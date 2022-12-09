@@ -401,6 +401,7 @@ function ledger(this: any, options: LedgerOptions) {
     baseval?: number
     basecur?: string
     baserate?: number
+    xreward?: string
 
     kind?: string
 
@@ -494,13 +495,13 @@ function ledger(this: any, options: LedgerOptions) {
       basecur,
       baserate,
       date: msg.date,
-      account_id: msg.credit?.account_id
     }
 
     let creditEntry = {
       ...sharedEntry,
       credit_id: creditAccountEnt.id,
       caref: creditAccountEnt.aref,
+      xreward: msg.xreward
     }
 
     let debitEntry = {

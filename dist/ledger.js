@@ -218,7 +218,6 @@ function ledger(options) {
     }
     // TODO: mark ledger/balance stale
     async function msgCreateEntry(msg) {
-        var _a;
         let seneca = this;
         let out = { ok: false };
         let debit = msg.debit || { aref: msg.daref };
@@ -275,12 +274,12 @@ function ledger(options) {
             basecur,
             baserate,
             date: msg.date,
-            account_id: (_a = msg.credit) === null || _a === void 0 ? void 0 : _a.account_id
         };
         let creditEntry = {
             ...sharedEntry,
             credit_id: creditAccountEnt.id,
             caref: creditAccountEnt.aref,
+            xreward: msg.xreward
         };
         let debitEntry = {
             ...sharedEntry,
