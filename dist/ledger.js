@@ -273,7 +273,6 @@ function ledger(options) {
             baseval,
             basecur,
             baserate,
-            date: msg.date,
         };
         let creditEntry = {
             ...sharedEntry,

@@ -494,7 +494,6 @@ function ledger(this: any, options: LedgerOptions) {
       baseval,
       basecur,
       baserate,
-      date: msg.date,
     }
 
     let creditEntry = {
