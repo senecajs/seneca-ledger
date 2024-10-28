@@ -6,7 +6,6 @@ export default {
   allow: { missing: true },
 
   calls: [
-
     // See https://fundsnetservices.com/debits-and-credits
 
     // Chart of Accounts
@@ -20,8 +19,8 @@ export default {
           oref: 'o0',
           path: 'Asset',
           name: 'Cash',
-          normal: 'debit'
-        }
+          normal: 'debit',
+        },
       },
       out: {
         ok: true,
@@ -36,8 +35,8 @@ export default {
           path: ['Asset'],
           name: 'Cash',
           normal: 'debit',
-        }
-      }
+        },
+      },
     },
 
     {
@@ -46,8 +45,8 @@ export default {
       params: {
         id: 'shop-a0',
         account: {
-          xfoo: 1  // custom field
-        }
+          xfoo: 1, // custom field
+        },
       },
       out: {
         ok: true,
@@ -63,8 +62,8 @@ export default {
           name: 'Cash',
           normal: 'debit',
           xfoo: 1,
-        }
-      }
+        },
+      },
     },
 
     {
@@ -76,8 +75,8 @@ export default {
           oref: 'o0',
           path: 'Income',
           name: 'Sales',
-          normal: 'credit'
-        }
+          normal: 'credit',
+        },
       },
       out: {
         ok: true,
@@ -92,8 +91,8 @@ export default {
           path: ['Income'],
           name: 'Sales',
           normal: 'credit',
-        }
-      }
+        },
+      },
     },
 
     {
@@ -105,8 +104,8 @@ export default {
           oref: 'o0',
           path: 'Asset',
           name: 'Office',
-          normal: 'debit'
-        }
+          normal: 'debit',
+        },
       },
       out: {
         ok: true,
@@ -121,10 +120,9 @@ export default {
           path: ['Asset'],
           name: 'Office',
           normal: 'debit',
-        }
-      }
+        },
+      },
     },
-
 
     // Open a book
 
@@ -137,7 +135,7 @@ export default {
           oref: 'o0',
           name: 'Q1',
           start: 20220101,
-        }
+        },
       },
       out: {
         ok: true,
@@ -149,8 +147,8 @@ export default {
           name: 'Q1',
           start: 20220101,
           time: { kind: 'basic' },
-        }
-      }
+        },
+      },
     },
 
     {
@@ -160,8 +158,8 @@ export default {
         id: 'shop-b0',
         book: {
           end: 20220331,
-          xbar: 2 // custom field
-        }
+          xbar: 2, // custom field
+        },
       },
       out: {
         ok: true,
@@ -174,11 +172,10 @@ export default {
           start: 20220101,
           end: 20220331,
           time: { kind: 'basic' },
-          xbar: 2
-        }
-      }
+          xbar: 2,
+        },
+      },
     },
-
 
     // Post journal entries
 
@@ -195,11 +192,11 @@ export default {
         desc: 'Jan Sales',
         date: '20220131',
         custom: {
-          geo: 'EU'
+          geo: 'EU',
         },
         entry: {
-          xrep: 'alice'
-        }
+          xrep: 'alice',
+        },
       },
       out: {
         ok: true,
@@ -218,7 +215,7 @@ export default {
           baserate: 0,
           credit_id: 'shop-a1',
           caref: 'o0/Income/Sales',
-          id: 'shop-e0'
+          id: 'shop-e0',
         },
         debit: {
           xrep: 'alice',
@@ -235,9 +232,9 @@ export default {
           baserate: 0,
           debit_id: 'shop-a0',
           daref: 'o0/Asset/Cash',
-          id: 'shop-e0'
-        }
-      }
+          id: 'shop-e0',
+        },
+      },
     },
 
     {
@@ -269,7 +266,7 @@ export default {
           baserate: 0,
           credit_id: 'shop-a0',
           caref: 'o0/Asset/Cash',
-          id: 'shop-e1'
+          id: 'shop-e1',
         },
         debit: {
           val: 20,
@@ -285,9 +282,9 @@ export default {
           baserate: 0,
           debit_id: 'shop-a2',
           daref: 'o0/Asset/Office',
-          id: 'shop-e1'
-        }
-      }
+          id: 'shop-e1',
+        },
+      },
     },
 
     {
@@ -307,34 +304,33 @@ export default {
             val: 100,
             desc: 'Jan Sales',
             caref: 'o0/Income/Sales',
-            id: 'shop-e0'
+            id: 'shop-e0',
           },
           {
             val: 20,
             desc: 'Buy desk',
             caref: 'o0/Asset/Cash',
-            id: 'shop-e1'
-          }
+            id: 'shop-e1',
+          },
         ],
         debits: [
           {
             val: 100,
             desc: 'Jan Sales',
             daref: 'o0/Asset/Cash',
-            id: 'shop-e0'
+            id: 'shop-e0',
           },
           {
             val: 20,
             desc: 'Buy desk',
             daref: 'o0/Asset/Office',
-            id: 'shop-e1'
-          }
+            id: 'shop-e1',
+          },
         ],
         cq: { oref: 'o0', book_id: 'shop-b0' },
-        dq: { oref: 'o0', book_id: 'shop-b0' }
-      }
+        dq: { oref: 'o0', book_id: 'shop-b0' },
+      },
     },
-
 
     {
       // print: true,
@@ -366,8 +362,8 @@ export default {
             baserate: 0,
             credit_id: 'shop-a0',
             caref: 'o0/Asset/Cash',
-            id: 'shop-e1'
-          }
+            id: 'shop-e1',
+          },
         ],
         debits: [
           {
@@ -385,15 +381,13 @@ export default {
             baserate: 0,
             debit_id: 'shop-a0',
             daref: 'o0/Asset/Cash',
-            id: 'shop-e0'
-          }
+            id: 'shop-e0',
+          },
         ],
         cq: { oref: 'o0', book_id: 'shop-b0', credit_id: 'shop-a0' },
-        dq: { oref: 'o0', book_id: 'shop-b0', debit_id: 'shop-a0' }
-      }
+        dq: { oref: 'o0', book_id: 'shop-b0', debit_id: 'shop-a0' },
+      },
     },
-
-
 
     // Balance
     {
@@ -418,9 +412,8 @@ export default {
         creditCount: 1,
         debitCount: 1,
         normal: 'debit',
-        balance: 80
-      }
-    }
-
+        balance: 80,
+      },
+    },
   ],
 }
