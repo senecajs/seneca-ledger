@@ -18,6 +18,14 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest, macos-latest]
         node-version: [lts/*, 17.x, 16.x, 14.x]
+        # Tests on Intel Mac x Node.js 14
+        include:
+          - os: macos-13
+            node: "14"
+        # setup-node does not support Node.js 14 x M1 Mac
+        exclude:
+          - os: macos-latest
+            node-version: 14.x
 
     runs-on: ${{ matrix.os }}
 
