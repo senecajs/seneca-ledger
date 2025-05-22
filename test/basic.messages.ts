@@ -788,6 +788,7 @@ export default {
       }
     },
 
+
     // Close o0 b1
     {
       name: 'shop-o0-c1',
@@ -801,6 +802,21 @@ export default {
       }
     },
 
+
+    // Trying to close a book without an identifier
+    {
+      name: 'shop-o0-c1',
+      pattern: 'close:book',
+      params: {
+        end: 20220630
+      },
+      out: {
+        ok: false,
+        why: "book-not-found"
+      }
+    },
+
+
     // Close o1 b0
     {
       name: 'shop-o1-c0',
@@ -813,6 +829,21 @@ export default {
         ok: true
       }
     },
+
+
+    // Trying to close a book without an end date
+    {
+      name: 'shop-o1-c0',
+      pattern: 'close:book',
+      params: {
+        bref: 'o1/Q2/20220401'
+      },
+      out: {
+        ok: false,
+        why: "no-end"
+      }
+    },
+
 
 
     // Should not accept a new entry for o0 b1
