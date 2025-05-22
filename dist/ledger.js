@@ -25,6 +25,7 @@ function ledger(options) {
         .message('balance:account', msgBalanceAccount)
         .message('create:book', msgCreateBook)
         .message('get:book', msgGetBook)
+        .message('close:book', msgCloseBook)
         .message('update:book', msgUpdateBook)
         .message('list:book', msgListBook)
         .message('list:balance', msgListBalance)
@@ -211,6 +212,20 @@ function ledger(options) {
         await bookEnt.data$(msg.book).save$();
         return { ok: true, book: bookEnt.data$(false) };
     }
+    async function msgCloseBook(msg) {
+        let seneca = this;
+        let bookEnt = await getBook(seneca, bookCanon, msg);
+        if (null == bookEnt) {
+            return { ok: false, why: 'book-not-found' };
+        }
+        const end = msg.end;
+        if (null == end) {
+            return { ok: false, why: 'no-end' };
+        }
+        bookEnt.end = end;
+        await bookEnt.save$();
+        return { ok: true };
+    }
     async function msgListBalance(msg) {
         // TODO: list ledger/balance for book
     }
@@ -227,6 +242,9 @@ function ledger(options) {
         let bookEnt = await getBook(seneca, bookCanon, msg);
         if (null == bookEnt) {
             return { ok: false, why: 'book-not-found' };
+        }
+        if (bookEnt.end > 0 && bookEnt.end < msg.date) {
+            return { ok: false, why: 'book-closed' };
         }
         let debitAccountEnt = await getAccount(seneca, accountCanon, {
             ...debit
