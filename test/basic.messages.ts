@@ -852,7 +852,7 @@ export default {
         bref: 'o1/Q2/20220401',
         daref: 'o1/Asset/Cash',
         caref: 'o1/Income/Sales',
-        val: 130,
+        val: 230,
         desc: 'April Sales',
         date: '20220703',
         custom: {
