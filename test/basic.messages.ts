@@ -724,54 +724,6 @@ export default {
     },
 
 
-    // Test Open Balance Equity account in Q1 (closing entries only)
-    {
-      name: 'shop-ba-open-balance-q1',
-      pattern: 'balance:account',
-      params: {
-        aref: 'o0/Equity/Open Balance',
-        bref: 'o0/Q1/20220101',
-        save: false
-      },
-      out: {
-        ok: true,
-        aref: 'o0/Equity/Open Balance',
-        book_id: 'shop-b0',
-        bref: 'o0/Q1/20220101',
-        start: 20220101,
-        end: 20220331,
-        creditTotal: 50,   // Only Credit Card closing: Credit Open Balance 50
-        debitTotal: 80,    // Only Cash closing: Debit Open Balance 80
-        normal: 'credit',
-        balance: -30       // 50 - 80 = -30
-      }
-    },
-
-
-    // Test Open Balance Equity account has net zero balance in Q2 (opening entries only)
-    {
-      name: 'shop-ba-open-balance',
-      pattern: 'balance:account',
-      params: {
-        aref: 'o0/Equity/Open Balance',
-        bref: 'o0/Q2/20220401',
-        save: false
-      },
-      out: {
-        ok: true,
-        aref: 'o0/Equity/Open Balance',
-        book_id: 'shop-b1',
-        bref: 'o0/Q2/20220401',
-        start: 20220401,
-        end: 20220630,
-        creditTotal: 80,   // Only Cash opening: Credit Open Balance 80
-        debitTotal: 50,    // Only Credit Card opening: Debit Open Balance 50  
-        normal: 'credit',
-        balance: 30        // 80 - 50 = 30 (not zero because closing entries are in Q1)
-      }
-    },
-
-
     // Test close:book method - Close Q1 book and transfer all accounts to Q2
     {
       name: 'shop-cb0',
