@@ -536,6 +536,9 @@ function ledger(options) {
         if (bookEnt.closed) {
             return { ok: false, why: 'book-closed' };
         }
+        if (bookEnt.start > msg.date || bookEnt.end < msg.date) {
+            return { ok: false, why: 'wrong-book-period' };
+        }
         let debitAccountEnt = await getAccount(seneca, accountCanon, {
             ...debit
         });

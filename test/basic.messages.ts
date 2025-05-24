@@ -724,6 +724,48 @@ export default {
     },
 
 
+    // Test create a entry before the book start date
+    {
+      name: 'shop-add-q2-entry',
+      pattern: 'create:entry',
+      params: {
+        id: 'shop-wrong-entry-start',
+        oref: 'o0',
+        bref: 'o0/Q1/20220101',
+        daref: 'o0/Asset/Cash',
+        caref: 'o0/Income/Sales',
+        val: 20,
+        desc: 'Q1 Sales',
+        date: 20211215,
+      },
+      out: {
+        ok: false,
+        why: 'wrong-book-period'
+      }
+    },
+
+
+    // Test create a entry after the book end date
+    {
+      name: 'shop-add-q2-entry',
+      pattern: 'create:entry',
+      params: {
+        id: 'shop-wrong-entry-end',
+        oref: 'o0',
+        bref: 'o0/Q1/20220101',
+        daref: 'o0/Asset/Cash',
+        caref: 'o0/Income/Sales',
+        val: 20,
+        desc: 'Q1 Sales',
+        date: 20220513,
+      },
+      out: {
+        ok: false,
+        why: 'wrong-book-period'
+      }
+    },
+
+
     // Test close:book method - Close Q1 book and transfer all accounts to Q2
     {
       name: 'shop-cb0',
