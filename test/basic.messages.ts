@@ -423,7 +423,38 @@ export default {
     },
 
 
-    // Open a book for Q2
+    // Create a liability account for testing close:account
+    {
+      name: 'shop-a3',
+      pattern: 'create:account',
+      params: {
+        account: {
+          id$: 'shop-a3',
+          oref: 'o0',
+          path: 'Liability',
+          name: 'Credit Card',
+          normal: 'credit'
+        }
+      },
+      out: {
+        ok: true,
+        account: {
+          id: 'shop-a3',
+          path0: 'Liability',
+          path1: '',
+          path2: '',
+          org_id: 'o0',
+          oref: 'o0',
+          aref: 'o0/Liability/Credit Card',
+          path: ['Liability'],
+          name: 'Credit Card',
+          normal: 'credit',
+        }
+      }
+    },
+
+
+    // Create Q2 book for target closing
     {
       name: 'shop-b1',
       pattern: 'create:book',
@@ -433,6 +464,7 @@ export default {
           oref: 'o0',
           name: 'Q2',
           start: 20220401,
+          end: 20220630
         }
       },
       out: {
@@ -444,13 +476,14 @@ export default {
           bref: 'o0/Q2/20220401',
           name: 'Q2',
           start: 20220401,
+          end: 20220630,
           time: { kind: 'basic' },
         }
       }
     },
 
 
-    // Try create an entry on closed book
+    // Create entry to give Credit Card account a balance
     {
       name: 'shop-e2',
       pattern: 'create:entry',
@@ -458,240 +491,220 @@ export default {
         id: 'shop-e2',
         oref: 'o0',
         bref: 'o0/Q1/20220101',
-        daref: 'o0/Asset/Cash',
-        caref: 'o0/Income/Sales',
-        val: 200,
-        desc: 'Jan Sales',
-        date: '20220401',
-        custom: {
-          geo: 'EU'
-        },
-        entry: {
-          xrep: 'alice'
-        }
-      },
-      out: {
-        ok: false,
-        why: "book-closed"
-      }
-    },
-
-
-    // Create a new entry on a new book
-    {
-      name: 'shop-e3',
-      pattern: 'create:entry',
-      params: {
-        id: 'shop-e3',
-        oref: 'o0',
-        bref: 'o0/Q2/20220401',
-        daref: 'o0/Asset/Cash',
-        caref: 'o0/Income/Sales',
-        val: 150,
-        desc: 'April Sales',
-        date: '20220403',
-        custom: {
-          geo: 'EU'
-        },
-        entry: {
-          xrep: 'alice'
-        }
+        daref: 'o0/Asset/Office',
+        caref: 'o0/Liability/Credit Card',
+        val: 50,
+        desc: 'Buy chair with credit card',
+        date: 20220215,
       },
       out: {
         ok: true,
         credit: {
-          xrep: 'alice',
-          val: 150,
-          desc: 'April Sales',
+          val: 50,
+          desc: 'Buy chair with credit card',
           kind: 'standard',
           oref: 'o0',
           org_id: 'o0',
-          bref: 'o0/Q2/20220401',
-          book_id: 'shop-b1',
-          custom: { geo: 'EU' },
+          bref: 'o0/Q1/20220101',
+          book_id: 'shop-b0',
+          custom: {},
           baseval: -1,
           basecur: '---',
           baserate: 0,
-          credit_id: 'shop-a1',
-          caref: 'o0/Income/Sales',
-          id: 'shop-e3'
+          credit_id: 'shop-a3',
+          caref: 'o0/Liability/Credit Card',
+          id: 'shop-e2'
         },
         debit: {
-          xrep: 'alice',
-          val: 150,
-          desc: 'April Sales',
+          val: 50,
+          desc: 'Buy chair with credit card',
           kind: 'standard',
           oref: 'o0',
           org_id: 'o0',
-          bref: 'o0/Q2/20220401',
-          book_id: 'shop-b1',
-          custom: { geo: 'EU' },
+          bref: 'o0/Q1/20220101',
+          book_id: 'shop-b0',
+          custom: {},
           baseval: -1,
           basecur: '---',
           baserate: 0,
-          debit_id: 'shop-a0',
-          daref: 'o0/Asset/Cash',
-          id: 'shop-e3'
+          debit_id: 'shop-a2',
+          daref: 'o0/Asset/Office',
+          id: 'shop-e2'
         }
       }
     },
 
 
-    // Open a book for another org at Q2
+    // Balance Credit Card account before closing
     {
-      name: 'shop-b0-org1',
-      pattern: 'create:book',
-      params: {
-        book: {
-          id$: 'shop-o1-b0',
-          oref: 'o1',
-          name: 'Q2',
-          start: 20220401,
-        }
-      },
-      out: {
-        ok: true,
-        book: {
-          id: 'shop-o1-b0',
-          org_id: 'o1',
-          oref: 'o1',
-          bref: 'o1/Q2/20220401',
-          name: 'Q2',
-          start: 20220401,
-          time: { kind: 'basic' },
-        }
-      }
-    },
-
-
-    // Create accounts for o1
-    {
-      name: 'shop-o1-a0',
-      pattern: 'create:account',
-      params: {
-        account: {
-          id$: 'shop-o1-a0',
-          oref: 'o1',
-          path: 'Asset',
-          name: 'Cash',
-          normal: 'debit'
-        }
-      },
-      out: {
-        ok: true,
-        account: {
-          id: 'shop-o1-a0',
-          path0: 'Asset',
-          path1: '',
-          path2: '',
-          org_id: 'o1',
-          oref: 'o1',
-          aref: 'o1/Asset/Cash',
-          path: ['Asset'],
-          name: 'Cash',
-          normal: 'debit',
-        }
-      }
-    },
-
-    {
-      name: 'shop-o1-a1',
-      pattern: 'create:account',
-      params: {
-        account: {
-          id$: 'shop-o1-a1',
-          oref: 'o1',
-          path: 'Income',
-          name: 'Sales',
-          normal: 'credit'
-        }
-      },
-      out: {
-        ok: true,
-        account: {
-          id: 'shop-o1-a1',
-          path0: 'Income',
-          path1: '',
-          path2: '',
-          org_id: 'o1',
-          oref: 'o1',
-          aref: 'o1/Income/Sales',
-          path: ['Income'],
-          name: 'Sales',
-          normal: 'credit',
-        }
-      }
-    },
-
-
-    // Create a new entry for o1 b0
-    {
-      name: 'shop-o1-a1',
-      pattern: 'create:entry',
-      params: {
-        id: 'shop-o1-e0',
-        oref: 'o1',
-        bref: 'o1/Q2/20220401',
-        daref: 'o1/Asset/Cash',
-        caref: 'o1/Income/Sales',
-        val: 200,
-        desc: 'April Sales',
-        date: '20220403',
-        custom: {
-          geo: 'EU'
-        },
-        entry: {
-          xrep: 'alice'
-        }
-      },
-      out: {
-        ok: true,
-        credit: {
-          xrep: 'alice',
-          val: 200,
-          desc: 'April Sales',
-          kind: 'standard',
-          oref: 'o1',
-          org_id: 'o1',
-          bref: 'o1/Q2/20220401',
-          book_id: 'shop-o1-b0',
-          custom: { geo: 'EU' },
-          baseval: -1,
-          basecur: '---',
-          baserate: 0,
-          credit_id: 'shop-o1-a1',
-          caref: 'o1/Income/Sales',
-          id: 'shop-o1-e0'
-        },
-        debit: {
-          xrep: 'alice',
-          val: 200,
-          desc: 'April Sales',
-          kind: 'standard',
-          oref: 'o1',
-          org_id: 'o1',
-          bref: 'o1/Q2/20220401',
-          book_id: 'shop-o1-b0',
-          custom: { geo: 'EU' },
-          baseval: -1,
-          basecur: '---',
-          baserate: 0,
-          debit_id: 'shop-o1-a0',
-          daref: 'o1/Asset/Cash',
-          id: 'shop-o1-e0'
-        }
-      }
-    },
-
-
-    // o0 acc Balance should not be affected by o1 entry
-    {
-      name: 'shop-le2',
+      name: 'shop-ba3-before',
       pattern: 'balance:account',
       params: {
-        oref: 'o0',
+        aref: 'o0/Liability/Credit Card',
+        bref: 'o0/Q1/20220101',
+        save: false
+      },
+      out: {
+        ok: true,
+        account_id: 'shop-a3',
+        aref: 'o0/Liability/Credit Card',
+        book_id: 'shop-b0',
+        bref: 'o0/Q1/20220101',
+        start: 20220101,
+        end: 20220331,
+        creditTotal: 50,
+        debitTotal: 0,
+        creditCount: 1,
+        debitCount: 0,
+        normal: 'credit',
+        balance: 50
+      }
+    },
+
+
+    // Close Credit Card account from Q1 to Q2
+    {
+      name: 'shop-ca3',
+      pattern: 'close:account',
+      params: {
+        aref: 'o0/Liability/Credit Card',
+        bref: 'o0/Q1/20220101',
+        target_bref: 'o0/Q2/20220401',
+        end: 20220331
+      },
+      out: {
+        ok: true,
+        account_id: 'shop-a3',
+        aref: 'o0/Liability/Credit Card',
+        book_id: 'shop-b0',
+        bref: 'o0/Q1/20220101',
+        target_book_id: 'shop-b1',
+        target_bref: 'o0/Q2/20220401',
+        original_balance: 50,
+        closing_balance: 0,
+        opening_balance: 50,
+        opening_balance_aref: 'o0/Equity/Open Balance',
+        closing_date: 20220331
+      }
+    },
+
+
+    // Verify Credit Card account is zeroed in Q1
+    {
+      name: 'shop-ba3-closed',
+      pattern: 'balance:account',
+      params: {
+        aref: 'o0/Liability/Credit Card',
+        bref: 'o0/Q1/20220101',
+        save: false
+      },
+      out: {
+        ok: true,
+        account_id: 'shop-a3',
+        aref: 'o0/Liability/Credit Card',
+        book_id: 'shop-b0',
+        bref: 'o0/Q1/20220101',
+        start: 20220101,
+        end: 20220331,
+        creditTotal: 50,
+        debitTotal: 50,
+        creditCount: 1,
+        debitCount: 1,
+        normal: 'credit',
+        balance: 0
+      }
+    },
+
+
+    // Verify Credit Card account has correct balance in Q2
+    {
+      name: 'shop-ba3-opened',
+      pattern: 'balance:account',
+      params: {
+        aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q2/20220401',
+        save: false
+      },
+      out: {
+        ok: true,
+        account_id: 'shop-a3',
+        aref: 'o0/Liability/Credit Card',
+        book_id: 'shop-b1',
+        bref: 'o0/Q2/20220401',
+        start: 20220401,
+        end: 20220630,
+        creditTotal: 50,
+        debitTotal: 0,
+        creditCount: 1,
+        debitCount: 0,
+        normal: 'credit',
+        balance: 50
+      }
+    },
+
+
+    // Test closing Cash account (debit normal) with positive balance
+    {
+      name: 'shop-ca0',
+      pattern: 'close:account',
+      params: {
         aref: 'o0/Asset/Cash',
+        bref: 'o0/Q1/20220101',
+        target_bref: 'o0/Q2/20220401',
+        end: 20220331
+      },
+      out: {
+        ok: true,
+        account_id: 'shop-a0',
+        aref: 'o0/Asset/Cash',
+        book_id: 'shop-b0',
+        bref: 'o0/Q1/20220101',
+        target_book_id: 'shop-b1',
+        target_bref: 'o0/Q2/20220401',
+        original_balance: 80,
+        closing_balance: 0,
+        opening_balance: 80,
+        opening_balance_aref: 'o0/Equity/Open Balance',
+        closing_date: 20220331
+      }
+    },
+
+
+    // Verify Cash account is zeroed in Q1
+    {
+      name: 'shop-ba0-closed',
+      pattern: 'balance:account',
+      params: {
+        aref: 'o0/Asset/Cash',
+        bref: 'o0/Q1/20220101',
+        save: false
+      },
+      out: {
+        ok: true,
+        account_id: 'shop-a0',
+        aref: 'o0/Asset/Cash',
+        book_id: 'shop-b0',
+        bref: 'o0/Q1/20220101',
+        start: 20220101,
+        end: 20220331,
+        creditTotal: 100,  // Original 20 + closing credit 80
+        debitTotal: 100,   // Original debit 100
+        creditCount: 2,    // Original + closing entry
+        debitCount: 1,     // Original debit entry
+        normal: 'debit',
+        balance: 0
+      }
+    },
+
+
+    // Verify Cash account has correct balance in Q2
+    {
+      name: 'shop-ba0-opened',
+      pattern: 'balance:account',
+      params: {
+        aref: 'o0/Asset/Cash',
+        bref: 'o0/Q2/20220401',
+        save: false
       },
       out: {
         ok: true,
@@ -700,202 +713,59 @@ export default {
         book_id: 'shop-b1',
         bref: 'o0/Q2/20220401',
         start: 20220401,
-        end: -1,
+        end: 20220630,
         creditTotal: 0,
-        debitTotal: 150,
+        debitTotal: 80,
         creditCount: 0,
         debitCount: 1,
         normal: 'debit',
-        balance: 150
+        balance: 80
       }
     },
 
+    // Test Open Balance Equity account in Q1 (closing entries only)
     {
-      name: 'shop-le3',
+      name: 'shop-ba-open-balance-q1',
       pattern: 'balance:account',
       params: {
-        oref: 'o0',
-        bref: 'o0/Q2/20220401',
-        aref: 'o0/Income/Sales',
+        aref: 'o0/Equity/Open Balance',
+        bref: 'o0/Q1/20220101',
+        save: false
       },
       out: {
         ok: true,
-        account_id: 'shop-a1',
-        aref: 'o0/Income/Sales',
+        aref: 'o0/Equity/Open Balance',
+        book_id: 'shop-b0',
+        bref: 'o0/Q1/20220101',
+        start: 20220101,
+        end: 20220331,
+        creditTotal: 50,   // Only Credit Card closing: Credit Open Balance 50
+        debitTotal: 80,    // Only Cash closing: Debit Open Balance 80
+        normal: 'credit',
+        balance: -30       // 50 - 80 = -30
+      }
+    },
+
+    // Test Open Balance Equity account has net zero balance in Q2 (opening entries only)
+    {
+      name: 'shop-ba-open-balance',
+      pattern: 'balance:account',
+      params: {
+        aref: 'o0/Equity/Open Balance',
+        bref: 'o0/Q2/20220401',
+        save: false
+      },
+      out: {
+        ok: true,
+        aref: 'o0/Equity/Open Balance',
         book_id: 'shop-b1',
         bref: 'o0/Q2/20220401',
         start: 20220401,
-        end: -1,
-        creditTotal: 150,
-        debitTotal: 0,
-        creditCount: 1,
-        debitCount: 0,
+        end: 20220630,
+        creditTotal: 80,   // Only Cash opening: Credit Open Balance 80
+        debitTotal: 50,    // Only Credit Card opening: Debit Open Balance 50  
         normal: 'credit',
-        balance: 150
-      }
-    },
-
-
-    // o1 acc Balance should not be affected by o0 entry
-    {
-      name: 'shop-o1-le1',
-      pattern: 'balance:account',
-      params: {
-        id: 'shop-o1-e0',
-        oref: 'o1',
-        bref: 'o1/Q2/20220401',
-        aref: 'o1/Asset/Cash',
-      },
-      out: {
-        ok: true,
-        account_id: 'shop-o1-a0',
-        aref: 'o1/Asset/Cash',
-        book_id: 'shop-o1-b0',
-        bref: 'o1/Q2/20220401',
-        start: 20220401,
-        end: -1,
-        creditTotal: 0,
-        debitTotal: 200,
-        creditCount: 0,
-        debitCount: 1,
-        normal: 'debit',
-        balance: 200
-      }
-    },
-
-    {
-      name: 'shop-o1-le2',
-      pattern: 'balance:account',
-      params: {
-        oref: 'o1',
-        bref: 'o1/Q2/20220401',
-        aref: 'o1/Income/Sales',
-      },
-      out: {
-        ok: true,
-        account_id: 'shop-o1-a1',
-        aref: 'o1/Income/Sales',
-        book_id: 'shop-o1-b0',
-        bref: 'o1/Q2/20220401',
-        start: 20220401,
-        end: -1,
-        creditTotal: 200,
-        debitTotal: 0,
-        creditCount: 1,
-        debitCount: 0,
-        normal: 'credit',
-        balance: 200
-      }
-    },
-
-
-    // Close o0 b1
-    {
-      name: 'shop-o0-c1',
-      pattern: 'close:book',
-      params: {
-        bref: 'o0/Q2/20220401',
-        end: 20220630
-      },
-      out: {
-        ok: true
-      }
-    },
-
-
-    // Trying to close a book without an identifier
-    {
-      name: 'shop-o0-c1',
-      pattern: 'close:book',
-      params: {
-        end: 20220630
-      },
-      out: {
-        ok: false,
-        why: "book-not-found"
-      }
-    },
-
-
-    // Close o1 b0
-    {
-      name: 'shop-o1-c0',
-      pattern: 'close:book',
-      params: {
-        bref: 'o1/Q2/20220401',
-        end: 20220630
-      },
-      out: {
-        ok: true
-      }
-    },
-
-
-    // Trying to close a book without an end date
-    {
-      name: 'shop-o1-c0',
-      pattern: 'close:book',
-      params: {
-        bref: 'o1/Q2/20220401'
-      },
-      out: {
-        ok: false,
-        why: "no-end"
-      }
-    },
-
-
-
-    // Should not accept a new entry for o0 b1
-    {
-      name: 'shop-e4',
-      pattern: 'create:entry',
-      params: {
-        id: 'shop-e4',
-        oref: 'o0',
-        bref: 'o0/Q2/20220401',
-        daref: 'o0/Asset/Cash',
-        caref: 'o0/Income/Sales',
-        val: 50,
-        desc: 'April Sales',
-        date: '20220703',
-        custom: {
-          geo: 'EU'
-        },
-        entry: {
-          xrep: 'alice'
-        }
-      },
-      out: {
-        ok: false,
-        why: 'book-closed'
-      }
-    },
-
-
-    // Should not accept a new entry for o1 b0
-    {
-      name: 'shop-o1-a1',
-      pattern: 'create:entry',
-      params: {
-        id: 'shop-o1-e1',
-        oref: 'o1',
-        bref: 'o1/Q2/20220401',
-        daref: 'o1/Asset/Cash',
-        caref: 'o1/Income/Sales',
-        val: 230,
-        desc: 'April Sales',
-        date: '20220703',
-        custom: {
-          geo: 'EU'
-        },
-        entry: {
-          xrep: 'alice'
-        }
-      },
-      out: {
-        ok: false,
-        why: 'book-closed'
+        balance: 30        // 80 - 50 = 30 (not zero because closing entries are in Q1)
       }
     }
   ],
