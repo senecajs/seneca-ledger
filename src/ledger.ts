@@ -48,6 +48,7 @@ function ledger(this: any, options: LedgerOptions) {
     .message('get:book', msgGetBook)
     .message('update:book', msgUpdateBook)
     .message('list:book', msgListBook)
+    .message('close:book', msgCloseBook)
     .message('list:balance', msgListBalance)
     .message('balance:book', msgBalanceBook)
     .message('create:entry', msgCreateEntry)
@@ -500,6 +501,157 @@ function ledger(this: any, options: LedgerOptions) {
     list = list.map((ent: any) => ent.data$(false))
 
     return { ok: true, q, list }
+  }
+
+
+  async function msgCloseBook(this: any, msg: {
+    book_id?: string
+    bref?: string
+    target_book_id?: string
+    target_bref?: string
+    end?: number
+    opening_balance_aref?: string
+  }) {
+    const seneca = this
+
+    const bookEnt = await getBook(seneca, bookCanon, msg)
+    if (null == bookEnt) {
+      return { ok: false, why: 'book-not-found' }
+    }
+
+    let targetBookEnt = null
+    if (msg.target_book_id || msg.target_bref) {
+      targetBookEnt = await getBook(seneca, bookCanon, {
+        book_id: msg.target_book_id,
+        bref: msg.target_bref
+      })
+    }
+
+    if (null == targetBookEnt) {
+      return { ok: false, why: 'target-book-not-found' }
+    }
+
+    const allCredits = await seneca.entity(creditCanon).list$({
+      book_id: bookEnt.id
+    })
+
+    const allDebits = await seneca.entity(debitCanon).list$({
+      book_id: bookEnt.id
+    })
+
+    const accountIds = new Set()
+    allCredits.forEach((entry: Record<string, any>) => accountIds.add(entry.credit_id))
+    allDebits.forEach((entry: Record<string, any>) => accountIds.add(entry.debit_id))
+
+    const bookAccIds = Array.from(accountIds)
+
+    if (bookAccIds.length === 0) {
+      return {
+        ok: true,
+        book_id: bookEnt.id,
+        bref: bookEnt.bref,
+        target_book_id: targetBookEnt?.id,
+        target_bref: targetBookEnt?.bref,
+        message: 'No accounts entries in this book',
+        accout_closures: [],
+        summary: {
+          total_accounts: 0,
+          successful_closures: 0,
+          failed_closures: 0,
+          total_balance_transferred: 0
+        }
+      }
+    }
+
+    const accountClosures = []
+    let successfulClosures = 0
+    let failedClosures = 0
+    let totalBalanceTransferred = 0
+
+    for (const bookAccId of bookAccIds) {
+      const closeResult = await seneca.post('biz:ledger,close:account', {
+        account_id: bookAccId,
+        book_id: bookEnt.id,
+        target_book_id: targetBookEnt?.id,
+        target_bref: targetBookEnt?.bref,
+        end: msg.end,
+        opening_balance_aref: msg.opening_balance_aref
+      })
+
+
+      accountClosures.push({
+        account_id: bookAccId,
+        result: closeResult
+      })
+
+      if (closeResult.ok) {
+        successfulClosures++
+        totalBalanceTransferred += Math.abs(closeResult.original_balance || 0)
+      } else {
+        failedClosures++
+      }
+    }
+
+    let opCheck = null
+    if (targetBookEnt) {
+      const opAref = msg.opening_balance_aref || `${bookEnt.oref}/Equity/Open Balance`
+
+      const result = await seneca.post('biz:ledger,balance:account', {
+        aref: opAref,
+        book_id: targetBookEnt.id,
+        save: false
+      })
+
+      if (result.ok) {
+        opCheck = {
+          aref: opAref,
+          balance: result.balance,
+          creditTotal: result.creditTotal,
+          debitTotal: result.debitTotal,
+          balanced: Math.abs(result.balance) < 0.01
+        }
+      }
+    }
+
+    const balanceCheck = []
+    for (const bookAccId of bookAccIds) {
+      const balanceResult = await seneca.post('biz:ledger,balance:account', {
+        account_id: bookAccId,
+        book_id: bookEnt.id,
+        save: false
+      })
+
+      if (balanceResult.ok) {
+        balanceCheck.push({
+          account_id: bookAccId,
+          aref: balanceResult.aref,
+          balance: balanceResult.balance,
+          is_zeroed: Math.abs(balanceResult.balance) < 0.01
+        })
+      }
+    }
+
+    const allAccZeroed = balanceCheck.every(v => v.is_zeroed)
+
+    return {
+      ok: true,
+      book_id: bookEnt.id,
+      bref: bookEnt.bref,
+      target_book_id: targetBookEnt?.id,
+      target_bref: targetBookEnt?.bref,
+      closing_date: msg.end || bookEnt.end,
+      account_closures: accountClosures,
+      summary: {
+        total_accounts: bookAccIds.length,
+        successful_closures: successfulClosures,
+        failed_closures: failedClosures,
+        total_balance_transferred: totalBalanceTransferred,
+        all_accounts_zeroed: allAccZeroed
+      },
+      balance_check: balanceCheck,
+      op_balance_check: opCheck,
+      closuere_successfull: failedClosures === 0 && allAccZeroed
+    }
   }
 
 
