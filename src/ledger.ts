@@ -748,6 +748,7 @@ function ledger(this: any, options: LedgerOptions) {
     return { ok: true, book: bookEnt.data$(false) }
   }
 
+
   async function msgListBalance(this: any, msg: any) {
     // TODO: list ledger/balance for book
   }
@@ -1047,8 +1048,6 @@ function calcTotals(accountEnt: any, creditEnts: any[], debitEnts: any) {
     balance,
   }
 }
-
-
 
 
 // Default options.
