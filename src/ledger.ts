@@ -255,12 +255,15 @@ function ledger(this: any, options: LedgerOptions) {
   }) {
     const seneca = this
 
-    const accountEnt = await getAccount(seneca, accountCanon, msg)
+    const [accountEnt, bookEnt] = await Promise.all([
+      getAccount(seneca, accountCanon, msg),
+      getBook(seneca, bookCanon, msg)
+    ])
+
     if (null == accountEnt) {
       return { ok: false, why: 'account-not-found' }
     }
 
-    const bookEnt = await getBook(seneca, bookCanon, msg)
     if (null == bookEnt) {
       return { ok: false, why: 'book-not-found' }
     }
@@ -284,13 +287,31 @@ function ledger(this: any, options: LedgerOptions) {
     })
 
     if (!balanceResult.ok) {
-      return { ok: false, why: 'balance-calculation-failed', error: balanceResult }
+      return { ok: false, why: 'balance-result-failed', error: balanceResult }
     }
 
     const currentBalance = balanceResult.balance
-    const closingDate = msg.end || bookEnt.end
+    if (currentBalance === 0) {
+      return {
+        ok: true,
+        account_id: accountEnt.id,
+        aref: accountEnt.aref,
+        book_id: bookEnt.id,
+        bref: bookEnt.bref,
+        target_book_id: targetBookEnt?.id,
+        target_bref: targetBookEnt?.bref,
+        original_balance: 0,
+        closing_balance: 0,
+        opening_balance: 0,
+        opening_balance_aref: null,
+        closing_entries: [],
+        opening_entries: [],
+        closing_date: msg.end || bookEnt.end
+      }
+    }
 
-    let opAref = msg.opening_balance_aref
+    const closingDate = msg.end || bookEnt.end
+    const opAref = msg.opening_balance_aref
       || `${accountEnt.oref}/Equity/Open Balance`
 
     let opEnt = await getAccount(seneca, accountCanon, {
@@ -307,89 +328,81 @@ function ledger(this: any, options: LedgerOptions) {
           normal: 'credit'
         }
       })
-      opEnt = createResult.account
 
       if (!createResult?.ok) {
         return { ok: false, why: 'open-balance-create-fail', error: opEnt }
       }
+
+      opEnt = createResult.account
     }
 
-    let closingEntries = []
-    let openingEntries = []
+    const absBalance = Math.abs(currentBalance)
+    const isDebitBalance = (accountEnt.normal === 'debit' && currentBalance > 0)
+      || (accountEnt.normal === 'credit' && currentBalance < 0)
 
-    if (currentBalance !== 0) {
-      let closingEntry = {
-        book_id: bookEnt.id,
-        date: closingDate,
-        val: Math.abs(currentBalance),
-        desc: `Close account: ${accountEnt.name}`,
-        kind: 'closing',
-        daref: null,
-        caref: null
-      }
-
-      if ((accountEnt.normal == 'debit' && currentBalance > 0)
-        || (accountEnt.normal === 'credit' && currentBalance < 0)) {
-        closingEntry.daref = opEnt.aref
-        closingEntry.caref = accountEnt.aref
-      } else {
-        closingEntry.daref = accountEnt.aref
-        closingEntry.caref = opEnt.aref
-      }
-
-      const closingResult = await seneca.post('biz:ledger,create:entry', closingEntry)
-
-      if (!closingResult.ok) {
-        return { ok: false, why: 'closing-entry-failed', error: closingResult }
-      }
-
-      closingEntries.push(closingResult)
+    const baseEntry = {
+      val: absBalance,
+      desc: `${targetBookEnt ? 'Open' : 'Close'} account: ${accountEnt.name}`
     }
 
-    if (targetBookEnt && currentBalance != 0) {
-      let openingEntry = {
+    const entryPromises = []
+
+    const closingEntry = {
+      ...baseEntry,
+      book_id: bookEnt.id,
+      date: closingDate,
+      kind: 'closing',
+      daref: isDebitBalance ? opEnt.aref : accountEnt.aref,
+      caref: isDebitBalance ? accountEnt.aref : opEnt.aref
+    }
+    entryPromises.push(seneca.post('biz:ledger,create:entry', closingEntry))
+
+    if (targetBookEnt) {
+      const openingEntry = {
+        ...baseEntry,
         book_id: targetBookEnt.id,
         date: targetBookEnt.start,
-        val: Math.abs(currentBalance),
-        desc: `Open account: ${accountEnt.name}`,
         kind: 'opening',
-        caref: null,
-        daref: null
+        daref: isDebitBalance ? accountEnt.aref : opEnt.aref,
+        caref: isDebitBalance ? opEnt.aref : accountEnt.aref
       }
-
-      if ((accountEnt.normal === 'debit' && currentBalance > 0)
-        || (accountEnt.normal === 'credit' && currentBalance < 0)) {
-        openingEntry.daref = accountEnt.aref
-        openingEntry.caref = opEnt.aref
-      } else {
-        openingEntry.daref = opEnt.aref
-        openingEntry.caref = accountEnt.aref
-      }
-
-      const openingResult = await seneca.post('biz:ledger,create:entry', openingEntry)
-
-      if (!openingResult.ok) {
-        return { ok: false, why: 'opening-entry-failed', error: openingResult }
-      }
-
-      openingEntries.push(openingResult)
+      entryPromises.push(seneca.post('biz:ledger,create:entry', openingEntry))
     }
 
-    const verifyClosingBalance = await seneca.post('biz:ledger,balance:account', {
-      account_id: accountEnt.id,
-      book_id: bookEnt.id,
-      save: false
-    })
+    const results = await Promise.all(entryPromises)
 
-    let finalBalance = null
-    if (targetBookEnt) {
-      const verifyOpeningBalance = await seneca.post('biz:ledger,balance:account', {
+    let closingResult = results[0]
+    let openingResult = results[1]
+
+    if (!closingResult.ok) {
+      return { ok: false, why: 'closing-entry-failed', error: closingResult }
+    }
+
+    if (targetBookEnt && !openingResult?.ok) {
+      return { ok: false, why: 'opening-entry-failed', error: openingResult }
+    }
+
+    const verifyPromises = [
+      seneca.post('biz:ledger,balance:account', {
         account_id: accountEnt.id,
-        book_id: targetBookEnt.id,
+        book_id: bookEnt.id,
         save: false
       })
-      finalBalance = verifyOpeningBalance.balance
+    ]
+
+    if (targetBookEnt) {
+      verifyPromises.push(
+        seneca.post('biz:ledger,balance:account', {
+          account_id: accountEnt.id,
+          book_id: targetBookEnt.id,
+          save: false
+        })
+      )
     }
+
+    const verifyResults = await Promise.all(verifyPromises)
+    const verifyClosingBalance = verifyResults[0]
+    const verifyOpeningBalance = verifyResults[1]
 
     return {
       ok: true,
@@ -401,10 +414,10 @@ function ledger(this: any, options: LedgerOptions) {
       target_bref: targetBookEnt?.bref,
       original_balance: currentBalance,
       closing_balance: verifyClosingBalance.balance,
-      opening_balance: finalBalance,
+      opening_balance: verifyOpeningBalance?.balance || null,
       opening_balance_aref: opEnt.aref,
-      closing_entries: closingEntries,
-      opening_entries: openingEntries,
+      closing_entries: [closingResult],
+      opening_entries: openingResult ? [openingResult] : [],
       closing_date: closingDate
     }
   }
