@@ -544,9 +544,18 @@ function ledger(this: any, options: LedgerOptions) {
     allCredits.forEach((entry: Record<string, any>) => accountIds.add(entry.credit_id))
     allDebits.forEach((entry: Record<string, any>) => accountIds.add(entry.debit_id))
 
-    const bookAccIds = Array.from(accountIds)
+    const opAref = msg.opening_balance_aref || `${bookEnt.oref}/Equity/Open Balance`
+    const accIdsToClose: string[] = []
 
-    if (bookAccIds.length === 0) {
+    for (const accountId of Array.from(accountIds)) {
+      const strAccId = String(accountId)
+      const accountEnt = await getAccount(seneca, accountCanon, { account_id: strAccId })
+      if (accountEnt?.aref !== opAref) {
+        accIdsToClose.push(strAccId)
+      }
+    }
+
+    if (accIdsToClose.length === 0) {
       return {
         ok: true,
         book_id: bookEnt.id,
@@ -569,9 +578,11 @@ function ledger(this: any, options: LedgerOptions) {
     let failedClosures = 0
     let totalBalanceTransferred = 0
 
-    for (const bookAccId of bookAccIds) {
+    const balanceCheck = []
+
+    for (const accId of accIdsToClose) {
       const closeResult = await seneca.post('biz:ledger,close:account', {
-        account_id: bookAccId,
+        account_id: accId,
         book_id: bookEnt.id,
         target_book_id: targetBookEnt?.id,
         target_bref: targetBookEnt?.bref,
@@ -581,7 +592,7 @@ function ledger(this: any, options: LedgerOptions) {
 
 
       accountClosures.push({
-        account_id: bookAccId,
+        account_id: accId,
         result: closeResult
       })
 
@@ -591,6 +602,23 @@ function ledger(this: any, options: LedgerOptions) {
       } else {
         failedClosures++
       }
+
+
+      const balanceResult = await seneca.post('biz:ledger,balance:account', {
+        account_id: accId,
+        book_id: bookEnt.id,
+        save: false
+      })
+
+      if (balanceResult.ok) {
+        balanceCheck.push({
+          account_id: accId,
+          aref: balanceResult.aref,
+          balance: balanceResult.balance,
+          is_zeroed: Math.abs(balanceResult.balance) < 0.01
+        })
+      }
+
     }
 
     let opCheck = null
@@ -614,24 +642,6 @@ function ledger(this: any, options: LedgerOptions) {
       }
     }
 
-    const balanceCheck = []
-    for (const bookAccId of bookAccIds) {
-      const balanceResult = await seneca.post('biz:ledger,balance:account', {
-        account_id: bookAccId,
-        book_id: bookEnt.id,
-        save: false
-      })
-
-      if (balanceResult.ok) {
-        balanceCheck.push({
-          account_id: bookAccId,
-          aref: balanceResult.aref,
-          balance: balanceResult.balance,
-          is_zeroed: Math.abs(balanceResult.balance) < 0.01
-        })
-      }
-    }
-
     const allAccZeroed = balanceCheck.every(v => v.is_zeroed)
 
     return {
@@ -643,7 +653,7 @@ function ledger(this: any, options: LedgerOptions) {
       closing_date: msg.end || bookEnt.end,
       account_closures: accountClosures,
       summary: {
-        total_accounts: bookAccIds.length,
+        total_accounts: accIdsToClose.length,
         successful_closures: successfulClosures,
         failed_closures: failedClosures,
         total_balance_transferred: totalBalanceTransferred,
