@@ -271,6 +271,7 @@ function ledger(this: any, options: LedgerOptions) {
         book_id: msg.target_book_id,
         bref: msg.target_bref
       })
+
       if (null == targetBookEnt) {
         return { ok: false, why: 'target-book-not-found' }
       }
@@ -525,10 +526,10 @@ function ledger(this: any, options: LedgerOptions) {
         book_id: msg.target_book_id,
         bref: msg.target_bref
       })
-    }
 
-    if (null == targetBookEnt) {
-      return { ok: false, why: 'target-book-not-found' }
+      if (null == targetBookEnt) {
+        return { ok: false, why: 'target-book-not-found' }
+      }
     }
 
     const allCredits = await seneca.entity(creditCanon).list$({
@@ -552,8 +553,8 @@ function ledger(this: any, options: LedgerOptions) {
         bref: bookEnt.bref,
         target_book_id: targetBookEnt?.id,
         target_bref: targetBookEnt?.bref,
-        message: 'No accounts entries in this book',
-        accout_closures: [],
+        message: 'No account entries in this book',
+        account_closures: [],
         summary: {
           total_accounts: 0,
           successful_closures: 0,
@@ -650,7 +651,7 @@ function ledger(this: any, options: LedgerOptions) {
       },
       balance_check: balanceCheck,
       op_balance_check: opCheck,
-      closuere_successfull: failedClosures === 0 && allAccZeroed
+      closure_successful: failedClosures === 0 && allAccZeroed
     }
   }
 
