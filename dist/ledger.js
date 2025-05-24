@@ -340,6 +340,9 @@ function ledger(options) {
         if (null == bookEnt) {
             return { ok: false, why: 'book-not-found' };
         }
+        if (bookEnt.closed === true) {
+            return { ok: false, why: 'book-already-closed' };
+        }
         let targetBookEnt = null;
         if (msg.target_book_id || msg.target_bref) {
             targetBookEnt = await getBook(seneca, bookCanon, {
@@ -443,6 +446,11 @@ function ledger(options) {
             }
         }
         const allAccZeroed = balanceCheck.every(v => v.is_zeroed);
+        const closureSuccessful = failedClosures === 0 && allAccZeroed;
+        if (closureSuccessful) {
+            bookEnt.closed = true;
+            await bookEnt.save$();
+        }
         return {
             ok: true,
             book_id: bookEnt.id,
@@ -460,7 +468,7 @@ function ledger(options) {
             },
             balance_check: balanceCheck,
             op_balance_check: opCheck,
-            closure_successful: failedClosures === 0 && allAccZeroed
+            closure_successful: closureSuccessful
         };
     }
     async function msgUpdateBook(msg) {
@@ -492,7 +500,7 @@ function ledger(options) {
         if (null == bookEnt) {
             return { ok: false, why: 'book-not-found' };
         }
-        if (bookEnt.end > 0 && bookEnt.end < msg.date) {
+        if (bookEnt.closed) {
             return { ok: false, why: 'book-closed' };
         }
         let debitAccountEnt = await getAccount(seneca, accountCanon, {

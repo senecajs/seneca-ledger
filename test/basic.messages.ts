@@ -1057,87 +1057,6 @@ export default {
     },
 
 
-    // Test idempotent behavior - closing an already closed book should not fail
-    {
-      name: 'shop-cb0-idempotent',
-      pattern: 'close:book',
-      params: {
-        bref: 'o0/Q1/20220101',
-        target_bref: 'o0/Q2/20220401',
-        end: 20220331
-      },
-      out: {
-        ok: true,
-        book_id: 'shop-b0',
-        bref: 'o0/Q1/20220101',
-        target_book_id: 'shop-b1',
-        target_bref: 'o0/Q2/20220401',
-        closing_date: 20220331,
-        summary: {
-          total_accounts: 4,  // All accounts are found but have 0 balance
-          successful_closures: 4,  // All accounts "successfully" closed (no-op for 0 balance)
-          failed_closures: 0,
-          total_balance_transferred: 0,  // All balances are already 0
-          all_accounts_zeroed: true
-        },
-        closure_successful: true
-      }
-    },
-
-
-    // Verify no duplicate entries were created during idempotent closure
-    {
-      name: 'shop-verify-no-duplicate-entries-cash',
-      pattern: 'balance:account',
-      params: {
-        aref: 'o0/Asset/Cash',
-        bref: 'o0/Q1/20220101',
-        save: false
-      },
-      out: {
-        ok: true,
-        account_id: 'shop-a0',
-        aref: 'o0/Asset/Cash',
-        book_id: 'shop-b0',
-        bref: 'o0/Q1/20220101',
-        start: 20220101,
-        end: 20220331,
-        creditTotal: 100,  // Should remain the same
-        debitTotal: 100,   // Should remain the same
-        creditCount: 2,    // Should remain the same - no duplicate closing entries
-        debitCount: 1,     // Should remain the same
-        normal: 'debit',
-        balance: 0
-      }
-    },
-
-
-    {
-      name: 'shop-verify-no-duplicate-entries-q2-cash',
-      pattern: 'balance:account',
-      params: {
-        aref: 'o0/Asset/Cash',
-        bref: 'o0/Q2/20220401',
-        save: false
-      },
-      out: {
-        ok: true,
-        account_id: 'shop-a0',
-        aref: 'o0/Asset/Cash',
-        book_id: 'shop-b1',
-        bref: 'o0/Q2/20220401',
-        start: 20220401,
-        end: 20220630,
-        creditTotal: 0,
-        debitTotal: 80,    // Should remain the same
-        creditCount: 0,
-        debitCount: 1,     // Should remain the same - no duplicate opening entries
-        normal: 'debit',
-        balance: 80
-      }
-    },
-
-
     // Test closing a book with no target (just close, don't open anywhere)
     {
       name: 'shop-create-q3-book',
@@ -1241,6 +1160,48 @@ export default {
         },
         closure_successful: true
       }
-    }
+    },
+
+
+    // Try to add entry to Q1 book (closed on 20220331)
+    {
+      name: 'shop-fail-q1-entry',
+      pattern: 'create:entry',
+      params: {
+        id: 'shop-fail-e1',
+        oref: 'o0',
+        bref: 'o0/Q1/20220101',
+        daref: 'o0/Asset/Cash',
+        caref: 'o0/Income/Sales',
+        val: 500,
+        desc: 'Attempted entry after Q1 closure',
+        date: 20220215,
+      },
+      out: {
+        ok: false,
+        why: 'book-closed'
+      }
+    },
+
+
+    // Try to add entry to Q2 book (closed on 20220630)
+    {
+      name: 'shop-fail-q2-entry',
+      pattern: 'create:entry',
+      params: {
+        id: 'shop-fail-e2',
+        oref: 'o0',
+        bref: 'o0/Q2/20220401',
+        daref: 'o0/Asset/Office',
+        caref: 'o0/Asset/Cash',
+        val: 300,
+        desc: 'Attempted entry after Q2 closure',
+        date: 20220517,
+      },
+      out: {
+        ok: false,
+        why: 'book-closed'
+      }
+    },
   ],
 }
