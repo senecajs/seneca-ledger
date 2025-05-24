@@ -495,6 +495,7 @@ function ledger(this: any, options: LedgerOptions) {
     return { ok: true, book: bookEnt.data$(false) }
   }
 
+
   async function msgListBook(this: any, msg: {
     org_id?: string // Organization holding the ledger, defined externally
     oref?: string // Organization holding the ledger, defined externally
