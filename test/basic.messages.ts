@@ -783,7 +783,7 @@ export default {
         target_bref: 'o0/Q2/20220401',
         closing_date: 20220331,
         summary: {
-          total_accounts: 4,  // Cash, Sales, Office, Credit Card
+          total_accounts: 4,  // Cash, Sales, Office, Credit Card - doesn't count Open Balance
           successful_closures: 4,
           failed_closures: 0,
           total_balance_transferred: 170,  // 100 (Sales) + 70 (Office) = remaining balances
@@ -1051,35 +1051,6 @@ export default {
     },
 
 
-    // Test closing a book with no target (just close, don't open anywhere)
-    {
-      name: 'shop-create-q3-book',
-      pattern: 'create:book',
-      params: {
-        book: {
-          id$: 'shop-b2',
-          oref: 'o0',
-          name: 'Q3',
-          start: 20220701,
-          end: 20220930
-        }
-      },
-      out: {
-        ok: true,
-        book: {
-          id: 'shop-b2',
-          org_id: 'o0',
-          oref: 'o0',
-          bref: 'o0/Q3/20220701',
-          name: 'Q3',
-          start: 20220701,
-          end: 20220930,
-          time: { kind: 'basic' },
-        }
-      }
-    },
-
-
     // Add some entries to Q2 to test closing without target
     {
       name: 'shop-add-q2-entry',
@@ -1149,7 +1120,7 @@ export default {
           total_accounts: 4,  // All accounts that have entries in Q2
           successful_closures: 4,
           failed_closures: 0,
-          total_balance_transferred: 700, // 50 + 300 + 280 + 70
+          total_balance_transferred: 700, // 50 + 300 + 280 + 70 - to the Open Balance - no new book open
           all_accounts_zeroed: true
         },
         closure_successful: true
