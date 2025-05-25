@@ -527,7 +527,7 @@ function ledger(options) {
             return { ok: false, why: 'book-closed' };
         }
         if (bookEnt.start > msg.date || bookEnt.end < msg.date) {
-            return { ok: false, why: 'invalid-book-period' };
+            return { ok: false, why: 'invalid-entry-period' };
         }
         let debitAccountEnt = await getAccount(seneca, accountCanon, {
             ...debit

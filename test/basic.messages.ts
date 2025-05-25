@@ -740,7 +740,7 @@ export default {
       },
       out: {
         ok: false,
-        why: 'invalid-book-period'
+        why: 'invalid-entry-period'
       }
     },
 
@@ -761,7 +761,7 @@ export default {
       },
       out: {
         ok: false,
-        why: 'invalid-book-period'
+        why: 'invalid-entry-period'
       }
     },
 
