@@ -165,8 +165,6 @@ function ledger(options) {
                 book_id: msg.target_book_id,
                 bref: msg.target_bref
             });
-            // Handling all accounts as permanent ones.
-            // Thus, a new book needs to be provided.
             if (null == targetBookEnt) {
                 return { ok: false, why: 'target-book-not-found' };
             }

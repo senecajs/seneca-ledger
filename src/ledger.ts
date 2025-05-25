@@ -328,8 +328,6 @@ function ledger(this: any, options: LedgerOptions) {
         bref: msg.target_bref
       })
 
-      // Handling all accounts as permanent ones.
-      // Thus, a new book needs to be provided.
       if (null == targetBookEnt) {
         return { ok: false, why: 'target-book-not-found' }
       }
