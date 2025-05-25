@@ -729,7 +729,7 @@ export default {
       name: 'shop-add-q2-entry',
       pattern: 'create:entry',
       params: {
-        id: 'shop-wrong-entry-start',
+        id: 'shop-invalid-entry-start',
         oref: 'o0',
         bref: 'o0/Q1/20220101',
         daref: 'o0/Asset/Cash',
@@ -740,7 +740,7 @@ export default {
       },
       out: {
         ok: false,
-        why: 'wrong-book-period'
+        why: 'invalid-book-period'
       }
     },
 
@@ -750,7 +750,7 @@ export default {
       name: 'shop-add-q2-entry',
       pattern: 'create:entry',
       params: {
-        id: 'shop-wrong-entry-end',
+        id: 'shop-invalid-entry-end',
         oref: 'o0',
         bref: 'o0/Q1/20220101',
         daref: 'o0/Asset/Cash',
@@ -761,7 +761,7 @@ export default {
       },
       out: {
         ok: false,
-        why: 'wrong-book-period'
+        why: 'invalid-book-period'
       }
     },
 
@@ -1120,7 +1120,7 @@ export default {
           total_accounts: 4,  // All accounts that have entries in Q2
           successful_closures: 4,
           failed_closures: 0,
-          total_balance_transferred: 700, // 50 + 300 + 280 + 70 - to the Open Balance - no new book open
+          total_balance_transferred: 0, // No book to transfer
           all_accounts_zeroed: true
         },
         closure_successful: true

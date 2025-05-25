@@ -165,6 +165,8 @@ function ledger(options) {
                 book_id: msg.target_book_id,
                 bref: msg.target_bref
             });
+            // Handling all accounts as permanent ones.
+            // Thus, a new book needs to be provided.
             if (null == targetBookEnt) {
                 return { ok: false, why: 'target-book-not-found' };
             }
@@ -177,6 +179,7 @@ function ledger(options) {
         if (!balanceResult.ok) {
             return { ok: false, why: 'balance-result-failed', error: balanceResult };
         }
+        const closingDate = msg.end || bookEnt.end;
         const currentBalance = balanceResult.balance;
         if (currentBalance === 0) {
             return {
@@ -193,16 +196,15 @@ function ledger(options) {
                 opening_balance_aref: null,
                 closing_entries: [],
                 opening_entries: [],
-                closing_date: msg.end || bookEnt.end
+                closing_date: closingDate
             };
         }
-        const closingDate = msg.end || bookEnt.end;
-        const opAref = msg.opening_balance_aref
+        const obAref = msg.opening_balance_aref
             || `${accountEnt.oref}/Equity/Open Balance`;
-        let opEnt = await getAccount(seneca, accountCanon, {
-            aref: opAref
+        let obEnt = await getAccount(seneca, accountCanon, {
+            aref: obAref
         });
-        if (null == opEnt) {
+        if (null == obEnt) {
             const createResult = await seneca.post('biz:ledger,create:account', {
                 account: {
                     org_id: accountEnt.org_id,
@@ -213,9 +215,9 @@ function ledger(options) {
                 }
             });
             if (!(createResult === null || createResult === void 0 ? void 0 : createResult.ok)) {
-                return { ok: false, why: 'open-balance-create-fail', error: opEnt };
+                return { ok: false, why: 'open-balance-create-fail', error: obEnt };
             }
-            opEnt = createResult.account;
+            obEnt = createResult.account;
         }
         const absBalance = Math.abs(currentBalance);
         const isDebitBalance = (accountEnt.normal === 'debit' && currentBalance > 0)
@@ -230,8 +232,8 @@ function ledger(options) {
             book_id: bookEnt.id,
             date: closingDate,
             kind: 'closing',
-            daref: isDebitBalance ? opEnt.aref : accountEnt.aref,
-            caref: isDebitBalance ? accountEnt.aref : opEnt.aref
+            daref: isDebitBalance ? obEnt.aref : accountEnt.aref,
+            caref: isDebitBalance ? accountEnt.aref : obEnt.aref
         };
         entryPromises.push(seneca.post('biz:ledger,create:entry', closingEntry));
         if (targetBookEnt) {
@@ -240,8 +242,8 @@ function ledger(options) {
                 book_id: targetBookEnt.id,
                 date: targetBookEnt.start,
                 kind: 'opening',
-                daref: isDebitBalance ? accountEnt.aref : opEnt.aref,
-                caref: isDebitBalance ? opEnt.aref : accountEnt.aref
+                daref: isDebitBalance ? accountEnt.aref : obEnt.aref,
+                caref: isDebitBalance ? obEnt.aref : accountEnt.aref
             };
             entryPromises.push(seneca.post('biz:ledger,create:entry', openingEntry));
         }
@@ -251,7 +253,7 @@ function ledger(options) {
         if (!closingResult.ok) {
             return { ok: false, why: 'closing-entry-failed', error: closingResult };
         }
-        if (targetBookEnt && !(openingResult === null || openingResult === void 0 ? void 0 : openingResult.ok)) {
+        if (targetBookEnt && !openingResult.ok) {
             return { ok: false, why: 'opening-entry-failed', error: openingResult };
         }
         const verifyPromises = [
@@ -282,7 +284,7 @@ function ledger(options) {
             original_balance: currentBalance,
             closing_balance: verifyClosingBalance.balance,
             opening_balance: (verifyOpeningBalance === null || verifyOpeningBalance === void 0 ? void 0 : verifyOpeningBalance.balance) || null,
-            opening_balance_aref: opEnt.aref,
+            opening_balance_aref: obEnt.aref,
             closing_entries: [closingResult],
             opening_entries: openingResult ? [openingResult] : [],
             closing_date: closingDate
@@ -362,13 +364,16 @@ function ledger(options) {
             }
         }
         const [allCredits, allDebits] = await Promise.all([
-            seneca.entity(creditCanon).list$({ book_id: bookEnt.id }),
-            seneca.entity(debitCanon).list$({ book_id: bookEnt.id })
+            seneca.entity(creditCanon).list$({ book_id: bookEnt.id, fields$: ['credit_id'] }),
+            seneca.entity(debitCanon).list$({ book_id: bookEnt.id, fields$: ['debit_id'] })
         ]);
-        const accountIds = new Set();
-        allCredits.forEach((entry) => accountIds.add(entry.credit_id));
-        allDebits.forEach((entry) => accountIds.add(entry.debit_id));
-        if (accountIds.size === 0) {
+        const accountIds = [
+            ...new Set([
+                ...allCredits.map((entry) => entry.credit_id),
+                ...allDebits.map((entry) => entry.debit_id)
+            ])
+        ];
+        if (accountIds.length === 0) {
             bookEnt.closed = true;
             await bookEnt.save$();
             return {
@@ -377,7 +382,7 @@ function ledger(options) {
                 bref: bookEnt.bref,
                 target_book_id: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.id,
                 target_bref: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.bref,
-                message: 'No account entries in this book',
+                note: 'No account entries in this book',
                 account_closures: [],
                 summary: {
                     total_accounts: 0,
@@ -386,15 +391,14 @@ function ledger(options) {
                     total_balance_transferred: 0,
                     all_accounts_zeroed: true
                 },
-                balance_check: [],
                 op_balance_check: null,
                 closure_successful: true
             };
         }
-        const opAref = msg.opening_balance_aref || `${bookEnt.oref}/Equity/Open Balance`;
-        const accountPromises = Array.from(accountIds).map(accountId => getAccount(seneca, accountCanon, { account_id: accountId }));
+        const obAref = msg.opening_balance_aref || `${bookEnt.oref}/Equity/Open Balance`;
+        const accountPromises = accountIds.map(accountId => getAccount(seneca, accountCanon, { account_id: accountId }));
         const accounts = await Promise.all(accountPromises);
-        const accountsToClose = accounts.filter(acc => (acc === null || acc === void 0 ? void 0 : acc.aref) !== opAref);
+        const accountsToClose = accounts.filter(acc => (acc === null || acc === void 0 ? void 0 : acc.aref) !== obAref);
         if (accountsToClose.length === 0) {
             return {
                 ok: true,
@@ -402,7 +406,7 @@ function ledger(options) {
                 bref: bookEnt.bref,
                 target_book_id: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.id,
                 target_bref: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.bref,
-                message: 'No accounts to close in this book',
+                note: 'No accounts to close in this book',
                 account_closures: [],
                 summary: {
                     total_accounts: 0,
@@ -411,7 +415,6 @@ function ledger(options) {
                     total_balance_transferred: 0,
                     all_accounts_zeroed: true
                 },
-                balance_check: [],
                 op_balance_check: null,
                 closure_successful: true
             };
@@ -440,51 +443,33 @@ function ledger(options) {
                 });
                 if (closeResult.ok) {
                     successfulClosures++;
-                    totalBalanceTransferred += Math.abs(closeResult.original_balance || 0);
+                    totalBalanceTransferred += Math.abs(closeResult.opening_balance || 0);
                 }
                 else {
                     failedClosures++;
                 }
             });
         }
-        const balancePromises = accountsToClose.map(accountEnt => seneca.post('biz:ledger,balance:account', {
-            account_id: accountEnt.id,
-            book_id: bookEnt.id,
-            save: false
-        }));
-        const balanceResults = await Promise.all(balancePromises);
-        const balanceCheck = balanceResults
-            .filter(result => result.ok)
-            .map(result => ({
-            account_id: result.account_id,
-            aref: result.aref,
-            balance: result.balance,
-            is_zeroed: Math.abs(result.balance) < 0.01
-        }));
-        let opCheck = null;
+        let obCheck = null;
         if (targetBookEnt) {
-            const opBalanceResult = await seneca.post('biz:ledger,balance:account', {
-                aref: opAref,
+            const obBalanceResult = await seneca.post('biz:ledger,balance:account', {
+                aref: obAref,
                 book_id: targetBookEnt.id,
                 save: false
             });
-            if (opBalanceResult.ok) {
-                opCheck = {
-                    aref: opAref,
-                    balance: opBalanceResult.balance,
-                    creditTotal: opBalanceResult.creditTotal,
-                    debitTotal: opBalanceResult.debitTotal,
-                    balanced: Math.abs(opBalanceResult.balance) < 0.01
+            if (obBalanceResult.ok) {
+                obCheck = {
+                    aref: obAref,
+                    balance: obBalanceResult.balance,
+                    creditTotal: obBalanceResult.creditTotal,
+                    debitTotal: obBalanceResult.debitTotal,
+                    balanced: Math.abs(obBalanceResult.balance) < 0.01
                 };
             }
         }
-        const allAccZeroed = balanceCheck.every(v => v.is_zeroed);
+        const allAccZeroed = accountClosures.every(ac => ac.result.closing_balance === 0);
         const closureSuccessful = failedClosures === 0 && allAccZeroed;
-        if (closureSuccessful) {
-            bookEnt.closed = true;
-            await bookEnt.save$();
-        }
-        return {
+        const outClosure = {
             ok: true,
             book_id: bookEnt.id,
             bref: bookEnt.bref,
@@ -499,10 +484,17 @@ function ledger(options) {
                 total_balance_transferred: totalBalanceTransferred,
                 all_accounts_zeroed: allAccZeroed
             },
-            balance_check: balanceCheck,
-            op_balance_check: opCheck,
+            op_balance_check: obCheck,
             closure_successful: closureSuccessful
         };
+        if (!closureSuccessful) {
+            outClosure.ok = false;
+            outClosure.note = 'Book closure failed';
+            return outClosure;
+        }
+        bookEnt.closed = true;
+        await bookEnt.save$();
+        return outClosure;
     }
     async function msgUpdateBook(msg) {
         let seneca = this;
@@ -537,7 +529,7 @@ function ledger(options) {
             return { ok: false, why: 'book-closed' };
         }
         if (bookEnt.start > msg.date || bookEnt.end < msg.date) {
-            return { ok: false, why: 'wrong-book-period' };
+            return { ok: false, why: 'invalid-book-period' };
         }
         let debitAccountEnt = await getAccount(seneca, accountCanon, {
             ...debit
