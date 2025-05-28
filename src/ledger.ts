@@ -660,6 +660,7 @@ function calcTotals(accountEnt: any, creditEnts: any[], debitEnts: any) {
   }
 }
 
+// 1748459422656 -> 20250528
 function formatDateToYYYYMMDD(unixTime: number): number {
   let year = new Date(unixTime).getUTCFullYear()
 
@@ -673,6 +674,7 @@ function formatDateToYYYYMMDD(unixTime: number): number {
   return Number(`${year}${month}${day}`)
 }
 
+// 1748459422656 -> 191022
 function timestamp2timestr(unixTime: number): number {
   const date = new Date(unixTime)
 

@@ -384,6 +384,7 @@ function calcTotals(accountEnt, creditEnts, debitEnts) {
         balance,
     };
 }
+// 1748459422656 -> 20250528 
 function formatDateToYYYYMMDD(unixTime) {
     let year = new Date(unixTime).getUTCFullYear();
     if (year <= 1970) {
@@ -393,6 +394,7 @@ function formatDateToYYYYMMDD(unixTime) {
     let day = (new Date(unixTime).getUTCDate()).toString().padStart(2, '0');
     return Number(`${year}${month}${day}`);
 }
+// 1748459422656 -> 191022
 function timestamp2timestr(unixTime) {
     const date = new Date(unixTime);
     return Number(date.getUTCHours().toString().padStart(2, '0') +
