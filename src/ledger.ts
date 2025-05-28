@@ -220,6 +220,7 @@ function ledger(this: any, options: LedgerOptions) {
     //   debitTotal - creditTotal
 
     let totals = calcTotals(accountEnt, credits, debits)
+    const currUnixTime = Date.now()
 
     let out = {
       ok: true,
@@ -236,6 +237,9 @@ function ledger(this: any, options: LedgerOptions) {
       creditCount: credits.length,
       debitCount: debits.length,
       normal: accountEnt.normal,
+      when: currUnixTime,
+      date: formatDateToYYYYMMDD(currUnixTime),
+      time: timestamp2timestr(currUnixTime)
     }
 
     return out
@@ -656,6 +660,26 @@ function calcTotals(accountEnt: any, creditEnts: any[], debitEnts: any) {
   }
 }
 
+function formatDateToYYYYMMDD(unixTime: number): number {
+  let year = new Date(unixTime).getUTCFullYear()
+
+  if (year <= 1970) {
+    throw new Error('invalid-time')
+  }
+
+  let month = (new Date(unixTime).getUTCMonth() + 1).toString().padStart(2, '0')
+  let day = (new Date(unixTime).getUTCDate()).toString().padStart(2, '0')
+
+  return Number(`${year}${month}${day}`)
+}
+
+function timestamp2timestr(unixTime: number): number {
+  const date = new Date(unixTime)
+
+  return Number(date.getUTCHours().toString().padStart(2, '0') +
+    date.getUTCMinutes().toString().padStart(2, '0') +
+    date.getUTCSeconds().toString().padStart(2, '0'))
+}
 
 // Default options.
 const defaults: LedgerOptions = {
