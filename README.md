@@ -48,6 +48,8 @@ _None._
 * [biz:ledger,create:entry](#-bizledgercreateentry-)
 * [biz:ledger,get:account](#-bizledgergetaccount-)
 * [biz:ledger,get:book](#-bizledgergetbook-)
+* [biz:ledger,close:account](#-bizledgercloseaccount-)
+* [biz:ledger,close:book](#-bizledgerclosebook-)
 * [biz:ledger,list:account](#-bizledgerlistaccount-)
 * [biz:ledger,list:book](#-bizledgerlistbook-)
 * [biz:ledger,list:balance](#-bizledgerlistbalance-)
@@ -107,6 +109,20 @@ No description provided.
 
 ----------
 ### &laquo; `biz:ledger,get:book` &raquo;
+
+No description provided.
+
+
+
+----------
+### &laquo; `biz:ledger,close:account` &raquo;
+
+No description provided.
+
+
+
+----------
+### &laquo; `biz:ledger,close:book` &raquo;
 
 No description provided.
 

@@ -11,6 +11,59 @@ type LedgerOptions = {
   }
 }
 
+type ClosedAccount = {
+  ok: boolean,
+  account_id: string,
+  aref: string,
+  book_id: string,
+  bref: string,
+  target_book_id?: string,
+  target_bref?: string,
+  original_balance: number,
+  closing_balance: number,
+  opening_balance: number,
+  opening_balance_aref: string | null,
+  closing_entries: Record<string, any>[],
+  opening_entries: Record<string, any>[],
+  closing_date: number
+}
+
+type ClosedBookSummary = {
+  total_accounts: number,
+  successful_closures: number,
+  failed_closures: number,
+  total_balance_transferred: number,
+  all_accounts_zeroed: boolean
+}
+
+type OpenBalenceCheck = {
+  aref: string,
+  balance: Record<string, any>,
+  creditTotal: number,
+  debitTotal: number,
+  balanced: boolean
+}
+
+type ClosedBook = {
+  ok: boolean,
+  book_id: string,
+  bref: string,
+  target_book_id?: string,
+  target_bref?: string,
+  closing_date?: number,
+  note?: string,
+  account_closures: Record<string, any>[],
+  summary: ClosedBookSummary,
+  op_balance_check: OpenBalenceCheck | null,
+  closure_successful: boolean
+}
+
+type Invalid = {
+  ok: boolean,
+  why: string
+  error?: Record<string, any>
+}
+
 
 type dc = 'debit' | 'credit'
 
@@ -43,10 +96,12 @@ function ledger(this: any, options: LedgerOptions) {
     .message('update:account', msgUpdateAccount)
     .message('list:account', msgListAccount)
     .message('balance:account', msgBalanceAccount)
+    .message('close:account', msgCloseAccount)
     .message('create:book', msgCreateBook)
     .message('get:book', msgGetBook)
     .message('update:book', msgUpdateBook)
     .message('list:book', msgListBook)
+    .message('close:book', msgCloseBook)
     .message('list:balance', msgListBalance)
     .message('balance:book', msgBalanceBook)
     .message('create:entry', msgCreateEntry)
@@ -220,6 +275,7 @@ function ledger(this: any, options: LedgerOptions) {
     //   debitTotal - creditTotal
 
     let totals = calcTotals(accountEnt, credits, debits)
+    const currUnixTime = Date.now()
 
     let out = {
       ok: true,
@@ -236,9 +292,192 @@ function ledger(this: any, options: LedgerOptions) {
       creditCount: credits.length,
       debitCount: debits.length,
       normal: accountEnt.normal,
+      when: currUnixTime,
+      date: formatDateToYYYYMMDD(currUnixTime),
+      time: timestamp2timestr(currUnixTime)
     }
 
     return out
+  }
+
+  async function msgCloseAccount(this: any, msg: {
+    account_id?: string
+    aref?: string
+    book_id?: string
+    bref?: string
+    target_book_id?: string
+    target_bref?: string
+    end?: number
+    opening_balance_aref?: string
+  }): Promise<ClosedAccount | Invalid> {
+    const seneca = this
+
+    const [accountEnt, bookEnt] = await Promise.all([
+      getAccount(seneca, accountCanon, msg),
+      getBook(seneca, bookCanon, msg)
+    ])
+
+    if (null == accountEnt) {
+      return { ok: false, why: 'account-not-found' }
+    }
+
+    if (null == bookEnt) {
+      return { ok: false, why: 'book-not-found' }
+    }
+
+    let targetBookEnt = null
+    if (msg.target_book_id || msg.target_bref) {
+      targetBookEnt = await getBook(seneca, bookCanon, {
+        book_id: msg.target_book_id,
+        bref: msg.target_bref
+      })
+
+      if (null == targetBookEnt) {
+        return { ok: false, why: 'target-book-not-found' }
+      }
+    }
+
+    const balanceResult = await seneca.post('biz:ledger,balance:account', {
+      account_id: accountEnt.id,
+      book_id: bookEnt.id,
+      save: false
+    })
+
+    if (!balanceResult.ok) {
+      return { ok: false, why: 'balance-result-failed', error: balanceResult }
+    }
+
+    const closingDate = msg.end || bookEnt.end
+    const currentBalance = balanceResult.balance
+
+    if (currentBalance === 0) {
+      return {
+        ok: true,
+        account_id: accountEnt.id,
+        aref: accountEnt.aref,
+        book_id: bookEnt.id,
+        bref: bookEnt.bref,
+        target_book_id: targetBookEnt?.id,
+        target_bref: targetBookEnt?.bref,
+        original_balance: 0,
+        closing_balance: 0,
+        opening_balance: 0,
+        opening_balance_aref: null,
+        closing_entries: [],
+        opening_entries: [],
+        closing_date: closingDate
+      }
+    }
+
+    const obAref = msg.opening_balance_aref
+      || `${accountEnt.oref}/Equity/Open Balance`
+
+    let obEnt = await getAccount(seneca, accountCanon, {
+      aref: obAref
+    })
+
+    if (null == obEnt) {
+      const createResult = await seneca.post('biz:ledger,create:account', {
+        account: {
+          org_id: accountEnt.org_id,
+          oref: accountEnt.oref,
+          path: ['Equity'],
+          name: 'Open Balance',
+          normal: 'credit'
+        }
+      })
+
+      if (!createResult?.ok) {
+        return { ok: false, why: 'open-balance-create-fail', error: obEnt }
+      }
+
+      obEnt = createResult.account
+    }
+
+    const absBalance = Math.abs(currentBalance)
+    const isDebitBalance = (accountEnt.normal === 'debit' && currentBalance > 0)
+      || (accountEnt.normal === 'credit' && currentBalance < 0)
+
+    const baseEntry = {
+      val: absBalance,
+      desc: `${targetBookEnt ? 'Open' : 'Close'} account: ${accountEnt.name}`
+    }
+
+    const entryPromises = []
+
+    const closingEntry = {
+      ...baseEntry,
+      book_id: bookEnt.id,
+      date: closingDate,
+      kind: 'closing',
+      daref: isDebitBalance ? obEnt.aref : accountEnt.aref,
+      caref: isDebitBalance ? accountEnt.aref : obEnt.aref
+    }
+    entryPromises.push(seneca.post('biz:ledger,create:entry', closingEntry))
+
+    if (targetBookEnt) {
+      const openingEntry = {
+        ...baseEntry,
+        book_id: targetBookEnt.id,
+        date: targetBookEnt.start,
+        kind: 'opening',
+        daref: isDebitBalance ? accountEnt.aref : obEnt.aref,
+        caref: isDebitBalance ? obEnt.aref : accountEnt.aref
+      }
+      entryPromises.push(seneca.post('biz:ledger,create:entry', openingEntry))
+    }
+
+    const results = await Promise.all(entryPromises)
+
+    let closingResult = results[0]
+    let openingResult = results[1]
+
+    if (!closingResult.ok) {
+      return { ok: false, why: 'closing-entry-failed', error: closingResult }
+    }
+
+    if (targetBookEnt && !openingResult.ok) {
+      return { ok: false, why: 'opening-entry-failed', error: openingResult }
+    }
+
+    const verifyPromises = [
+      seneca.post('biz:ledger,balance:account', {
+        account_id: accountEnt.id,
+        book_id: bookEnt.id,
+        save: false
+      })
+    ]
+
+    if (targetBookEnt) {
+      verifyPromises.push(
+        seneca.post('biz:ledger,balance:account', {
+          account_id: accountEnt.id,
+          book_id: targetBookEnt.id,
+          save: false
+        })
+      )
+    }
+
+    const verifyResults = await Promise.all(verifyPromises)
+    const verifyClosingBalance = verifyResults[0]
+    const verifyOpeningBalance = verifyResults[1]
+
+    return {
+      ok: true,
+      account_id: accountEnt.id,
+      aref: accountEnt.aref,
+      book_id: bookEnt.id,
+      bref: bookEnt.bref,
+      target_book_id: targetBookEnt?.id,
+      target_bref: targetBookEnt?.bref,
+      original_balance: currentBalance,
+      closing_balance: verifyClosingBalance.balance,
+      opening_balance: verifyOpeningBalance?.balance || null,
+      opening_balance_aref: obEnt.aref,
+      closing_entries: [closingResult],
+      opening_entries: openingResult ? [openingResult] : [],
+      closing_date: closingDate
+    }
   }
 
 
@@ -338,6 +577,197 @@ function ledger(this: any, options: LedgerOptions) {
   }
 
 
+  async function msgCloseBook(this: any, msg: {
+    book_id?: string
+    bref?: string
+    target_book_id?: string
+    target_bref?: string
+    end?: number
+    opening_balance_aref?: string
+    batch_size?: number
+  }): Promise<ClosedBook | Invalid> {
+    const seneca = this
+
+    const bookEnt = await getBook(seneca, bookCanon, msg)
+    if (null == bookEnt) {
+      return { ok: false, why: 'book-not-found' }
+    }
+
+    if (bookEnt.closed === true) {
+      return { ok: false, why: 'book-already-closed' }
+    }
+
+    let targetBookEnt = null
+    if (msg.target_book_id || msg.target_bref) {
+      targetBookEnt = await getBook(seneca, bookCanon, {
+        book_id: msg.target_book_id,
+        bref: msg.target_bref
+      })
+
+      if (null == targetBookEnt) {
+        return { ok: false, why: 'target-book-not-found' }
+      }
+    }
+
+    const [allCredits, allDebits] = await Promise.all([
+      seneca.entity(creditCanon).list$({ book_id: bookEnt.id, fields$: ['credit_id'] }),
+      seneca.entity(debitCanon).list$({ book_id: bookEnt.id, fields$: ['debit_id'] })
+    ])
+
+    const accountIds: string[] = [
+      ...new Set([
+        ...allCredits.map((entry: Record<string, any>) => entry.credit_id),
+        ...allDebits.map((entry: Record<string, any>) => entry.debit_id)
+      ])
+    ]
+
+    if (accountIds.length === 0) {
+      bookEnt.closed = true
+      await bookEnt.save$()
+
+      return {
+        ok: true,
+        book_id: bookEnt.id,
+        bref: bookEnt.bref,
+        target_book_id: targetBookEnt?.id,
+        target_bref: targetBookEnt?.bref,
+        note: 'No account entries in this book',
+        account_closures: [],
+        summary: {
+          total_accounts: 0,
+          successful_closures: 0,
+          failed_closures: 0,
+          total_balance_transferred: 0,
+          all_accounts_zeroed: true
+        },
+        op_balance_check: null,
+        closure_successful: true
+      }
+    }
+
+    const obAref = msg.opening_balance_aref || `${bookEnt.oref}/Equity/Open Balance`
+
+    const accountPromises = accountIds.map(accountId =>
+      getAccount(seneca, accountCanon, { account_id: accountId })
+    )
+    const accounts = await Promise.all(accountPromises)
+
+    const accountsToClose = accounts.filter(acc => acc?.aref !== obAref)
+
+    if (accountsToClose.length === 0) {
+      return {
+        ok: true,
+        book_id: bookEnt.id,
+        bref: bookEnt.bref,
+        target_book_id: targetBookEnt?.id,
+        target_bref: targetBookEnt?.bref,
+        note: 'No accounts to close in this book',
+        account_closures: [],
+        summary: {
+          total_accounts: 0,
+          successful_closures: 0,
+          failed_closures: 0,
+          total_balance_transferred: 0,
+          all_accounts_zeroed: true
+        },
+        op_balance_check: null,
+        closure_successful: true
+      }
+    }
+
+    const batchSize = msg.batch_size || 5
+    const accountClosures: Record<string, any>[] = []
+    let successfulClosures = 0
+    let failedClosures = 0
+    let totalBalanceTransferred = 0
+
+    for (let i = 0; i < accountsToClose.length; i += batchSize) {
+      const batch = accountsToClose.slice(i, i + batchSize)
+
+      const closurePromises = batch.map(accountEnt =>
+        seneca.post('biz:ledger,close:account', {
+          account_id: accountEnt.id,
+          book_id: bookEnt.id,
+          target_book_id: targetBookEnt?.id,
+          target_bref: targetBookEnt?.bref,
+          end: msg.end,
+          opening_balance_aref: msg.opening_balance_aref
+        })
+      )
+
+      const batchResults = await Promise.all(closurePromises)
+
+      batchResults.forEach((closeResult, i) => {
+        const accountEnt = batch[i]
+
+        accountClosures.push({
+          account_id: accountEnt.id,
+          result: closeResult
+        })
+
+        if (closeResult.ok) {
+          successfulClosures++
+          totalBalanceTransferred += Math.abs(closeResult.opening_balance || 0)
+        } else {
+          failedClosures++
+        }
+      })
+    }
+
+    let obCheck = null
+    if (targetBookEnt) {
+      const obBalanceResult = await seneca.post('biz:ledger,balance:account', {
+        aref: obAref,
+        book_id: targetBookEnt.id,
+        save: false
+      })
+
+      if (obBalanceResult.ok) {
+        obCheck = {
+          aref: obAref,
+          balance: obBalanceResult.balance,
+          creditTotal: obBalanceResult.creditTotal,
+          debitTotal: obBalanceResult.debitTotal,
+          balanced: Math.abs(obBalanceResult.balance) < 0.01
+        }
+      }
+    }
+
+    const allAccZeroed = accountClosures.every(ac => ac.result.closing_balance === 0)
+    const closureSuccessful = failedClosures === 0 && allAccZeroed
+
+    const outClosure: ClosedBook = {
+      ok: true,
+      book_id: bookEnt.id,
+      bref: bookEnt.bref,
+      target_book_id: targetBookEnt?.id,
+      target_bref: targetBookEnt?.bref,
+      closing_date: msg.end || bookEnt.end,
+      account_closures: accountClosures,
+      summary: {
+        total_accounts: accountsToClose.length,
+        successful_closures: successfulClosures,
+        failed_closures: failedClosures,
+        total_balance_transferred: totalBalanceTransferred,
+        all_accounts_zeroed: allAccZeroed
+      },
+      op_balance_check: obCheck,
+      closure_successful: closureSuccessful
+    }
+
+    if (!closureSuccessful) {
+      outClosure.ok = false
+      outClosure.note = 'Book closure failed'
+      return outClosure
+    }
+
+    bookEnt.closed = true
+    await bookEnt.save$()
+
+    return outClosure
+  }
+
+
   async function msgUpdateBook(this: any, msg: {
     id?: string
     book_id?: string
@@ -427,6 +857,13 @@ function ledger(this: any, options: LedgerOptions) {
       return { ok: false, why: 'book-not-found' }
     }
 
+    if (bookEnt.closed) {
+      return { ok: false, why: 'book-closed' }
+    }
+
+    if (bookEnt.start > msg.date || bookEnt.end < msg.date) {
+      return { ok: false, why: 'invalid-entry-period' }
+    }
 
     let debitAccountEnt = await getAccount(seneca, accountCanon, {
       ...debit
@@ -656,6 +1093,28 @@ function calcTotals(accountEnt: any, creditEnts: any[], debitEnts: any) {
   }
 }
 
+// 1748459422656 -> 20250528
+function formatDateToYYYYMMDD(unixTime: number): number {
+  let year = new Date(unixTime).getUTCFullYear()
+
+  if (year <= 1970) {
+    throw new Error('invalid-time')
+  }
+
+  let month = (new Date(unixTime).getUTCMonth() + 1).toString().padStart(2, '0')
+  let day = (new Date(unixTime).getUTCDate()).toString().padStart(2, '0')
+
+  return Number(`${year}${month}${day}`)
+}
+
+// 1748459422656 -> 191022
+function timestamp2timestr(unixTime: number): number {
+  const date = new Date(unixTime)
+
+  return Number(date.getUTCHours().toString().padStart(2, '0') +
+    date.getUTCMinutes().toString().padStart(2, '0') +
+    date.getUTCSeconds().toString().padStart(2, '0'))
+}
 
 // Default options.
 const defaults: LedgerOptions = {
