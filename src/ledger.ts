@@ -1,5 +1,6 @@
-/* Copyright © 2022 Seneca Project Contributors, MIT License. */
-
+/* Copyright © 2025 Seneca Project Contributors, MIT License. */
+import fs from 'fs/promises'
+import path from 'path'
 
 type LedgerOptions = {
   debug: boolean
@@ -96,6 +97,7 @@ function ledger(this: any, options: LedgerOptions) {
     .message('update:account', msgUpdateAccount)
     .message('list:account', msgListAccount)
     .message('balance:account', msgBalanceAccount)
+    .message('export:account,format:csv', msgExportAccountCSV)
     .message('close:account', msgCloseAccount)
     .message('create:book', msgCreateBook)
     .message('get:book', msgGetBook)
@@ -300,6 +302,81 @@ function ledger(this: any, options: LedgerOptions) {
     return out
   }
 
+  async function msgExportAccountCSV(this: any, msg: {
+    account_id?: string
+    aref?: string
+    book_id?: string
+    bref?: string
+    filename?: string
+    path?: string
+    save?: boolean // True by default
+  }): Promise<Record<string, any> | Invalid> {
+    const seneca = this
+
+    const [accountEnt, bookEnt] = await Promise.all([
+      getAccount(seneca, accountCanon, msg),
+      getBook(seneca, bookCanon, msg)
+    ])
+
+    if (!accountEnt) {
+      return { ok: false, why: 'account-not-found' }
+    }
+
+    if (!bookEnt) {
+      return { ok: false, why: 'bookEnt-not-found' }
+    }
+
+    const [balanceResult, entriesResult] = await Promise.all([
+      seneca.post('biz:ledger,balance:account', {
+        account_id: accountEnt.id,
+        book_id: bookEnt.id,
+        save: false
+      }),
+      seneca.post('biz:ledger,list:entry', {
+        oref: accountEnt.oref,
+        book_id: bookEnt.id,
+        account_id: accountEnt.id
+      })
+    ])
+
+    if (!balanceResult.ok) {
+      return { ok: false, why: 'balance-calculation-failed', error: balanceResult }
+    }
+
+    if (!entriesResult.ok) {
+      return { ok: false, why: 'entries-fetch-failed', error: entriesResult }
+    }
+
+    const entries = processEntries(entriesResult, bookEnt.start)
+
+    const csvContent = generateCSV(accountEnt, bookEnt, entries, balanceResult)
+
+    const fileName = msg.filename
+      || `${accountEnt.name}_${bookEnt.name}_${bookEnt.oref}.csv`.toLowerCase()
+
+
+    const shouldSave = msg.save !== false
+    let saveResult: Record<string, any> = {}
+
+    if (shouldSave) {
+      saveResult = await saveFile(fileName, csvContent, msg.path,)
+    }
+
+    return {
+      ok: true,
+      account_id: accountEnt.id,
+      aref: accountEnt.aref,
+      book_id: bookEnt.id,
+      bref: bookEnt.bref,
+      fileName,
+      content: csvContent,
+      entry_count: entries.length,
+      final_balance: balanceResult.balance,
+      saved: shouldSave,
+      file: saveResult
+    }
+  }
+
   async function msgCloseAccount(this: any, msg: {
     account_id?: string
     aref?: string
@@ -400,13 +477,13 @@ function ledger(this: any, options: LedgerOptions) {
 
     const baseEntry = {
       val: absBalance,
-      desc: `${targetBookEnt ? 'Open' : 'Close'} account: ${accountEnt.name}`
     }
 
     const entryPromises = []
 
     const closingEntry = {
       ...baseEntry,
+      desc: 'Closing Balance',
       book_id: bookEnt.id,
       date: closingDate,
       kind: 'closing',
@@ -418,6 +495,7 @@ function ledger(this: any, options: LedgerOptions) {
     if (targetBookEnt) {
       const openingEntry = {
         ...baseEntry,
+        desc: 'Opening Balance',
         book_id: targetBookEnt.id,
         date: targetBookEnt.start,
         kind: 'opening',
@@ -930,6 +1008,7 @@ function ledger(this: any, options: LedgerOptions) {
       bref: bookEnt.bref,
       book_id: bookEnt.id,
       custom,
+      date,
       baseval,
       basecur,
       baserate,
@@ -1114,6 +1193,121 @@ function timestamp2timestr(unixTime: number): number {
   return Number(date.getUTCHours().toString().padStart(2, '0') +
     date.getUTCMinutes().toString().padStart(2, '0') +
     date.getUTCSeconds().toString().padStart(2, '0'))
+}
+
+function processEntries(entriesResult: any, bookStart: number):
+  Record<string, any>[] {
+  const entries: Record<string, any>[] = []
+
+  entriesResult.credits.forEach((credit: any) => {
+    entries.push({
+      date: credit.date || bookStart,
+      desc: credit.desc,
+      type: 'credit',
+      val: credit.val,
+      ref: credit.ref,
+      kind: credit.kind || 'standard'
+    })
+  })
+
+  entriesResult.debits.forEach((debit: any) => {
+    entries.push({
+      date: debit.date || bookStart,
+      desc: debit.desc,
+      type: 'debit',
+      val: debit.val,
+      ref: debit.ref,
+      kind: debit.kind || 'standard'
+    })
+  })
+
+  return entries.sort((a: Record<string, any>, b: Record<string, any>) => {
+    if (a.date !== b.date) {
+      return a.date - b.date
+    }
+
+    if (a.kind === 'opening' && b.kind !== 'opening') return -1
+    if (a.kind !== 'opening' && b.kind === 'opening') return 1
+    return 0
+  })
+}
+
+function generateCSV(
+  accountEnt: Record<string, any>,
+  bookEnt: Record<string, any>,
+  entries: Record<string, any>[],
+  balanceResult: Record<string, any>
+): string {
+  let csv = `# ${accountEnt.name} - ${bookEnt.name} - ${bookEnt.oref}\n`
+  csv += 'Date,Description,Debit,Credit,Balance\n'
+
+  let runningBalance = 0
+  let hasOpeningEntry = false
+
+  const openingEntry = entries.find(e => e.kind === 'opening')
+
+  if (openingEntry) {
+    hasOpeningEntry = true
+
+    if (accountEnt.normal == 'debit') {
+      runningBalance = openingEntry.type === 'debit' ? openingEntry.val : -openingEntry.val
+    } else {
+      runningBalance = openingEntry.type === 'credit' ? openingEntry.val : -openingEntry.val
+    }
+
+    csv += `${bookEnt.start},Opening Balance,`
+    csv += `${runningBalance > 0 ? runningBalance : ''},,${runningBalance}\n`
+  }
+
+  entries.forEach(entry => {
+    if (entry.kind === 'opening') return;
+
+    const dateStr = entry.date || formatDateToYYYYMMDD(entry.t_c)
+    const debitVal = entry.type === 'debit' ? entry.val : ''
+    const creditVal = entry.type === 'credit' ? entry.val : ''
+
+    if (accountEnt.normal === 'debit') {
+      runningBalance += entry.type === 'debit' ? entry.val : -entry.val
+    } else {
+      runningBalance += entry.type === 'credit' ? entry.val : -entry.val
+    }
+
+    csv += `${dateStr},${entry.desc},${debitVal},${creditVal},${runningBalance}\n`
+  })
+
+  if (balanceResult.balance != runningBalance) {
+    throw Error('invalid-balance-total')
+  }
+
+  if (bookEnt.end == -1) {
+    csv += `Total,,,${balanceResult.balance}\n`
+  }
+
+  return csv
+}
+
+async function saveFile(
+  fileName: string,
+  content: any,
+  filePath?: string,
+): Promise<Record<string, any> | Invalid> {
+  try {
+    const outDir = filePath || process.cwd() + "/ledger_csv"
+
+    await fs.mkdir(outDir, { recursive: true })
+
+    filePath = path.join(outDir, fileName)
+
+    await fs.writeFile(filePath, content, 'utf8')
+
+    return { ok: true, filePath }
+  } catch (err: any) {
+    return {
+      ok: false,
+      why: 'save-file-failed',
+      error: err.message
+    }
+  }
 }
 
 // Default options.

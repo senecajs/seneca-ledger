@@ -193,7 +193,7 @@ export default {
         caref: 'o0/Income/Sales',
         val: 100,
         desc: 'Jan Sales',
-        date: '20220131',
+        date: 20220131,
         custom: {
           geo: 'EU'
         },
@@ -216,6 +216,7 @@ export default {
           baseval: -1,
           basecur: '---',
           baserate: 0,
+          date: 20220131,
           credit_id: 'shop-a1',
           caref: 'o0/Income/Sales',
           id: 'shop-e0'
@@ -233,6 +234,7 @@ export default {
           baseval: -1,
           basecur: '---',
           baserate: 0,
+          date: 20220131,
           debit_id: 'shop-a0',
           daref: 'o0/Asset/Cash',
           id: 'shop-e0'
@@ -251,7 +253,7 @@ export default {
         caref: 'o0/Asset/Cash',
         val: 20,
         desc: 'Buy desk',
-        date: '20220102',
+        date: 20220202,
       },
       out: {
         ok: true,
@@ -267,6 +269,7 @@ export default {
           baseval: -1,
           basecur: '---',
           baserate: 0,
+          date: 20220202,
           credit_id: 'shop-a0',
           caref: 'o0/Asset/Cash',
           id: 'shop-e1'
@@ -283,6 +286,7 @@ export default {
           baseval: -1,
           basecur: '---',
           baserate: 0,
+          date: 20220202,
           debit_id: 'shop-a2',
           daref: 'o0/Asset/Office',
           id: 'shop-e1'
@@ -1103,12 +1107,42 @@ export default {
     },
 
 
+    // Create Q3 book for target closing
+    {
+      name: 'shop-b1',
+      pattern: 'create:book',
+      params: {
+        book: {
+          id$: 'shop-b2',
+          oref: 'o0',
+          name: 'Q3',
+          start: 20220701,
+          end: 20220930
+        }
+      },
+      out: {
+        ok: true,
+        book: {
+          id: 'shop-b2',
+          org_id: 'o0',
+          oref: 'o0',
+          bref: 'o0/Q3/20220701',
+          name: 'Q3',
+          start: 20220701,
+          end: 20220930,
+          time: { kind: 'basic' },
+        }
+      }
+    },
+
+
     // Close Q2 book without specifying target (only close, don't open)
     {
       name: 'shop-cb1-no-target',
       pattern: 'close:book',
       params: {
         bref: 'o0/Q2/20220401',
+        target_bref: 'o0/Q3/20220701',
         end: 20220630
       },
       out: {
@@ -1120,7 +1154,7 @@ export default {
           total_accounts: 4,  // All accounts that have entries in Q2
           successful_closures: 4,
           failed_closures: 0,
-          total_balance_transferred: 0, // No book to transfer
+          total_balance_transferred: 700,
           all_accounts_zeroed: true
         },
         closure_successful: true
@@ -1166,6 +1200,46 @@ export default {
       out: {
         ok: false,
         why: 'book-closed'
+      }
+    },
+
+
+    // Export Cash Q1 o0 Account 
+    {
+      name: 'export-cash-q1-acc',
+      pattern: 'export:account,format:csv',
+      params: {
+        aref: 'o0/Asset/Cash',
+        bref: 'o0/Q1/20220101',
+      },
+      out: {
+        ok: true,
+      }
+    },
+
+    // Export Cash Q2 o0 Account 
+    {
+      name: 'export-cash-q2-acc',
+      pattern: 'export:account,format:csv',
+      params: {
+        aref: 'o0/Asset/Cash',
+        bref: 'o0/Q2/20220401',
+      },
+      out: {
+        ok: true,
+      }
+    },
+
+    // Export Cash Q3 o0 Account 
+    {
+      name: 'export-cash-q3-acc',
+      pattern: 'export:account,format:csv',
+      params: {
+        aref: 'o0/Asset/Cash',
+        bref: 'o0/Q3/20220701',
+      },
+      out: {
+        ok: true,
       }
     },
   ],
