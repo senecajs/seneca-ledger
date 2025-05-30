@@ -499,8 +499,9 @@ function ledger(options) {
                 .toLowerCase()
                 .replace(/[^a-zA-Z0-9.]/g, '_');
         const summaryResult = await generateBookSummaryCSV(bookEnt, exportResults.filter(r => r.result.ok));
-        if (msg.save) {
-            await saveFile(bookEnt, fileName, summaryResult.content, msg.path);
+        let saveResult = {};
+        if (shouldSave) {
+            saveResult = await saveFile(bookEnt, fileName, summaryResult.content, msg.path);
         }
         return {
             ok: failedExports === 0,
@@ -512,7 +513,8 @@ function ledger(options) {
             successful_exports: successfulExports,
             failed_exports: failedExports,
             exports: exportResults,
-            summary: summaryResult
+            summary: summaryResult,
+            file: saveResult
         };
     }
     async function msgCloseBook(msg) {

@@ -779,9 +779,9 @@ function ledger(this: any, options: LedgerOptions) {
       exportResults.filter(r => r.result.ok),
     )
 
-    if (msg.save) {
-      await saveFile(bookEnt, fileName, summaryResult.content, msg.path)
-
+    let saveResult: Record<string, any> = {}
+    if (shouldSave) {
+      saveResult = await saveFile(bookEnt, fileName, summaryResult.content, msg.path)
     }
 
     return {
@@ -794,7 +794,8 @@ function ledger(this: any, options: LedgerOptions) {
       successful_exports: successfulExports,
       failed_exports: failedExports,
       exports: exportResults,
-      summary: summaryResult
+      summary: summaryResult,
+      file: saveResult
     }
   }
 

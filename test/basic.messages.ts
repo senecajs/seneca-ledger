@@ -1337,7 +1337,8 @@ export default {
       params: {
         aref: 'o0/Asset/Cash',
         bref: 'o0/Q2/20220401',
-        path: '/../test/ledger_csv/o0/q2'
+        // path: '/../test/ledger_csv/o0/q2',
+        save: false
       },
       out: {
         ok: true,
@@ -1353,9 +1354,9 @@ export default {
           '20220630,Closing Balance,,280,0\n',
         entry_count: 3,
         final_balance: 0,
-        saved: true,
+        // saved: true,
         file: {
-          ok: true,
+          // ok: true,
         }
       }
     },
@@ -1368,7 +1369,8 @@ export default {
       params: {
         aref: 'o0/Income/Sales',
         bref: 'o0/Q2/20220401',
-        path: '/../test/ledger_csv/o0/q2'
+        // path: '/../test/ledger_csv/o0/q2',
+        save: false
       },
       out: {
         ok: true,
@@ -1384,9 +1386,9 @@ export default {
           '20220630,Closing Balance,300,,0\n',
         entry_count: 3,
         final_balance: 0,
-        saved: true,
+        // saved: true,
         file: {
-          ok: true,
+          // ok: true,
         }
       }
     },
@@ -1399,7 +1401,8 @@ export default {
       params: {
         aref: 'o0/Asset/Office',
         bref: 'o0/Q2/20220401',
-        path: '/../test/ledger_csv/o0/q2'
+        // path: '/../test/ledger_csv/o0/q2',
+        save: false
       },
       out: {
         ok: true,
@@ -1414,9 +1417,9 @@ export default {
           '20220630,Closing Balance,,70,0\n',
         entry_count: 2,
         final_balance: 0,
-        saved: true,
+        // saved: true,
         file: {
-          ok: true,
+          // ok: true,
         }
       }
     },
@@ -1429,7 +1432,8 @@ export default {
       params: {
         aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q2/20220401',
-        path: '/../test/ledger_csv/o0/q2'
+        // path: '/../test/ledger_csv/o0/q2',
+        save: false
       },
       out: {
         ok: true,
@@ -1444,9 +1448,9 @@ export default {
           '20220630,Closing Balance,50,,0\n',
         entry_count: 2,
         final_balance: 0,
-        saved: true,
+        // saved: true,
         file: {
-          ok: true,
+          // ok: true,
         }
       }
     },
@@ -1585,18 +1589,39 @@ export default {
       }
     },
 
-    // // Export Book Q2 o0
-    // {
-    //   name: 'export-book-q2-o0',
-    //   pattern: 'export:book,format:csv',
-    //   params: {
-    //     bref: 'o0/Q2/20220401',
-    //   },
-    //   out: {
-    //     ok: true,
-    //   }
-    // },
-    //
+    // Export Book Q2 o0
+    {
+      name: 'export-book-q2-o0',
+      pattern: 'export:book,format:csv',
+      params: {
+        bref: 'o0/Q2/20220401',
+        // path: '/../test/ledger_csv/o0/q2',
+        save: false
+      },
+      out: {
+        ok: true,
+        book_id: 'shop-b1',
+        bref: 'o0/Q2/20220401',
+        book_name: 'Q2',
+        // output_directory: '/../test/ledger_csv/o0/q2',
+        total_accounts: 4,
+        successful_exports: 4,
+        failed_exports: 0,
+        summary: {
+          ok: true,
+          content: '# Book Summary: Q2\n' +
+            '# Organization: o0\n' +
+            '# Period: 20220401 to 20220630\n' +
+            '\n' +
+            'Account,Type,Final Balance,Closing Balance,Entry Count,File\n' +
+            'Credit Card,Liability,0,50,2,credit_card_q2_o0.csv\n' +
+            'Sales,Income,0,300,3,sales_q2_o0.csv\n' +
+            'Cash,Asset,0,280,3,cash_q2_o0.csv\n' +
+            'Office,Asset,0,70,2,office_q2_o0.csv\n'
+        },
+      }
+    },
+
     // // Export Book Q3 o0
     // {
     //   name: 'export-book-q3-o0',
