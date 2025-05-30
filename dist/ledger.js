@@ -425,9 +425,9 @@ function ledger(options) {
                 book_id: bookEnt.id,
                 fields$: ['credit_id', 'caref']
             }),
-            seneca.entity(creditCanon).list$({
+            seneca.entity(debitCanon).list$({
                 book_id: bookEnt.id,
-                fields$: ['credit_id', 'caref']
+                fields$: ['debit_id', 'daref']
             })
         ]);
         const accountIds = [
