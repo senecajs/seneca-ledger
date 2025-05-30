@@ -103,7 +103,7 @@ function ledger(this: any, options: LedgerOptions) {
     .message('get:book', msgGetBook)
     .message('update:book', msgUpdateBook)
     .message('list:book', msgListBook)
-    // .message('export:book,format:csv', msgExportBookCSV)
+    .message('export:book,format:csv', msgExportBookCSV)
     .message('close:book', msgCloseBook)
     .message('list:balance', msgListBalance)
     .message('balance:book', msgBalanceBook)
@@ -350,7 +350,8 @@ function ledger(this: any, options: LedgerOptions) {
 
     const entries = processEntries(entriesResult, bookEnt.start)
 
-    const csvContent = generateCSV(accountEnt, bookEnt, entries, balanceResult)
+    const csvContent = generateAccountCSV(accountEnt,
+      bookEnt, entries, balanceResult)
 
     const fileName = msg.filename
       || `${accountEnt.name}_${bookEnt.name}_${bookEnt.oref}.csv`
@@ -365,6 +366,11 @@ function ledger(this: any, options: LedgerOptions) {
       saveResult = await saveFile(bookEnt, fileName, csvContent, msg.path)
     }
 
+    let closingBalance = 0
+    if (accountEnt.name !== "Opening Balance") {
+      closingBalance = entries[entries.length - 1].val
+    }
+
     return {
       ok: true,
       account_id: accountEnt.id,
@@ -375,6 +381,7 @@ function ledger(this: any, options: LedgerOptions) {
       content: csvContent,
       entry_count: entries.length,
       final_balance: balanceResult.balance,
+      closing_balance: bookEnt.end > 0 ? closingBalance : 0,
       saved: shouldSave,
       file: saveResult
     }
@@ -657,148 +664,139 @@ function ledger(this: any, options: LedgerOptions) {
     return { ok: true, q, list }
   }
 
-  // async function msgExportBookCSV(this: any, msg: {
-  //   book_id?: string
-  //   bref?: string
-  //   path?: string
-  //   save?: boolean
-  //   batch_size?: number
-  // }): Promise<Record<string, any> | Invalid> {
-  //   const seneca = this
-  //
-  //   const bookEnt = await getBook(seneca, bookCanon, msg)
-  //
-  //   if (!bookEnt) {
-  //     return { ok: false, why: 'book-not-found' }
-  //   }
-  //
-  //   const [allCredits, allDebits] = await Promise.all([
-  //     seneca.entity(creditCanon).list$({
-  //       book_id: bookEnt.id,
-  //       fields$: ['credit_id', 'caref']
-  //     }),
-  //     seneca.entity(creditCanon).list$({
-  //       book_id: bookEnt.id,
-  //       fields$: ['credit_id', 'caref']
-  //     })
-  //   ])
-  //
-  //   const accountIds: string[] = [
-  //     ...new Set([
-  //       ...allCredits.map((entry: Record<string, any>) => entry.credit_id),
-  //       ...allDebits.map((entry: Record<string, any>) => entry.debit_id)
-  //     ])
-  //   ]
-  //
-  //   if (accountIds.length === 0) {
-  //     return {
-  //       ok: true,
-  //       book_id: bookEnt.id,
-  //       bref: bookEnt.bref,
-  //       note: 'No accounts found in this book',
-  //       total_accounts: 0,
-  //       successful_exports: 0,
-  //       failed_exports: 0,
-  //       exports: []
-  //     }
-  //   }
-  //
-  //   const accountPromises = accountIds.map(accountId =>
-  //     getAccount(seneca, accountCanon, { account_id: accountId })
-  //   )
-  //   const accounts = await Promise.all(accountPromises)
-  //   // Check NULL
-  //   const validAccounts = accounts.filter(acc => acc !== null)
-  //
-  //   if (validAccounts.length === 0) {
-  //     return {
-  //       ok: true,
-  //       book_id: bookEnt.id,
-  //       bref: bookEnt.bref,
-  //       note: 'No valid accounts found',
-  //       total_accounts: 0,
-  //       successful_exports: 0,
-  //       failed_exports: 0,
-  //       exports: []
-  //     }
-  //   }
-  //
-  //   const batchSize = msg.batch_size || 5
-  //   const shouldSave = msg.save !== false
-  //   const exportResults: Record<string, any>[] = []
-  //   let successfulExports = 0
-  //   let failedExports = 0
-  //
-  //   const baseDir = msg.path || __dirname + "/ledger_csv"
-  //   const bookDir = path.join(baseDir, bookEnt.name)
-  //
-  //   if (shouldSave) {
-  //     try {
-  //       await fs.mkdir(bookDir, { recursive: true })
-  //     } catch (err: any) {
-  //       return {
-  //         ok: false,
-  //         why: 'directory-creation-failed',
-  //         error: err.message
-  //       }
-  //     }
-  //   }
-  //
-  //   for (let i = 0; i < validAccounts.length; i += batchSize) {
-  //     const batch = validAccounts.slice(i, i + batchSize)
-  //
-  //     const exportPromises = batch.map(accountEnt =>
-  //       seneca.post('biz:ledger,export:account,format:csv', {
-  //         account_id: accountEnt.id,
-  //         book_id: bookEnt.id,
-  //         path: bookDir,
-  //         save: shouldSave
-  //       })
-  //     )
-  //
-  //     const batchResults = await Promise.all(exportPromises)
-  //
-  //     batchResults.forEach((exportResult, i) => {
-  //       const accountEnt = batch[i]
-  //
-  //       exportResults.push({
-  //         account_id: accountEnt.id,
-  //         aref: accountEnt.aref,
-  //         name: accountEnt.name,
-  //         result: exportResult
-  //       })
-  //
-  //       if (exportResult.ok) {
-  //         successfulExports++
-  //       } else {
-  //         failedExports++
-  //       }
-  //     })
-  //   }
-  //
-  //   let summaryResult: Record<string, any> = { ok: false, why: 'not-generated' }
-  //
-  //   if (successfulExports > 0 && shouldSave) {
-  //     summaryResult = await generateBookSummaryCSV(
-  //       bookEnt,
-  //       exportResults.filter(r => r.result.ok),
-  //       bookDir
-  //     )
-  //   }
-  //
-  //   return {
-  //     ok: failedExports === 0,
-  //     book_id: bookEnt.id,
-  //     bref: bookEnt.bref,
-  //     book_name: bookEnt.name,
-  //     output_directory: shouldSave ? bookDir : null,
-  //     total_accounts: validAccounts.length,
-  //     successful_exports: successfulExports,
-  //     failed_exports: failedExports,
-  //     exports: exportResults,
-  //     summary: summaryResult
-  //   }
-  // }
+  async function msgExportBookCSV(this: any, msg: {
+    book_id?: string
+    bref?: string
+    path?: string
+    filename?: string
+    save?: boolean
+    batch_size?: number
+  }): Promise<Record<string, any> | Invalid> {
+    const seneca = this
+
+    const bookEnt = await getBook(seneca, bookCanon, msg)
+
+    if (!bookEnt) {
+      return { ok: false, why: 'book-not-found' }
+    }
+
+    const [allCredits, allDebits] = await Promise.all([
+      seneca.entity(creditCanon).list$({
+        book_id: bookEnt.id,
+        fields$: ['credit_id', 'caref']
+      }),
+      seneca.entity(creditCanon).list$({
+        book_id: bookEnt.id,
+        fields$: ['credit_id', 'caref']
+      })
+    ])
+
+    const accountIds: string[] = [
+      ...new Set([
+        ...allCredits.map((entry: Record<string, any>) => entry.credit_id),
+        ...allDebits.map((entry: Record<string, any>) => entry.debit_id)
+      ])
+    ]
+
+    if (accountIds.length === 0) {
+      return {
+        ok: true,
+        book_id: bookEnt.id,
+        bref: bookEnt.bref,
+        note: 'No accounts found in this book',
+        total_accounts: 0,
+        successful_exports: 0,
+        failed_exports: 0,
+        exports: []
+      }
+    }
+
+    const accountPromises = accountIds.map(accountId =>
+      getAccount(seneca, accountCanon, { account_id: accountId })
+    )
+    const accounts = await Promise.all(accountPromises)
+    const validAccounts = accounts.filter(acc => acc !== null
+      && acc.aref !== `${bookEnt.oref}/Equity/Open Balance`)
+
+    if (validAccounts.length === 0) {
+      return {
+        ok: true,
+        book_id: bookEnt.id,
+        bref: bookEnt.bref,
+        note: 'No valid accounts found',
+        total_accounts: 0,
+        successful_exports: 0,
+        failed_exports: 0,
+        exports: []
+      }
+    }
+
+    const batchSize = msg.batch_size || 5
+    const shouldSave = msg.save !== false
+    const exportResults: Record<string, any>[] = []
+    let successfulExports = 0
+    let failedExports = 0
+
+    for (let i = 0; i < validAccounts.length; i += batchSize) {
+      const batch = validAccounts.slice(i, i + batchSize)
+
+      const exportPromises = batch.map(accountEnt =>
+        seneca.post('biz:ledger,export:account,format:csv', {
+          account_id: accountEnt.id,
+          book_id: bookEnt.id,
+          path: msg.path,
+          save: shouldSave
+        })
+      )
+
+      const batchResults = await Promise.all(exportPromises)
+
+      batchResults.forEach((exportResult, i) => {
+        const accountEnt = batch[i]
+
+        exportResults.push({
+          account_id: accountEnt.id,
+          aref: accountEnt.aref,
+          name: accountEnt.name,
+          result: exportResult
+        })
+
+        if (exportResult.ok) {
+          successfulExports++
+        } else {
+          failedExports++
+        }
+      })
+    }
+
+    const fileName = msg.filename
+      || `${bookEnt.oref}_${bookEnt.name}_summary.csv`
+        .toLowerCase()
+        .replace(/[^a-zA-Z0-9.]/g, '_')
+
+    const summaryResult = await generateBookSummaryCSV(
+      bookEnt,
+      exportResults.filter(r => r.result.ok),
+    )
+
+    if (msg.save) {
+      await saveFile(bookEnt, fileName, summaryResult.content, msg.path)
+
+    }
+
+    return {
+      ok: failedExports === 0,
+      book_id: bookEnt.id,
+      bref: bookEnt.bref,
+      book_name: bookEnt.name,
+      output_directory: shouldSave ? msg.path : null,
+      total_accounts: validAccounts.length,
+      successful_exports: successfulExports,
+      failed_exports: failedExports,
+      exports: exportResults,
+      summary: summaryResult
+    }
+  }
 
 
   async function msgCloseBook(this: any, msg: {
@@ -1378,7 +1376,7 @@ function processEntries(entriesResult: any, bookStart: number):
   })
 }
 
-function generateCSV(
+function generateAccountCSV(
   accountEnt: Record<string, any>,
   bookEnt: Record<string, any>,
   entries: Record<string, any>[],
@@ -1462,43 +1460,37 @@ async function saveFile(
   }
 }
 
-// async function generateBookSummaryCSV(
-//   bookEnt: Record<string, any>,
-//   successfulExports: Record<string, any>[],
-//   outputDir: string
-// ): Promise<Record<string, any>> {
-//   try {
-//     let summaryContent = `# Book Summary: ${bookEnt.name}\n`
-//     summaryContent += `# Organization: ${bookEnt.oref}\n`
-//     summaryContent += `# Period: ${bookEnt.start} to ${bookEnt.end === -1 ?
-//       'ongoing' : bookEnt.end}\n`
-//     summaryContent += '\n'
-//     summaryContent += 'Account,Type,Final Balance,Entry Count,File\n'
-//
-//
-//     successfulExports.forEach(exp => {
-//       const result = exp.result
-//       const accountType = exp.aref.split('/')[1] || 'Uknown'
-//       summaryContent += `${exp.name},${accountType},${result.
-//         final_balance},${result.entry_count},${result.fileName}\n`
-//     })
-//
-//     const summaryPath = path.join(outputDir, `${bookEnt.oref}_book_summary.csv`
-//       .toLowerCase())
-//     await fs.writeFile(summaryPath, summaryContent, 'utf8')
-//
-//     return {
-//       ok: true,
-//       path: summaryPath
-//     }
-//   } catch (err: any) {
-//     return {
-//       ok: false,
-//       why: 'summary-generation-failed',
-//       error: err.message
-//     }
-//   }
-// }
+async function generateBookSummaryCSV(
+  bookEnt: Record<string, any>,
+  successfulExports: Record<string, any>[],
+): Promise<Record<string, any>> {
+  try {
+    let summaryContent = `# Book Summary: ${bookEnt.name}\n`
+    summaryContent += `# Organization: ${bookEnt.oref}\n`
+    summaryContent += `# Period: ${bookEnt.start} to ${bookEnt.end === -1 ?
+      'ongoing' : bookEnt.end}\n`
+    summaryContent += '\n'
+    summaryContent += 'Account,Type,Final Balance,Closing Balance,Entry Count,File\n'
+
+    successfulExports.forEach(exp => {
+      const result = exp.result
+      const accountType = exp.aref.split('/')[1] || 'Uknown'
+      summaryContent += `${exp.name},${accountType},${result.
+        final_balance},${result.closing_balance},${result.entry_count},${result.fileName}\n`
+    })
+
+    return {
+      ok: true,
+      content: summaryContent
+    }
+  } catch (err: any) {
+    return {
+      ok: false,
+      why: 'summary-generation-failed',
+      error: err.message
+    }
+  }
+}
 
 // Default options.
 const defaults: LedgerOptions = {
