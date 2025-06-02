@@ -197,7 +197,7 @@ function ledger(options) {
         const shouldSave = msg.save !== false;
         let saveResult = {};
         if (shouldSave) {
-            saveResult = await saveFile(bookEnt, fileName, csvContent, msg.path);
+            saveResult = await saveFile(bookEnt, fileName, csvContent, msg.filePath);
         }
         let closingBalance = 0;
         if (accountEnt.name !== "Opening Balance") {
@@ -474,7 +474,7 @@ function ledger(options) {
             const exportPromises = batch.map(accountEnt => seneca.post('biz:ledger,export:account,format:csv', {
                 account_id: accountEnt.id,
                 book_id: bookEnt.id,
-                path: msg.path,
+                filePath: msg.filePath,
                 save: shouldSave
             }));
             const batchResults = await Promise.all(exportPromises);
@@ -501,14 +501,14 @@ function ledger(options) {
         const summaryResult = await generateBookSummaryCSV(bookEnt, exportResults.filter(r => r.result.ok));
         let saveResult = {};
         if (shouldSave) {
-            saveResult = await saveFile(bookEnt, fileName, summaryResult.content, msg.path);
+            saveResult = await saveFile(bookEnt, fileName, summaryResult.content, msg.filePath);
         }
         return {
             ok: failedExports === 0,
             book_id: bookEnt.id,
             bref: bookEnt.bref,
             book_name: bookEnt.name,
-            output_directory: shouldSave ? msg.path : null,
+            output_directory: shouldSave ? msg.filePath : null,
             total_accounts: validAccounts.length,
             successful_exports: successfulExports,
             failed_exports: failedExports,
@@ -950,9 +950,8 @@ function generateAccountCSV(accountEnt, bookEnt, entries, balanceResult) {
 }
 async function saveFile(bookEnt, fileName, content, filePath) {
     try {
-        const inputPath = filePath ||
-            `/ledger_csv/${bookEnt.oref}/${bookEnt.name}`.toLowerCase();
-        const outDir = __dirname + inputPath;
+        const outDir = filePath ||
+            __dirname + `/ledger_csv/${bookEnt.oref}/${bookEnt.name}`.toLowerCase();
         await promises_1.default.mkdir(outDir, { recursive: true });
         filePath = path_1.default.join(outDir, fileName);
         await promises_1.default.writeFile(filePath, content, 'utf8');

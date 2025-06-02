@@ -1211,7 +1211,7 @@ export default {
       params: {
         aref: 'o0/Asset/Cash',
         bref: 'o0/Q1/20220101',
-        // path: '/../test/ledger_csv/o0/q1',
+        // filePath: `${__dirname}/ledger_csv/o0/q1`
         save: false
       },
       out: {
@@ -1243,7 +1243,6 @@ export default {
       params: {
         aref: 'o0/Income/Sales',
         bref: 'o0/Q1/20220101',
-        // path: '/../test/ledger_csv/o0/q1',
         save: false
       },
       out: {
@@ -1274,7 +1273,6 @@ export default {
       params: {
         aref: 'o0/Asset/Office',
         bref: 'o0/Q1/20220101',
-        // path: '/../test/ledger_csv/o0/q1',
         save: false
       },
       out: {
@@ -1306,7 +1304,6 @@ export default {
       params: {
         aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q1/20220101',
-        // path: '/../test/ledger_csv/o0/q1',
         save: false
       },
       out: {
@@ -1337,7 +1334,6 @@ export default {
       params: {
         aref: 'o0/Asset/Cash',
         bref: 'o0/Q2/20220401',
-        // path: '/../test/ledger_csv/o0/q2',
         save: false
       },
       out: {
@@ -1369,7 +1365,6 @@ export default {
       params: {
         aref: 'o0/Income/Sales',
         bref: 'o0/Q2/20220401',
-        // path: '/../test/ledger_csv/o0/q2',
         save: false
       },
       out: {
@@ -1401,7 +1396,6 @@ export default {
       params: {
         aref: 'o0/Asset/Office',
         bref: 'o0/Q2/20220401',
-        // path: '/../test/ledger_csv/o0/q2',
         save: false
       },
       out: {
@@ -1432,7 +1426,6 @@ export default {
       params: {
         aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q2/20220401',
-        // path: '/../test/ledger_csv/o0/q2',
         save: false
       },
       out: {
@@ -1463,7 +1456,6 @@ export default {
       params: {
         aref: 'o0/Asset/Cash',
         bref: 'o0/Q3/20220701',
-        // path: '/../test/ledger_csv/o0/q3',
         save: false
       },
       out: {
@@ -1494,7 +1486,6 @@ export default {
       params: {
         aref: 'o0/Income/Sales',
         bref: 'o0/Q3/20220701',
-        // path: '/../test/ledger_csv/o0/q3',
         save: false
       },
       out: {
@@ -1524,7 +1515,6 @@ export default {
       params: {
         aref: 'o0/Asset/Office',
         bref: 'o0/Q3/20220701',
-        // path: '/../test/ledger_csv/o0/q3',
         save: false
       },
       out: {
@@ -1554,7 +1544,6 @@ export default {
       params: {
         aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q3/20220701',
-        // path: '/../test/ledger_csv/o0/q3',
         save: false
       },
       out: {
@@ -1582,7 +1571,6 @@ export default {
       pattern: 'export:book,format:csv',
       params: {
         bref: 'o0/Q1/20220101',
-        // path: '/../test/ledger_csv/o0/q1',
         save: false
       },
       out: {
@@ -1614,7 +1602,6 @@ export default {
       pattern: 'export:book,format:csv',
       params: {
         bref: 'o0/Q2/20220401',
-        // path: '/../test/ledger_csv/o0/q2',
         save: false
       },
       out: {
@@ -1647,7 +1634,7 @@ export default {
       pattern: 'export:book,format:csv',
       params: {
         bref: 'o0/Q3/20220701',
-        // path: '/../test/ledger_csv/o0/q3',
+        // filePath: `${__dirname}/ledger_csv/o0/q3`,
         save: false
       },
       out: {

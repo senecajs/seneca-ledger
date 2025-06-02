@@ -309,7 +309,7 @@ function ledger(this: any, options: LedgerOptions) {
     book_id?: string
     bref?: string
     filename?: string
-    path?: string
+    filePath?: string
     save?: boolean // True by default
   }): Promise<Record<string, any> | Invalid> {
     const seneca = this
@@ -363,7 +363,7 @@ function ledger(this: any, options: LedgerOptions) {
     let saveResult: Record<string, any> = {}
 
     if (shouldSave) {
-      saveResult = await saveFile(bookEnt, fileName, csvContent, msg.path)
+      saveResult = await saveFile(bookEnt, fileName, csvContent, msg.filePath)
     }
 
     let closingBalance = 0
@@ -667,7 +667,7 @@ function ledger(this: any, options: LedgerOptions) {
   async function msgExportBookCSV(this: any, msg: {
     book_id?: string
     bref?: string
-    path?: string
+    filePath?: string
     filename?: string
     save?: boolean
     batch_size?: number
@@ -744,7 +744,7 @@ function ledger(this: any, options: LedgerOptions) {
         seneca.post('biz:ledger,export:account,format:csv', {
           account_id: accountEnt.id,
           book_id: bookEnt.id,
-          path: msg.path,
+          filePath: msg.filePath,
           save: shouldSave
         })
       )
@@ -781,7 +781,8 @@ function ledger(this: any, options: LedgerOptions) {
 
     let saveResult: Record<string, any> = {}
     if (shouldSave) {
-      saveResult = await saveFile(bookEnt, fileName, summaryResult.content, msg.path)
+      saveResult = await saveFile(bookEnt,
+        fileName, summaryResult.content, msg.filePath)
     }
 
     return {
@@ -789,7 +790,7 @@ function ledger(this: any, options: LedgerOptions) {
       book_id: bookEnt.id,
       bref: bookEnt.bref,
       book_name: bookEnt.name,
-      output_directory: shouldSave ? msg.path : null,
+      output_directory: shouldSave ? msg.filePath : null,
       total_accounts: validAccounts.length,
       successful_exports: successfulExports,
       failed_exports: failedExports,
@@ -1440,10 +1441,9 @@ async function saveFile(
   filePath?: string,
 ): Promise<Record<string, any> | Invalid> {
   try {
-    const inputPath = filePath ||
-      `/ledger_csv/${bookEnt.oref}/${bookEnt.name}`.toLowerCase()
+    const outDir = filePath ||
+      __dirname + `/ledger_csv/${bookEnt.oref}/${bookEnt.name}`.toLowerCase()
 
-    const outDir = __dirname + inputPath
 
     await fs.mkdir(outDir, { recursive: true })
 
