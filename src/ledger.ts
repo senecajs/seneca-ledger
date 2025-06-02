@@ -375,6 +375,7 @@ function ledger(this: any, options: LedgerOptions) {
       ok: true,
       account_id: accountEnt.id,
       aref: accountEnt.aref,
+      normal: accountEnt.normal,
       book_id: bookEnt.id,
       bref: bookEnt.bref,
       fileName,
@@ -1471,13 +1472,14 @@ async function generateBookSummaryCSV(
     summaryContent += `# Period: ${bookEnt.start} to ${bookEnt.end === -1 ?
       'ongoing' : bookEnt.end}\n`
     summaryContent += '\n'
-    summaryContent += 'Account,Type,Final Balance,Closing Balance,Entry Count,File\n'
+    summaryContent += `Account,Normal Balance,${bookEnt.closed ? 'Closing Balance' : 'Total Balance'},Entry Count,File\n`
 
     successfulExports.forEach(exp => {
       const result = exp.result
       const accountType = exp.aref.split('/')[1] || 'Uknown'
-      summaryContent += `${exp.name},${accountType},${result.
-        final_balance},${result.closing_balance},${result.entry_count},${result.fileName}\n`
+      summaryContent += `${exp.name},${result.normal},${accountType},${result.
+        final_balance},${result.closing_balance},${result.entry_count},${result
+          .fileName}\n`
     })
 
     return {
