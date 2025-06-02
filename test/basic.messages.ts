@@ -1587,7 +1587,7 @@ export default {
             '# Organization: o0\n' +
             '# Period: 20220101 to 20220331\n' +
             '\n' +
-            'Account,Normal Balance,Closing Balance,Entry Count,File\n' +
+            'Account,Normal Balance,Type,Closing Balance,Entry Count,File\n' +
             'Sales,credit,Income,0,100,2,sales_q1_o0.csv\n' +
             'Cash,debit,Asset,0,80,3,cash_q1_o0.csv\n' +
             'Credit Card,credit,Liability,0,50,2,credit_card_q1_o0.csv\n' +
@@ -1619,7 +1619,7 @@ export default {
             '# Organization: o0\n' +
             '# Period: 20220401 to 20220630\n' +
             '\n' +
-            'Account,Normal Balance,Closing Balance,Entry Count,File\n' +
+            'Account,Normal Balance,Type,Closing Balance,Entry Count,File\n' +
             'Credit Card,credit,Liability,0,50,2,credit_card_q2_o0.csv\n' +
             'Sales,credit,Income,0,300,3,sales_q2_o0.csv\n' +
             'Cash,debit,Asset,0,280,3,cash_q2_o0.csv\n' +
@@ -1652,7 +1652,7 @@ export default {
             '# Organization: o0\n' +
             '# Period: 20220701 to 20220930\n' +
             '\n' +
-            'Account,Normal Balance,Total Balance,Entry Count,File\n' +
+            'Account,Normal Balance,Type,Total Balance,Entry Count,File\n' +
             'Credit Card,credit,Liability,50,50,1,credit_card_q3_o0.csv\n' +
             'Sales,credit,Income,300,300,1,sales_q3_o0.csv\n' +
             'Cash,debit,Asset,280,280,1,cash_q3_o0.csv\n' +
