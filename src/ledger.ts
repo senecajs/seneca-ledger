@@ -308,8 +308,8 @@ function ledger(this: any, options: LedgerOptions) {
     aref?: string
     book_id?: string
     bref?: string
-    filename?: string
-    filePath?: string
+    file_name?: string
+    file_path?: string
     save?: boolean // True by default
   }): Promise<Record<string, any> | Invalid> {
     const seneca = this
@@ -353,7 +353,7 @@ function ledger(this: any, options: LedgerOptions) {
     const csvContent = generateAccountCSV(accountEnt,
       bookEnt, entries, balanceResult)
 
-    const fileName = msg.filename
+    const fileName = msg.file_name
       || `${accountEnt.name}_${bookEnt.name}_${bookEnt.oref}.csv`
         .toLowerCase()
         .replace(/[^a-zA-Z0-9.]/g, '_')
@@ -363,7 +363,7 @@ function ledger(this: any, options: LedgerOptions) {
     let saveResult: Record<string, any> = {}
 
     if (shouldSave) {
-      saveResult = await saveFile(bookEnt, fileName, csvContent, msg.filePath)
+      saveResult = await saveFile(bookEnt, fileName, csvContent, msg.file_path)
     }
 
     let closingBalance = 0
@@ -667,8 +667,8 @@ function ledger(this: any, options: LedgerOptions) {
   async function msgExportBookCSV(this: any, msg: {
     book_id?: string
     bref?: string
-    filePath?: string
-    filename?: string
+    file_path?: string
+    file_name?: string
     save?: boolean
     batch_size?: number
   }): Promise<Record<string, any> | Invalid> {
@@ -744,7 +744,7 @@ function ledger(this: any, options: LedgerOptions) {
         seneca.post('biz:ledger,export:account,format:csv', {
           account_id: accountEnt.id,
           book_id: bookEnt.id,
-          filePath: msg.filePath,
+          file_path: msg.file_path,
           save: shouldSave
         })
       )
@@ -769,7 +769,7 @@ function ledger(this: any, options: LedgerOptions) {
       })
     }
 
-    const fileName = msg.filename
+    const fileName = msg.file_name
       || `${bookEnt.oref}_${bookEnt.name}_summary.csv`
         .toLowerCase()
         .replace(/[^a-zA-Z0-9.]/g, '_')
@@ -782,7 +782,7 @@ function ledger(this: any, options: LedgerOptions) {
     let saveResult: Record<string, any> = {}
     if (shouldSave) {
       saveResult = await saveFile(bookEnt,
-        fileName, summaryResult.content, msg.filePath)
+        fileName, summaryResult.content, msg.file_path)
     }
 
     return {
@@ -790,7 +790,7 @@ function ledger(this: any, options: LedgerOptions) {
       book_id: bookEnt.id,
       bref: bookEnt.bref,
       book_name: bookEnt.name,
-      output_directory: shouldSave ? msg.filePath : null,
+      output_directory: shouldSave ? msg.file_path : null,
       total_accounts: validAccounts.length,
       successful_exports: successfulExports,
       failed_exports: failedExports,
@@ -1438,20 +1438,20 @@ async function saveFile(
   bookEnt: Record<string, any>,
   fileName: string,
   content: any,
-  filePath?: string,
+  file_path?: string,
 ): Promise<Record<string, any> | Invalid> {
   try {
-    const outDir = filePath ||
+    const outDir = file_path ||
       __dirname + `/ledger_csv/${bookEnt.oref}/${bookEnt.name}`.toLowerCase()
 
 
     await fs.mkdir(outDir, { recursive: true })
 
-    filePath = path.join(outDir, fileName)
+    file_path = path.join(outDir, fileName)
 
-    await fs.writeFile(filePath, content, 'utf8')
+    await fs.writeFile(file_path, content, 'utf8')
 
-    return { ok: true, filePath }
+    return { ok: true, file_path }
   } catch (err: any) {
     return {
       ok: false,

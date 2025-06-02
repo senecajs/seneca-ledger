@@ -1211,7 +1211,7 @@ export default {
       params: {
         aref: 'o0/Asset/Cash',
         bref: 'o0/Q1/20220101',
-        // filePath: `${__dirname}/ledger_csv/o0/q1`
+        // file_path: `${__dirname}/ledger_csv/o0/q1`
         save: false
       },
       out: {
@@ -1634,7 +1634,7 @@ export default {
       pattern: 'export:book,format:csv',
       params: {
         bref: 'o0/Q3/20220701',
-        // filePath: `${__dirname}/ledger_csv/o0/q3`,
+        // file_path: `${__dirname}/ledger_csv/o0/q3`,
         save: false
       },
       out: {
