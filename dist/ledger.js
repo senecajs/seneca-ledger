@@ -978,7 +978,7 @@ async function generateBookSummaryCSV(bookEnt, successfulExports) {
             const result = exp.result;
             const accountType = exp.aref.split('/')[1] || 'Uknown';
             summaryContent += `${exp.name},${result.normal},${accountType},${result.
-                final_balance},${result.closing_balance},${result.entry_count},${result
+                final_balance},${result.entry_count},${result
                 .fileName}\n`;
         });
         return {
