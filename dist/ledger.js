@@ -1,6 +1,11 @@
 "use strict";
-/* Copyright © 2022 Seneca Project Contributors, MIT License. */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
+/* Copyright © 2025 Seneca Project Contributors, MIT License. */
+const promises_1 = __importDefault(require("fs/promises"));
+const path_1 = __importDefault(require("path"));
 /* NOTES
  * oref, aref, bref are mostly for human repl convenience
  *
@@ -23,11 +28,13 @@ function ledger(options) {
         .message('update:account', msgUpdateAccount)
         .message('list:account', msgListAccount)
         .message('balance:account', msgBalanceAccount)
+        .message('export:account,format:csv', msgExportAccountCSV)
         .message('close:account', msgCloseAccount)
         .message('create:book', msgCreateBook)
         .message('get:book', msgGetBook)
         .message('update:book', msgUpdateBook)
         .message('list:book', msgListBook)
+        .message('export:book,format:csv', msgExportBookCSV)
         .message('close:book', msgCloseBook)
         .message('list:balance', msgListBalance)
         .message('balance:book', msgBalanceBook)
@@ -151,6 +158,67 @@ function ledger(options) {
         };
         return out;
     }
+    async function msgExportAccountCSV(msg) {
+        const seneca = this;
+        const [accountEnt, bookEnt] = await Promise.all([
+            getAccount(seneca, accountCanon, msg),
+            getBook(seneca, bookCanon, msg)
+        ]);
+        if (!accountEnt) {
+            return { ok: false, why: 'account-not-found' };
+        }
+        if (!bookEnt) {
+            return { ok: false, why: 'bookEnt-not-found' };
+        }
+        const [balanceResult, entriesResult] = await Promise.all([
+            seneca.post('biz:ledger,balance:account', {
+                account_id: accountEnt.id,
+                book_id: bookEnt.id,
+                save: false
+            }),
+            seneca.post('biz:ledger,list:entry', {
+                oref: accountEnt.oref,
+                book_id: bookEnt.id,
+                account_id: accountEnt.id
+            })
+        ]);
+        if (!balanceResult.ok) {
+            return { ok: false, why: 'balance-calculation-failed', error: balanceResult };
+        }
+        if (!entriesResult.ok) {
+            return { ok: false, why: 'entries-fetch-failed', error: entriesResult };
+        }
+        const entries = processEntries(entriesResult, bookEnt.start);
+        const csvContent = generateAccountCSV(accountEnt, bookEnt, entries, balanceResult);
+        const fileName = msg.file_name
+            || `${accountEnt.name}_${bookEnt.name}_${bookEnt.oref}.csv`
+                .toLowerCase()
+                .replace(/[^a-zA-Z0-9.]/g, '_');
+        const shouldSave = msg.save !== false;
+        let saveResult = {};
+        if (shouldSave) {
+            saveResult = await saveFile(bookEnt, fileName, csvContent, msg.file_path);
+        }
+        let closingBalance = 0;
+        if (accountEnt.name !== "Opening Balance") {
+            closingBalance = entries[entries.length - 1].val;
+        }
+        return {
+            ok: true,
+            account_id: accountEnt.id,
+            aref: accountEnt.aref,
+            normal: accountEnt.normal,
+            book_id: bookEnt.id,
+            bref: bookEnt.bref,
+            fileName,
+            content: csvContent,
+            entry_count: entries.length,
+            final_balance: balanceResult.balance,
+            closing_balance: bookEnt.end > 0 ? closingBalance : 0,
+            saved: shouldSave,
+            file: saveResult
+        };
+    }
     async function msgCloseAccount(msg) {
         const seneca = this;
         const [accountEnt, bookEnt] = await Promise.all([
@@ -226,11 +294,11 @@ function ledger(options) {
             || (accountEnt.normal === 'credit' && currentBalance < 0);
         const baseEntry = {
             val: absBalance,
-            desc: `${targetBookEnt ? 'Open' : 'Close'} account: ${accountEnt.name}`
         };
         const entryPromises = [];
         const closingEntry = {
             ...baseEntry,
+            desc: 'Closing Balance',
             book_id: bookEnt.id,
             date: closingDate,
             kind: 'closing',
@@ -241,6 +309,7 @@ function ledger(options) {
         if (targetBookEnt) {
             const openingEntry = {
                 ...baseEntry,
+                desc: 'Opening Balance',
                 book_id: targetBookEnt.id,
                 date: targetBookEnt.start,
                 kind: 'opening',
@@ -345,6 +414,109 @@ function ledger(options) {
             .list$(q);
         list = list.map((ent) => ent.data$(false));
         return { ok: true, q, list };
+    }
+    async function msgExportBookCSV(msg) {
+        const seneca = this;
+        const bookEnt = await getBook(seneca, bookCanon, msg);
+        if (!bookEnt) {
+            return { ok: false, why: 'book-not-found' };
+        }
+        const [allCredits, allDebits] = await Promise.all([
+            seneca.entity(creditCanon).list$({
+                book_id: bookEnt.id,
+                fields$: ['credit_id', 'caref']
+            }),
+            seneca.entity(debitCanon).list$({
+                book_id: bookEnt.id,
+                fields$: ['debit_id', 'daref']
+            })
+        ]);
+        const accountIds = [
+            ...new Set([
+                ...allCredits.map((entry) => entry.credit_id),
+                ...allDebits.map((entry) => entry.debit_id)
+            ])
+        ];
+        if (accountIds.length === 0) {
+            return {
+                ok: true,
+                book_id: bookEnt.id,
+                bref: bookEnt.bref,
+                note: 'No accounts found in this book',
+                total_accounts: 0,
+                successful_exports: 0,
+                failed_exports: 0,
+                exports: []
+            };
+        }
+        const accountPromises = accountIds.map(accountId => getAccount(seneca, accountCanon, { account_id: accountId }));
+        const accounts = await Promise.all(accountPromises);
+        const validAccounts = accounts.filter(acc => acc !== null
+            && acc.aref !== `${bookEnt.oref}/Equity/Open Balance`);
+        if (validAccounts.length === 0) {
+            return {
+                ok: true,
+                book_id: bookEnt.id,
+                bref: bookEnt.bref,
+                note: 'No valid accounts found',
+                total_accounts: 0,
+                successful_exports: 0,
+                failed_exports: 0,
+                exports: []
+            };
+        }
+        const batchSize = msg.batch_size || 5;
+        const shouldSave = msg.save !== false;
+        const exportResults = [];
+        let successfulExports = 0;
+        let failedExports = 0;
+        for (let i = 0; i < validAccounts.length; i += batchSize) {
+            const batch = validAccounts.slice(i, i + batchSize);
+            const exportPromises = batch.map(accountEnt => seneca.post('biz:ledger,export:account,format:csv', {
+                account_id: accountEnt.id,
+                book_id: bookEnt.id,
+                file_path: msg.file_path,
+                save: shouldSave
+            }));
+            const batchResults = await Promise.all(exportPromises);
+            batchResults.forEach((exportResult, i) => {
+                const accountEnt = batch[i];
+                exportResults.push({
+                    account_id: accountEnt.id,
+                    aref: accountEnt.aref,
+                    name: accountEnt.name,
+                    result: exportResult
+                });
+                if (exportResult.ok) {
+                    successfulExports++;
+                }
+                else {
+                    failedExports++;
+                }
+            });
+        }
+        const fileName = msg.file_name
+            || `${bookEnt.oref}_${bookEnt.name}_summary.csv`
+                .toLowerCase()
+                .replace(/[^a-zA-Z0-9.]/g, '_');
+        const summaryResult = await generateBookSummaryCSV(bookEnt, exportResults.filter(r => r.result.ok));
+        let saveResult = {};
+        if (shouldSave) {
+            saveResult = await saveFile(bookEnt, fileName, summaryResult.content, msg.file_path);
+        }
+        return {
+            ok: failedExports === 0,
+            book_id: bookEnt.id,
+            bref: bookEnt.bref,
+            book_name: bookEnt.name,
+            output_directory: shouldSave ? msg.file_path : null,
+            total_accounts: validAccounts.length,
+            successful_exports: successfulExports,
+            failed_exports: failedExports,
+            exports: exportResults,
+            summary: summaryResult,
+            file: saveResult
+        };
     }
     async function msgCloseBook(msg) {
         const seneca = this;
@@ -577,6 +749,7 @@ function ledger(options) {
             bref: bookEnt.bref,
             book_id: bookEnt.id,
             custom,
+            date,
             baseval,
             basecur,
             baserate,
@@ -701,6 +874,125 @@ function timestamp2timestr(unixTime) {
     return Number(date.getUTCHours().toString().padStart(2, '0') +
         date.getUTCMinutes().toString().padStart(2, '0') +
         date.getUTCSeconds().toString().padStart(2, '0'));
+}
+function processEntries(entriesResult, bookStart) {
+    const entries = [];
+    entriesResult.credits.forEach((credit) => {
+        entries.push({
+            date: credit.date || bookStart,
+            desc: credit.desc,
+            type: 'credit',
+            val: credit.val,
+            ref: credit.ref,
+            kind: credit.kind || 'standard'
+        });
+    });
+    entriesResult.debits.forEach((debit) => {
+        entries.push({
+            date: debit.date || bookStart,
+            desc: debit.desc,
+            type: 'debit',
+            val: debit.val,
+            ref: debit.ref,
+            kind: debit.kind || 'standard'
+        });
+    });
+    return entries.sort((a, b) => {
+        if (a.date !== b.date) {
+            return a.date - b.date;
+        }
+        if (a.kind === 'opening' && b.kind !== 'opening')
+            return -1;
+        if (a.kind !== 'opening' && b.kind === 'opening')
+            return 1;
+        return 0;
+    });
+}
+function generateAccountCSV(accountEnt, bookEnt, entries, balanceResult) {
+    let csv = `# ${accountEnt.name} - ${bookEnt.name} - ${bookEnt.oref}\n`;
+    csv += 'Date,Description,Debit,Credit,Balance\n';
+    let runningBalance = 0;
+    let hasOpeningEntry = false;
+    const openingEntry = entries.find(e => e.kind === 'opening');
+    const isDebit = accountEnt.normal === 'debit';
+    if (openingEntry) {
+        hasOpeningEntry = true;
+        if (isDebit) {
+            runningBalance = openingEntry.type === 'debit' ? openingEntry.val : -openingEntry.val;
+        }
+        else {
+            runningBalance = openingEntry.type === 'credit' ? openingEntry.val : -openingEntry.val;
+        }
+        csv += `${bookEnt.start},${'Opening Balance'},${runningBalance > 0
+            && isDebit ? runningBalance : ''},${runningBalance > 0
+            && !isDebit ? runningBalance : ''},${runningBalance}\n`;
+    }
+    entries.forEach(entry => {
+        if (entry.kind === 'opening')
+            return;
+        const dateStr = entry.date || formatDateToYYYYMMDD(entry.t_c);
+        const debitVal = entry.type === 'debit' ? entry.val : '';
+        const creditVal = entry.type === 'credit' ? entry.val : '';
+        if (isDebit) {
+            runningBalance += entry.type === 'debit' ? entry.val : -entry.val;
+        }
+        else {
+            runningBalance += entry.type === 'credit' ? entry.val : -entry.val;
+        }
+        csv += `${dateStr},${entry.desc},${debitVal},${creditVal},${runningBalance}\n`;
+    });
+    if (balanceResult.balance != runningBalance) {
+        throw Error('invalid-balance-total');
+    }
+    if (bookEnt.end == -1) {
+        csv += `Total,,,${balanceResult.balance}\n`;
+    }
+    return csv;
+}
+async function saveFile(bookEnt, fileName, content, file_path) {
+    try {
+        const outDir = file_path ||
+            __dirname + `/ledger_csv/${bookEnt.oref}/${bookEnt.name}`.toLowerCase();
+        await promises_1.default.mkdir(outDir, { recursive: true });
+        file_path = path_1.default.join(outDir, fileName);
+        await promises_1.default.writeFile(file_path, content, 'utf8');
+        return { ok: true, file_path };
+    }
+    catch (err) {
+        return {
+            ok: false,
+            why: 'save-file-failed',
+            error: err.message
+        };
+    }
+}
+async function generateBookSummaryCSV(bookEnt, successfulExports) {
+    try {
+        let summaryContent = `# Book Summary: ${bookEnt.name}\n`;
+        summaryContent += `# Organization: ${bookEnt.oref}\n`;
+        summaryContent += `# Period: ${bookEnt.start} to ${bookEnt.end === -1 ?
+            'ongoing' : bookEnt.end}\n`;
+        summaryContent += '\n';
+        summaryContent += `Account,Normal Balance,Type,${bookEnt.closed
+            ? 'Closing Balance' : 'Total Balance'},Entry Count,File\n`;
+        successfulExports.forEach(exp => {
+            const result = exp.result;
+            const accountType = exp.aref.split('/')[1] || 'Uknown';
+            summaryContent += `${exp.name},${result.normal},${accountType},${bookEnt.closed
+                ? result.closing_balance : result.final_balance},${result.entry_count},${result.fileName}\n`;
+        });
+        return {
+            ok: true,
+            content: summaryContent
+        };
+    }
+    catch (err) {
+        return {
+            ok: false,
+            why: 'summary-generation-failed',
+            error: err.message
+        };
+    }
 }
 // Default options.
 const defaults = {
