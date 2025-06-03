@@ -1588,10 +1588,10 @@ export default {
             '# Period: 20220101 to 20220331\n' +
             '\n' +
             'Account,Normal Balance,Type,Closing Balance,Entry Count,File\n' +
-            'Sales,credit,Income,0,2,sales_q1_o0.csv\n' +
-            'Cash,debit,Asset,0,3,cash_q1_o0.csv\n' +
-            'Credit Card,credit,Liability,0,2,credit_card_q1_o0.csv\n' +
-            'Office,debit,Asset,0,3,office_q1_o0.csv\n'
+            'Sales,credit,Income,100,2,sales_q1_o0.csv\n' +
+            'Cash,debit,Asset,80,3,cash_q1_o0.csv\n' +
+            'Credit Card,credit,Liability,50,2,credit_card_q1_o0.csv\n' +
+            'Office,debit,Asset,70,3,office_q1_o0.csv\n'
         }
       }
     },
@@ -1620,10 +1620,10 @@ export default {
             '# Period: 20220401 to 20220630\n' +
             '\n' +
             'Account,Normal Balance,Type,Closing Balance,Entry Count,File\n' +
-            'Credit Card,credit,Liability,0,2,credit_card_q2_o0.csv\n' +
-            'Sales,credit,Income,0,3,sales_q2_o0.csv\n' +
-            'Cash,debit,Asset,0,3,cash_q2_o0.csv\n' +
-            'Office,debit,Asset,0,2,office_q2_o0.csv\n'
+            'Credit Card,credit,Liability,50,2,credit_card_q2_o0.csv\n' +
+            'Sales,credit,Income,300,3,sales_q2_o0.csv\n' +
+            'Cash,debit,Asset,280,3,cash_q2_o0.csv\n' +
+            'Office,debit,Asset,70,2,office_q2_o0.csv\n'
         }
       }
     },

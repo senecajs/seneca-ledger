@@ -973,13 +973,13 @@ async function generateBookSummaryCSV(bookEnt, successfulExports) {
         summaryContent += `# Period: ${bookEnt.start} to ${bookEnt.end === -1 ?
             'ongoing' : bookEnt.end}\n`;
         summaryContent += '\n';
-        summaryContent += `Account,Normal Balance,Type,${bookEnt.closed ? 'Closing Balance' : 'Total Balance'},Entry Count,File\n`;
+        summaryContent += `Account,Normal Balance,Type,${bookEnt.closed
+            ? 'Closing Balance' : 'Total Balance'},Entry Count,File\n`;
         successfulExports.forEach(exp => {
             const result = exp.result;
             const accountType = exp.aref.split('/')[1] || 'Uknown';
-            summaryContent += `${exp.name},${result.normal},${accountType},${result.
-                final_balance},${result.entry_count},${result
-                .fileName}\n`;
+            summaryContent += `${exp.name},${result.normal},${accountType},${bookEnt.closed
+                ? result.closing_balance : result.final_balance},${result.entry_count},${result.fileName}\n`;
         });
         return {
             ok: true,
