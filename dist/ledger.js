@@ -548,6 +548,9 @@ function ledger(options) {
                 ...allDebits.map((entry) => entry.debit_id)
             ])
         ];
+        if (bookEnt.end <= 0) {
+            bookEnt.end = msg.end || formatDateToYYYYMMDD(Date.now());
+        }
         if (accountIds.length === 0) {
             bookEnt.closed = true;
             await bookEnt.save$();
@@ -606,7 +609,7 @@ function ledger(options) {
                 book_id: bookEnt.id,
                 target_book_id: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.id,
                 target_bref: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.bref,
-                end: msg.end,
+                end: bookEnt.end,
                 opening_balance_aref: msg.opening_balance_aref
             }));
             const batchResults = await Promise.all(closurePromises);
@@ -650,7 +653,7 @@ function ledger(options) {
             bref: bookEnt.bref,
             target_book_id: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.id,
             target_bref: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.bref,
-            closing_date: msg.end || bookEnt.end,
+            closing_date: bookEnt.end,
             account_closures: accountClosures,
             summary: {
                 total_accounts: accountsToClose.length,
