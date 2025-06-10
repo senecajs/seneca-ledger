@@ -201,7 +201,8 @@ function ledger(options) {
         }
         let closingBalance = 0;
         if (accountEnt.name !== "Opening Balance") {
-            closingBalance = entries[entries.length - 1].val;
+            const lastEntry = entries[entries.length - 1];
+            closingBalance = lastEntry.kind !== 'closing' ? closingBalance : lastEntry.val;
         }
         return {
             ok: true,
@@ -214,7 +215,7 @@ function ledger(options) {
             content: csvContent,
             entry_count: entries.length,
             final_balance: balanceResult.balance,
-            closing_balance: bookEnt.end > 0 ? closingBalance : 0,
+            closing_balance: closingBalance,
             saved: shouldSave,
             file: saveResult
         };

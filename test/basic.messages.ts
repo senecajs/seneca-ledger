@@ -1470,7 +1470,7 @@ export default {
           '20220701,Opening Balance,280,,280\n',
         entry_count: 1,
         final_balance: 280,
-        closing_balance: 280,
+        closing_balance: 0,
         saved: false,
         file: {
           // ok: true,
