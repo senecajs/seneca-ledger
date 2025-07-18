@@ -188,7 +188,7 @@ function ledger(options) {
         if (!entriesResult.ok) {
             return { ok: false, why: 'entries-fetch-failed', error: entriesResult };
         }
-        const entries = processEntries(entriesResult, bookEnt.start);
+        const entries = processEntries(entriesResult, bookEnt.start, accountEnt.normal);
         const csvContent = generateAccountCSV(accountEnt, bookEnt, entries, balanceResult);
         const fileName = msg.file_name
             || `${accountEnt.name}_${bookEnt.name}_${bookEnt.oref}.csv`
@@ -904,7 +904,7 @@ function timestamp2timestr(unixTime) {
         date.getUTCMinutes().toString().padStart(2, '0') +
         date.getUTCSeconds().toString().padStart(2, '0'));
 }
-function processEntries(entriesResult, bookStart) {
+function processEntries(entriesResult, bookStart, accountNormal) {
     const entries = [];
     entriesResult.credits.forEach((credit) => {
         entries.push({
@@ -934,6 +934,20 @@ function processEntries(entriesResult, bookStart) {
             return -1;
         if (a.kind !== 'opening' && b.kind === 'opening')
             return 1;
+        if (a.date === b.date) {
+            if (accountNormal === 'debit') {
+                if (a.type === 'debit' && b.type === 'credit')
+                    return -1;
+                if (a.type === 'credit' && b.type === 'debit')
+                    return 1;
+            }
+            else if (accountNormal === 'credit') {
+                if (a.type === 'credit' && b.type === 'debit')
+                    return -1;
+                if (a.type === 'debit' && b.type === 'credit')
+                    return 1;
+            }
+        }
         return 0;
     });
 }

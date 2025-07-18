@@ -348,7 +348,7 @@ function ledger(this: any, options: LedgerOptions) {
       return { ok: false, why: 'entries-fetch-failed', error: entriesResult }
     }
 
-    const entries = processEntries(entriesResult, bookEnt.start)
+    const entries = processEntries(entriesResult, bookEnt.start, accountEnt.normal)
 
     const csvContent = generateAccountCSV(accountEnt,
       bookEnt, entries, balanceResult)
@@ -1377,7 +1377,7 @@ function timestamp2timestr(unixTime: number): number {
     date.getUTCSeconds().toString().padStart(2, '0'))
 }
 
-function processEntries(entriesResult: any, bookStart: number):
+function processEntries(entriesResult: any, bookStart: number, accountNormal: dc):
   Record<string, any>[] {
   const entries: Record<string, any>[] = []
 
@@ -1410,6 +1410,18 @@ function processEntries(entriesResult: any, bookStart: number):
 
     if (a.kind === 'opening' && b.kind !== 'opening') return -1
     if (a.kind !== 'opening' && b.kind === 'opening') return 1
+
+
+    if (a.date === b.date) {
+      if (accountNormal === 'debit') {
+        if (a.type === 'debit' && b.type === 'credit') return -1
+        if (a.type === 'credit' && b.type === 'debit') return 1
+      } else if (accountNormal === 'credit') {
+        if (a.type === 'credit' && b.type === 'debit') return -1
+        if (a.type === 'debit' && b.type === 'credit') return 1
+      }
+    }
+
     return 0
   })
 }
