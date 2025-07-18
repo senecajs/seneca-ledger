@@ -587,7 +587,7 @@ export default {
         original_balance: 50,
         closing_balance: 0,
         opening_balance: 50,
-        opening_balance_aref: 'o0/Equity/Open Balance',
+        opening_balance_aref: 'o0/Equity/Opening Balance',
         closing_date: 20220331
       }
     },
@@ -668,7 +668,7 @@ export default {
         original_balance: 80,
         closing_balance: 0,
         opening_balance: 80,
-        opening_balance_aref: 'o0/Equity/Open Balance',
+        opening_balance_aref: 'o0/Equity/Opening Balance',
         closing_date: 20220331
       }
     },
@@ -787,7 +787,7 @@ export default {
         target_bref: 'o0/Q2/20220401',
         closing_date: 20220331,
         summary: {
-          total_accounts: 4,  // Cash, Sales, Office, Credit Card - doesn't count Open Balance
+          total_accounts: 4,  // Cash, Sales, Office, Credit Card - doesn't count Opening Balance
           successful_closures: 4,
           failed_closures: 0,
           total_balance_transferred: 170,  // 100 (Sales) + 70 (Office) = remaining balances
@@ -1013,13 +1013,13 @@ export default {
       name: 'shop-verify-open-balance-q1-after-book-close',
       pattern: 'balance:account',
       params: {
-        aref: 'o0/Equity/Open Balance',
+        aref: 'o0/Equity/Opening Balance',
         bref: 'o0/Q1/20220101',
         save: false
       },
       out: {
         ok: true,
-        aref: 'o0/Equity/Open Balance',
+        aref: 'o0/Equity/Opening Balance',
         book_id: 'shop-b0',
         bref: 'o0/Q1/20220101',
         start: 20220101,
@@ -1036,13 +1036,13 @@ export default {
       name: 'shop-verify-open-balance-q2-after-book-close',
       pattern: 'balance:account',
       params: {
-        aref: 'o0/Equity/Open Balance',
+        aref: 'o0/Equity/Opening Balance',
         bref: 'o0/Q2/20220401',
         save: false
       },
       out: {
         ok: true,
-        aref: 'o0/Equity/Open Balance',
+        aref: 'o0/Equity/Opening Balance',
         book_id: 'shop-b1',
         bref: 'o0/Q2/20220401',
         start: 20220401,
