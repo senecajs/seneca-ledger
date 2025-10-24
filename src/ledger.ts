@@ -322,9 +322,6 @@ function ledger(this: any, options: LedgerOptions) {
       aref?: string
       book_id?: string
       bref?: string
-      file_name?: string
-      file_path?: string
-      save?: boolean // True by default
     },
   ): Promise<Record<string, any> | Invalid> {
     const seneca = this
@@ -346,7 +343,6 @@ function ledger(this: any, options: LedgerOptions) {
       seneca.post('biz:ledger,balance:account', {
         account_id: accountEnt.id,
         book_id: bookEnt.id,
-        save: false,
       }),
       seneca.post('biz:ledger,list:entry', {
         oref: accountEnt.oref,
@@ -380,12 +376,6 @@ function ledger(this: any, options: LedgerOptions) {
       balanceResult,
     )
 
-    const fileName =
-      msg.file_name ||
-      `${accountEnt.name}_${bookEnt.name}_${bookEnt.oref}.csv`
-        .toLowerCase()
-        .replace(/[^a-zA-Z0-9.]/g, '_')
-
     let closingBalance = 0
     if (accountEnt.name !== 'Opening Balance' && entries.length > 0) {
       const closingEntry = entries.find((entry) => entry.kind === 'closing')
@@ -399,7 +389,6 @@ function ledger(this: any, options: LedgerOptions) {
       normal: accountEnt.normal,
       book_id: bookEnt.id,
       bref: bookEnt.bref,
-      fileName,
       content: csvContent,
       entry_count: entries.length,
       final_balance: balanceResult.balance,
@@ -460,7 +449,6 @@ function ledger(this: any, options: LedgerOptions) {
     const balanceResult = await seneca.post('biz:ledger,balance:account', {
       account_id: accountEnt.id,
       book_id: bookEnt.id,
-      save: false,
     })
 
     if (!balanceResult.ok) {
@@ -566,7 +554,6 @@ function ledger(this: any, options: LedgerOptions) {
       seneca.post('biz:ledger,balance:account', {
         account_id: accountEnt.id,
         book_id: bookEnt.id,
-        save: false,
       }),
     ]
 
@@ -575,7 +562,6 @@ function ledger(this: any, options: LedgerOptions) {
         seneca.post('biz:ledger,balance:account', {
           account_id: accountEnt.id,
           book_id: targetBookEnt.id,
-          save: false,
         }),
       )
     }
@@ -710,9 +696,6 @@ function ledger(this: any, options: LedgerOptions) {
     msg: {
       book_id?: string
       bref?: string
-      file_path?: string
-      file_name?: string
-      save?: boolean
       batch_size?: number
     },
   ): Promise<Record<string, any> | Invalid> {
@@ -779,7 +762,6 @@ function ledger(this: any, options: LedgerOptions) {
     }
 
     const batchSize = msg.batch_size || 5
-    const shouldSave = msg.save !== false
     const exportResults: Record<string, any>[] = []
     let successfulExports = 0
     let failedExports = 0
@@ -791,8 +773,6 @@ function ledger(this: any, options: LedgerOptions) {
         seneca.post('biz:ledger,export:account,format:csv', {
           account_id: accountEnt.id,
           book_id: bookEnt.id,
-          file_path: msg.file_path,
-          save: shouldSave,
         }),
       )
 
@@ -826,7 +806,6 @@ function ledger(this: any, options: LedgerOptions) {
       book_id: bookEnt.id,
       bref: bookEnt.bref,
       book_name: bookEnt.name,
-      output_directory: shouldSave ? msg.file_path : null,
       total_accounts: validAccounts.length,
       successful_exports: successfulExports,
       failed_exports: failedExports,
@@ -1015,7 +994,6 @@ function ledger(this: any, options: LedgerOptions) {
       const obBalanceResult = await seneca.post('biz:ledger,balance:account', {
         aref: obAref,
         book_id: targetBookEnt.id,
-        save: false,
       })
 
       if (obBalanceResult.ok) {
@@ -1538,14 +1516,14 @@ async function generateBookSummaryCSV(
     summaryContent += '\n'
     summaryContent += `Account,Normal Balance,Type,${
       bookEnt.closed ? 'Closing Balance' : 'Total Balance'
-    },Entry Count,File\n`
+    },Entry Count\n`
 
     successfulExports.forEach((exp) => {
       const result = exp.result
       const accountType = exp.aref.split('/')[1] || 'Uknown'
       summaryContent += `${exp.name},${result.normal},${accountType},${
         bookEnt.closed ? result.closing_balance : result.final_balance
-      },${result.entry_count},${result.fileName}\n`
+      },${result.entry_count}\n`
     })
 
     return {

@@ -1168,7 +1168,6 @@ export default {
         aref: 'o0/Asset/Cash',
         book_id: 'shop-b0',
         bref: 'o0/Q1/20220101',
-        fileName: 'cash_q1_o0.csv',
         content:
           '# Cash - Q1 - o0\n' +
           'Date,Description,Debit,Credit,Balance\n' +
@@ -1243,7 +1242,6 @@ export default {
         aref: 'o0/Liability/Credit Card',
         book_id: 'shop-b0',
         bref: 'o0/Q1/20220101',
-        fileName: 'credit_card_q1_o0.csv',
         content:
           '# Credit Card - Q1 - o0\n' +
           'Date,Description,Debit,Credit,Balance\n' +
@@ -1268,7 +1266,6 @@ export default {
         aref: 'o0/Asset/Cash',
         book_id: 'shop-b1',
         bref: 'o0/Q2/20220401',
-        fileName: 'cash_q2_o0.csv',
         content:
           '# Cash - Q2 - o0\n' +
           'Date,Description,Debit,Credit,Balance\n' +
@@ -1294,7 +1291,6 @@ export default {
         aref: 'o0/Income/Sales',
         book_id: 'shop-b1',
         bref: 'o0/Q2/20220401',
-        fileName: 'sales_q2_o0.csv',
         content:
           '# Sales - Q2 - o0\n' +
           'Date,Description,Debit,Credit,Balance\n' +
@@ -1320,7 +1316,6 @@ export default {
         aref: 'o0/Asset/Office',
         book_id: 'shop-b1',
         bref: 'o0/Q2/20220401',
-        fileName: 'office_q2_o0.csv',
         content:
           '# Office - Q2 - o0\n' +
           'Date,Description,Debit,Credit,Balance\n' +
@@ -1345,7 +1340,6 @@ export default {
         aref: 'o0/Liability/Credit Card',
         book_id: 'shop-b1',
         bref: 'o0/Q2/20220401',
-        fileName: 'credit_card_q2_o0.csv',
         content:
           '# Credit Card - Q2 - o0\n' +
           'Date,Description,Debit,Credit,Balance\n' +
@@ -1370,7 +1364,6 @@ export default {
         aref: 'o0/Asset/Cash',
         book_id: 'shop-b2',
         bref: 'o0/Q3/20220701',
-        fileName: 'cash_q3_o0.csv',
         content:
           '# Cash - Q3 - o0\n' +
           'Date,Description,Debit,Credit,Balance\n' +
@@ -1471,11 +1464,11 @@ export default {
             '# Organization: o0\n' +
             '# Period: 20220101 to 20220331\n' +
             '\n' +
-            'Account,Normal Balance,Type,Closing Balance,Entry Count,File\n' +
-            'Sales,credit,Income,100,2,sales_q1_o0.csv\n' +
-            'Cash,debit,Asset,80,3,cash_q1_o0.csv\n' +
-            'Credit Card,credit,Liability,50,2,credit_card_q1_o0.csv\n' +
-            'Office,debit,Asset,70,3,office_q1_o0.csv\n',
+            'Account,Normal Balance,Type,Closing Balance,Entry Count\n' +
+            'Sales,credit,Income,100,2\n' +
+            'Cash,debit,Asset,80,3\n' +
+            'Credit Card,credit,Liability,50,2\n' +
+            'Office,debit,Asset,70,3\n',
         },
       },
     },
@@ -1502,11 +1495,11 @@ export default {
             '# Organization: o0\n' +
             '# Period: 20220401 to 20220630\n' +
             '\n' +
-            'Account,Normal Balance,Type,Closing Balance,Entry Count,File\n' +
-            'Credit Card,credit,Liability,50,2,credit_card_q2_o0.csv\n' +
-            'Sales,credit,Income,300,3,sales_q2_o0.csv\n' +
-            'Cash,debit,Asset,280,3,cash_q2_o0.csv\n' +
-            'Office,debit,Asset,70,2,office_q2_o0.csv\n',
+            'Account,Normal Balance,Type,Closing Balance,Entry Count\n' +
+            'Credit Card,credit,Liability,50,2\n' +
+            'Sales,credit,Income,300,3\n' +
+            'Cash,debit,Asset,280,3\n' +
+            'Office,debit,Asset,70,2\n',
         },
       },
     },
@@ -1533,11 +1526,11 @@ export default {
             '# Organization: o0\n' +
             '# Period: 20220701 to 20220930\n' +
             '\n' +
-            'Account,Normal Balance,Type,Total Balance,Entry Count,File\n' +
-            'Credit Card,credit,Liability,50,1,credit_card_q3_o0.csv\n' +
-            'Sales,credit,Income,300,1,sales_q3_o0.csv\n' +
-            'Cash,debit,Asset,280,1,cash_q3_o0.csv\n' +
-            'Office,debit,Asset,70,1,office_q3_o0.csv\n',
+            'Account,Normal Balance,Type,Total Balance,Entry Count\n' +
+            'Credit Card,credit,Liability,50,1\n' +
+            'Sales,credit,Income,300,1\n' +
+            'Cash,debit,Asset,280,1\n' +
+            'Office,debit,Asset,70,1\n',
         },
       },
     },
