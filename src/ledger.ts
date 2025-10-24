@@ -1,7 +1,4 @@
 /* Copyright © 2025 Seneca Project Contributors, MIT License. */
-import fs from 'fs/promises'
-import path from 'path'
-
 type LedgerOptions = {
   debug: boolean
   path: {
@@ -389,13 +386,6 @@ function ledger(this: any, options: LedgerOptions) {
         .toLowerCase()
         .replace(/[^a-zA-Z0-9.]/g, '_')
 
-    const shouldSave = msg.save !== false
-    let saveResult: Record<string, any> = {}
-
-    if (shouldSave) {
-      saveResult = await saveFile(bookEnt, fileName, csvContent, msg.file_path)
-    }
-
     let closingBalance = 0
     if (accountEnt.name !== 'Opening Balance' && entries.length > 0) {
       const closingEntry = entries.find((entry) => entry.kind === 'closing')
@@ -414,8 +404,6 @@ function ledger(this: any, options: LedgerOptions) {
       entry_count: entries.length,
       final_balance: balanceResult.balance,
       closing_balance: closingBalance,
-      saved: shouldSave,
-      file: saveResult,
     }
   }
 
@@ -828,26 +816,10 @@ function ledger(this: any, options: LedgerOptions) {
       })
     }
 
-    const fileName =
-      msg.file_name ||
-      `${bookEnt.oref}_${bookEnt.name}_summary.csv`
-        .toLowerCase()
-        .replace(/[^a-zA-Z0-9.]/g, '_')
-
     const summaryResult = await generateBookSummaryCSV(
       bookEnt,
       exportResults.filter((r) => r.result.ok),
     )
-
-    let saveResult: Record<string, any> = {}
-    if (shouldSave) {
-      saveResult = await saveFile(
-        bookEnt,
-        fileName,
-        summaryResult.content,
-        msg.file_path,
-      )
-    }
 
     return {
       ok: failedExports === 0,
@@ -860,7 +832,6 @@ function ledger(this: any, options: LedgerOptions) {
       failed_exports: failedExports,
       exports: exportResults,
       summary: summaryResult,
-      file: saveResult,
     }
   }
 
@@ -1552,33 +1523,6 @@ function generateAccountCSV(
   }
 
   return csv
-}
-
-async function saveFile(
-  bookEnt: Record<string, any>,
-  fileName: string,
-  content: any,
-  file_path?: string,
-): Promise<Record<string, any> | Invalid> {
-  try {
-    const outDir =
-      file_path ||
-      __dirname + `/ledger_csv/${bookEnt.oref}/${bookEnt.name}`.toLowerCase()
-
-    await fs.mkdir(outDir, { recursive: true })
-
-    file_path = path.join(outDir, fileName)
-
-    await fs.writeFile(file_path, content, 'utf8')
-
-    return { ok: true, file_path }
-  } catch (err: any) {
-    return {
-      ok: false,
-      why: 'save-file-failed',
-      error: err.message,
-    }
-  }
 }
 
 async function generateBookSummaryCSV(
