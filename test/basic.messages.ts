@@ -536,7 +536,6 @@ export default {
       params: {
         aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q1/20220101',
-        save: false,
       },
       out: {
         ok: true,
@@ -588,7 +587,6 @@ export default {
       params: {
         aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q1/20220101',
-        save: false,
       },
       out: {
         ok: true,
@@ -614,7 +612,6 @@ export default {
       params: {
         aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q2/20220401',
-        save: false,
       },
       out: {
         ok: true,
@@ -666,7 +663,6 @@ export default {
       params: {
         aref: 'o0/Asset/Cash',
         bref: 'o0/Q1/20220101',
-        save: false,
       },
       out: {
         ok: true,
@@ -692,7 +688,6 @@ export default {
       params: {
         aref: 'o0/Asset/Cash',
         bref: 'o0/Q2/20220401',
-        save: false,
       },
       out: {
         ok: true,
@@ -785,7 +780,6 @@ export default {
       params: {
         aref: 'o0/Asset/Cash',
         bref: 'o0/Q1/20220101',
-        save: false,
       },
       out: {
         ok: true,
@@ -810,7 +804,6 @@ export default {
       params: {
         aref: 'o0/Income/Sales',
         bref: 'o0/Q1/20220101',
-        save: false,
       },
       out: {
         ok: true,
@@ -835,7 +828,6 @@ export default {
       params: {
         aref: 'o0/Asset/Office',
         bref: 'o0/Q1/20220101',
-        save: false,
       },
       out: {
         ok: true,
@@ -860,7 +852,6 @@ export default {
       params: {
         aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q1/20220101',
-        save: false,
       },
       out: {
         ok: true,
@@ -886,7 +877,6 @@ export default {
       params: {
         aref: 'o0/Asset/Cash',
         bref: 'o0/Q2/20220401',
-        save: false,
       },
       out: {
         ok: true,
@@ -911,7 +901,6 @@ export default {
       params: {
         aref: 'o0/Income/Sales',
         bref: 'o0/Q2/20220401',
-        save: false,
       },
       out: {
         ok: true,
@@ -936,7 +925,6 @@ export default {
       params: {
         aref: 'o0/Asset/Office',
         bref: 'o0/Q2/20220401',
-        save: false,
       },
       out: {
         ok: true,
@@ -961,7 +949,6 @@ export default {
       params: {
         aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q2/20220401',
-        save: false,
       },
       out: {
         ok: true,
@@ -987,7 +974,6 @@ export default {
       params: {
         aref: 'o0/Equity/Opening Balance',
         bref: 'o0/Q1/20220101',
-        save: false,
       },
       out: {
         ok: true,
@@ -1009,7 +995,6 @@ export default {
       params: {
         aref: 'o0/Equity/Opening Balance',
         bref: 'o0/Q2/20220401',
-        save: false,
       },
       out: {
         ok: true,
@@ -1192,10 +1177,6 @@ export default {
           '20220331,Closing Balance,,80,0\n',
         entry_count: 3,
         final_balance: 0,
-        saved: false,
-        // file: {
-        //   ok: true
-        // }
       },
     },
 
@@ -1206,7 +1187,6 @@ export default {
       params: {
         aref: 'o0/Income/Sales',
         bref: 'o0/Q1/20220101',
-        save: false,
       },
       out: {
         ok: true,
@@ -1214,7 +1194,6 @@ export default {
         aref: 'o0/Income/Sales',
         book_id: 'shop-b0',
         bref: 'o0/Q1/20220101',
-        fileName: 'sales_q1_o0.csv',
         content:
           '# Sales - Q1 - o0\n' +
           'Date,Description,Debit,Credit,Balance\n' +
@@ -1222,10 +1201,6 @@ export default {
           '20220331,Closing Balance,100,,0\n',
         entry_count: 2,
         final_balance: 0,
-        saved: false,
-        // file: {
-        //   ok: true,
-        // }
       },
     },
 
@@ -1236,7 +1211,6 @@ export default {
       params: {
         aref: 'o0/Asset/Office',
         bref: 'o0/Q1/20220101',
-        save: false,
       },
       out: {
         ok: true,
@@ -1244,7 +1218,6 @@ export default {
         aref: 'o0/Asset/Office',
         book_id: 'shop-b0',
         bref: 'o0/Q1/20220101',
-        fileName: 'office_q1_o0.csv',
         content:
           '# Office - Q1 - o0\n' +
           'Date,Description,Debit,Credit,Balance\n' +
@@ -1253,10 +1226,6 @@ export default {
           '20220331,Closing Balance,,70,0\n',
         entry_count: 3,
         final_balance: 0,
-        saved: false,
-        // file: {
-        //   ok: true,
-        // }
       },
     },
 
@@ -1267,7 +1236,6 @@ export default {
       params: {
         aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q1/20220101',
-        save: false,
       },
       out: {
         ok: true,
@@ -1283,10 +1251,6 @@ export default {
           '20220331,Closing Balance,50,,0\n',
         entry_count: 2,
         final_balance: 0,
-        saved: false,
-        // file: {
-        //   ok: true,
-        // }
       },
     },
 
@@ -1297,7 +1261,6 @@ export default {
       params: {
         aref: 'o0/Asset/Cash',
         bref: 'o0/Q2/20220401',
-        save: false,
       },
       out: {
         ok: true,
@@ -1314,10 +1277,6 @@ export default {
           '20220630,Closing Balance,,280,0\n',
         entry_count: 3,
         final_balance: 0,
-        // saved: true,
-        file: {
-          // ok: true,
-        },
       },
     },
 
@@ -1328,7 +1287,6 @@ export default {
       params: {
         aref: 'o0/Income/Sales',
         bref: 'o0/Q2/20220401',
-        save: false,
       },
       out: {
         ok: true,
@@ -1345,10 +1303,6 @@ export default {
           '20220630,Closing Balance,300,,0\n',
         entry_count: 3,
         final_balance: 0,
-        // saved: true,
-        file: {
-          // ok: true,
-        },
       },
     },
 
@@ -1359,7 +1313,6 @@ export default {
       params: {
         aref: 'o0/Asset/Office',
         bref: 'o0/Q2/20220401',
-        save: false,
       },
       out: {
         ok: true,
@@ -1375,10 +1328,6 @@ export default {
           '20220630,Closing Balance,,70,0\n',
         entry_count: 2,
         final_balance: 0,
-        // saved: true,
-        file: {
-          // ok: true,
-        },
       },
     },
 
@@ -1389,7 +1338,6 @@ export default {
       params: {
         aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q2/20220401',
-        save: false,
       },
       out: {
         ok: true,
@@ -1405,10 +1353,6 @@ export default {
           '20220630,Closing Balance,50,,0\n',
         entry_count: 2,
         final_balance: 0,
-        // saved: true,
-        file: {
-          // ok: true,
-        },
       },
     },
 
@@ -1419,7 +1363,6 @@ export default {
       params: {
         aref: 'o0/Asset/Cash',
         bref: 'o0/Q3/20220701',
-        save: false,
       },
       out: {
         ok: true,
@@ -1435,10 +1378,6 @@ export default {
         entry_count: 1,
         final_balance: 280,
         closing_balance: 0,
-        saved: false,
-        file: {
-          // ok: true,
-        },
       },
     },
 
@@ -1449,7 +1388,6 @@ export default {
       params: {
         aref: 'o0/Income/Sales',
         bref: 'o0/Q3/20220701',
-        save: false,
       },
       out: {
         ok: true,
@@ -1457,17 +1395,12 @@ export default {
         aref: 'o0/Income/Sales',
         book_id: 'shop-b2',
         bref: 'o0/Q3/20220701',
-        // fileName: 'sales_q3_o0.csv',
         content:
           '# Sales - Q3 - o0\n' +
           'Date,Description,Debit,Credit,Balance\n' +
           '20220701,Opening Balance,,300,300\n',
         entry_count: 1,
         final_balance: 300,
-        // saved: true,
-        file: {
-          // ok: true,
-        },
       },
     },
 
@@ -1478,7 +1411,6 @@ export default {
       params: {
         aref: 'o0/Asset/Office',
         bref: 'o0/Q3/20220701',
-        save: false,
       },
       out: {
         ok: true,
@@ -1486,17 +1418,12 @@ export default {
         aref: 'o0/Asset/Office',
         book_id: 'shop-b2',
         bref: 'o0/Q3/20220701',
-        // fileName: 'office_q3_o0.csv',
         content:
           '# Office - Q3 - o0\n' +
           'Date,Description,Debit,Credit,Balance\n' +
           '20220701,Opening Balance,70,,70\n',
         entry_count: 1,
         final_balance: 70,
-        // saved: true,
-        file: {
-          // ok: true,
-        },
       },
     },
 
@@ -1507,7 +1434,6 @@ export default {
       params: {
         aref: 'o0/Liability/Credit Card',
         bref: 'o0/Q3/20220701',
-        save: false,
       },
       out: {
         ok: true,
@@ -1515,17 +1441,12 @@ export default {
         aref: 'o0/Liability/Credit Card',
         book_id: 'shop-b2',
         bref: 'o0/Q3/20220701',
-        // fileName: 'credit_card_q3_o0.csv',
         content:
           '# Credit Card - Q3 - o0\n' +
           'Date,Description,Debit,Credit,Balance\n' +
           '20220701,Opening Balance,,50,50\n',
         entry_count: 1,
         final_balance: 50,
-        // saved: true,
-        file: {
-          // ok: true,
-        },
       },
     },
 
@@ -1535,13 +1456,11 @@ export default {
       pattern: 'export:book,format:csv',
       params: {
         bref: 'o0/Q1/20220101',
-        save: false,
       },
       out: {
         book_id: 'shop-b0',
         bref: 'o0/Q1/20220101',
         book_name: 'Q1',
-        // output_directory: '/../test/ledger_csv/o0/q1',
         total_accounts: 4,
         successful_exports: 4,
         failed_exports: 0,
@@ -1567,14 +1486,12 @@ export default {
       pattern: 'export:book,format:csv',
       params: {
         bref: 'o0/Q2/20220401',
-        save: false,
       },
       out: {
         ok: true,
         book_id: 'shop-b1',
         bref: 'o0/Q2/20220401',
         book_name: 'Q2',
-        // output_directory: '/../test/ledger_csv/o0/q2',
         total_accounts: 4,
         successful_exports: 4,
         failed_exports: 0,
@@ -1600,15 +1517,12 @@ export default {
       pattern: 'export:book,format:csv',
       params: {
         bref: 'o0/Q3/20220701',
-        // file_path: `${__dirname}/ledger_csv/o0/q3`,
-        save: false,
       },
       out: {
         ok: true,
         book_id: 'shop-b2',
         bref: 'o0/Q3/20220701',
         book_name: 'Q3',
-        // output_directory: '/../test/ledger_csv/o0/q3',
         total_accounts: 4,
         successful_exports: 4,
         failed_exports: 0,
