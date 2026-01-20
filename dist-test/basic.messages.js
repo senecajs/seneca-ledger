@@ -1820,7 +1820,7 @@ exports.default = {
                         time: { kind: 'basic' },
                         id: 'shop-b0',
                         xbar: 2,
-                        closed: true
+                        closed: true,
                     },
                     {
                         org_id: 'o0',
@@ -1831,7 +1831,7 @@ exports.default = {
                         end: 20220630,
                         time: { kind: 'basic' },
                         id: 'shop-b1',
-                        closed: true
+                        closed: true,
                     },
                     {
                         org_id: 'o0',
@@ -1841,7 +1841,7 @@ exports.default = {
                         start: 20220701,
                         end: 20220930,
                         time: { kind: 'basic' },
-                        id: 'shop-b2'
+                        id: 'shop-b2',
                     },
                     {
                         org_id: 'o0',
@@ -1851,9 +1851,9 @@ exports.default = {
                         start: 20230101,
                         end: 20230131,
                         time: { kind: 'utc', timezone: 'America/New_York' },
-                        id: 'test-time-book'
-                    }
-                ]
+                        id: 'test-time-book',
+                    },
+                ],
             },
         },
         // Test update book that doesn't exist
@@ -1903,746 +1903,703 @@ exports.default = {
                 why: 'book-not-found',
             },
         },
-        // // Test creating entry with nonexistent debit account
-        // {
-        //   name: 'test-entry-nonexistent-debit',
-        //   pattern: 'create:entry',
-        //   params: {
-        //     id: 'test-bad-debit',
-        //     oref: 'o0',
-        //     bref: 'o0/Q1/20220101',
-        //     daref: 'o0/Asset/NonExistent',
-        //     caref: 'o0/Income/Sales',
-        //     val: 100,
-        //     desc: 'Test',
-        //     date: 20220115,
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'debit-account-not-found',
-        //   },
-        // },
-        //
-        // // Test creating entry with nonexistent credit account
-        // {
-        //   name: 'test-entry-nonexistent-credit',
-        //   pattern: 'create:entry',
-        //   params: {
-        //     id: 'test-bad-credit',
-        //     oref: 'o0',
-        //     bref: 'o0/Q1/20220101',
-        //     daref: 'o0/Asset/Cash',
-        //     caref: 'o0/Income/NonExistent',
-        //     val: 100,
-        //     desc: 'Test',
-        //     date: 20220115,
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'credit-account-not-found',
-        //   },
-        // },
-        //
-        // // Test creating entry with no value
-        // {
-        //   name: 'test-entry-no-val',
-        //   pattern: 'create:entry',
-        //   params: {
-        //     id: 'test-no-val',
-        //     oref: 'o0',
-        //     bref: 'o0/Q1/20220101',
-        //     daref: 'o0/Asset/Cash',
-        //     caref: 'o0/Income/Sales',
-        //     desc: 'Test',
-        //     date: 20220115,
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'no-val',
-        //   },
-        // },
-        //
-        // // Test creating entry with no description
-        // {
-        //   name: 'test-entry-no-desc',
-        //   pattern: 'create:entry',
-        //   params: {
-        //     id: 'test-no-desc',
-        //     oref: 'o0',
-        //     bref: 'o0/Q1/20220101',
-        //     daref: 'o0/Asset/Cash',
-        //     caref: 'o0/Income/Sales',
-        //     val: 100,
-        //     date: 20220115,
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'no-desc',
-        //   },
-        // },
-        //
-        // // Test creating entry with empty description
-        // {
-        //   name: 'test-entry-empty-desc',
-        //   pattern: 'create:entry',
-        //   params: {
-        //     id: 'test-empty-desc',
-        //     oref: 'o0',
-        //     bref: 'o0/Q1/20220101',
-        //     daref: 'o0/Asset/Cash',
-        //     caref: 'o0/Income/Sales',
-        //     val: 100,
-        //     desc: '',
-        //     date: 20220115,
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'no-desc',
-        //   },
-        // },
-        //
-        // // Test creating entry with no date
-        // {
-        //   name: 'test-entry-no-date',
-        //   pattern: 'create:entry',
-        //   params: {
-        //     id: 'test-no-date',
-        //     oref: 'o0',
-        //     bref: 'o0/Q1/20220101',
-        //     daref: 'o0/Asset/Cash',
-        //     caref: 'o0/Income/Sales',
-        //     val: 100,
-        //     desc: 'Test',
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'no-date',
-        //   },
-        // },
-        //
-        // // Test creating entry with base currency info
-        // {
-        //   name: 'test-entry-base-currency',
-        //   pattern: 'create:entry',
-        //   params: {
-        //     id: 'test-base-cur',
-        //     oref: 'o0',
-        //     bref: 'o0/Q3/20220701',
-        //     daref: 'o0/Asset/Cash',
-        //     caref: 'o0/Income/Sales',
-        //     val: 100,
-        //     desc: 'Sale in EUR',
-        //     date: 20220715,
-        //     baseval: 85,
-        //     basecur: 'EUR',
-        //     baserate: 1.18,
-        //   },
-        //   out: {
-        //     ok: true,
-        //     credit: {
-        //       val: 100,
-        //       desc: 'Sale in EUR',
-        //       baseval: 85,
-        //       basecur: 'EUR',
-        //       baserate: 1.18,
-        //       date: 20220715,
-        //     },
-        //     debit: {
-        //       val: 100,
-        //       desc: 'Sale in EUR',
-        //       baseval: 85,
-        //       basecur: 'EUR',
-        //       baserate: 1.18,
-        //       date: 20220715,
-        //     },
-        //   },
-        // },
-        //
-        // // Test creating entry with custom kind
-        // {
-        //   name: 'test-entry-custom-kind',
-        //   pattern: 'create:entry',
-        //   params: {
-        //     id: 'test-custom-kind',
-        //     oref: 'o0',
-        //     bref: 'o0/Q3/20220701',
-        //     daref: 'o0/Asset/Cash',
-        //     caref: 'o0/Income/Sales',
-        //     val: 50,
-        //     desc: 'Adjustment',
-        //     date: 20220720,
-        //     kind: 'adjustment',
-        //   },
-        //   out: {
-        //     ok: true,
-        //     credit: {
-        //       val: 50,
-        //       desc: 'Adjustment',
-        //       kind: 'adjustment',
-        //       date: 20220720,
-        //     },
-        //     debit: {
-        //       val: 50,
-        //       desc: 'Adjustment',
-        //       kind: 'adjustment',
-        //       date: 20220720,
-        //     },
-        //   },
-        // },
-        //
-        // // Test list entries with no oref (should fail)
-        // {
-        //   name: 'test-list-entry-no-oref',
-        //   pattern: 'list:entry',
-        //   params: {
-        //     bref: 'o0/Q1/20220101',
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'org-required',
-        //   },
-        // },
-        //
-        // // Test list entries with credit only
-        // {
-        //   name: 'test-list-entry-credit-only',
-        //   pattern: 'list:entry',
-        //   params: {
-        //     oref: 'o0',
-        //     bref: 'o0/Q1/20220101',
-        //     aref: 'o0/Income/Sales',
-        //     credit: true,
-        //     debit: false,
-        //   },
-        //   out: {
-        //     ok: true,
-        //     credits: [
-        //       {
-        //         val: 100,
-        //         desc: 'Jan Sales',
-        //         caref: 'o0/Income/Sales',
-        //       },
-        //     ],
-        //     debits: [],
-        //   },
-        // },
-        //
-        // // Test list entries with debit only
-        // {
-        //   name: 'test-list-entry-debit-only',
-        //   pattern: 'list:entry',
-        //   params: {
-        //     oref: 'o0',
-        //     bref: 'o0/Q1/20220101',
-        //     aref: 'o0/Asset/Cash',
-        //     credit: false,
-        //     debit: true,
-        //   },
-        //   out: {
-        //     ok: true,
-        //     credits: [],
-        //     debits: [
-        //       {
-        //         val: 100,
-        //         desc: 'Jan Sales',
-        //         daref: 'o0/Asset/Cash',
-        //       },
-        //     ],
-        //   },
-        // },
-        //
-        // // Edge Cases for Balance Account
-        //
-        // // Test balance for nonexistent account
-        // {
-        //   name: 'test-balance-nonexistent-account',
-        //   pattern: 'balance:account',
-        //   params: {
-        //     aref: 'o0/Asset/NonExistent',
-        //     bref: 'o0/Q1/20220101',
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'account-not-found',
-        //   },
-        // },
-        //
-        // // Test balance for nonexistent book
-        // {
-        //   name: 'test-balance-nonexistent-book',
-        //   pattern: 'balance:account',
-        //   params: {
-        //     aref: 'o0/Asset/Cash',
-        //     bref: 'o0/NonExistent/20230101',
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'book-not-found',
-        //   },
-        // },
-        //
-        // // Test balance for account with zero balance
-        // {
-        //   name: 'test-balance-zero-account',
-        //   pattern: 'balance:account',
-        //   params: {
-        //     aref: 'o0/Asset/Cash',
-        //     bref: 'o0/Q1/20220101',
-        //   },
-        //   out: {
-        //     ok: true,
-        //     account_id: 'shop-a0',
-        //     aref: 'o0/Asset/Cash',
-        //     balance: 0,
-        //   },
-        // },
-        //
-        // // Edge Cases for Close Account
-        //
-        // // Test closing nonexistent account
-        // {
-        //   name: 'test-close-nonexistent-account',
-        //   pattern: 'close:account',
-        //   params: {
-        //     aref: 'o0/Asset/NonExistent',
-        //     bref: 'o0/Q3/20220701',
-        //     end: 20220930,
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'account-not-found',
-        //   },
-        // },
-        //
-        // // Test closing account in nonexistent book
-        // {
-        //   name: 'test-close-account-nonexistent-book',
-        //   pattern: 'close:account',
-        //   params: {
-        //     aref: 'o0/Asset/Cash',
-        //     bref: 'o0/NonExistent/20230101',
-        //     end: 20230331,
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'book-not-found',
-        //   },
-        // },
-        //
-        // // Test closing Opening Balance equity account (should fail)
-        // {
-        //   name: 'test-close-opening-balance-account',
-        //   pattern: 'close:account',
-        //   params: {
-        //     aref: 'o0/Equity/Opening Balance',
-        //     bref: 'o0/Q3/20220701',
-        //     end: 20220930,
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'cannot-close-opening-balance-account',
-        //   },
-        // },
-        //
-        // // Test closing account with zero balance
-        // {
-        //   name: 'test-close-zero-balance-account',
-        //   pattern: 'close:account',
-        //   params: {
-        //     aref: 'o0/Income/Sales',
-        //     bref: 'o0/Q3/20220701',
-        //     end: 20220930,
-        //   },
-        //   out: {
-        //     ok: true,
-        //     aref: 'o0/Income/Sales',
-        //     original_balance: 0,
-        //     closing_balance: 0,
-        //     opening_balance: 0,
-        //     opening_balance_aref: null,
-        //     closing_entries: [],
-        //     opening_entries: [],
-        //   },
-        // },
-        //
-        // // Test closing account with nonexistent target book
-        // {
-        //   name: 'test-close-account-bad-target',
-        //   pattern: 'close:account',
-        //   params: {
-        //     aref: 'o0/Asset/Cash',
-        //     bref: 'o0/Q3/20220701',
-        //     target_bref: 'o0/NonExistent/20230101',
-        //     end: 20220930,
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'target-book-not-found',
-        //   },
-        // },
-        //
-        // // Edge Cases for Export Account CSV
-        //
-        // // Test export for nonexistent account
-        // {
-        //   name: 'test-export-nonexistent-account',
-        //   pattern: 'export:account,format:csv',
-        //   params: {
-        //     aref: 'o0/Asset/NonExistent',
-        //     bref: 'o0/Q1/20220101',
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'account-not-found',
-        //   },
-        // },
-        //
-        // // Test export for nonexistent book
-        // {
-        //   name: 'test-export-account-nonexistent-book',
-        //   pattern: 'export:account,format:csv',
-        //   params: {
-        //     aref: 'o0/Asset/Cash',
-        //     bref: 'o0/NonExistent/20230101',
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'bookEnt-not-found',
-        //   },
-        // },
-        //
-        // // Edge Cases for Close Book
-        //
-        // // Test closing nonexistent book
-        // {
-        //   name: 'test-close-nonexistent-book',
-        //   pattern: 'close:book',
-        //   params: {
-        //     bref: 'o0/NonExistent/20230101',
-        //     end: 20230331,
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'book-not-found',
-        //   },
-        // },
-        //
-        // // Test closing already closed book
-        // {
-        //   name: 'test-close-already-closed-book',
-        //   pattern: 'close:book',
-        //   params: {
-        //     bref: 'o0/Q1/20220101',
-        //     end: 20220331,
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'book-already-closed',
-        //   },
-        // },
-        //
-        // // Test closing book with nonexistent target
-        // {
-        //   name: 'test-close-book-bad-target',
-        //   pattern: 'close:book',
-        //   params: {
-        //     bref: 'o0/Q3/20220701',
-        //     target_bref: 'o0/NonExistent/20230101',
-        //     end: 20220930,
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'target-book-not-found',
-        //   },
-        // },
-        //
-        // // Create empty book for testing
-        // {
-        //   name: 'test-empty-book',
-        //   pattern: 'create:book',
-        //   params: {
-        //     book: {
-        //       id$: 'empty-book',
-        //       oref: 'o0',
-        //       name: 'Empty',
-        //       start: 20231001,
-        //       end: 20231231,
-        //     },
-        //   },
-        //   out: {
-        //     ok: true,
-        //     book: {
-        //       id: 'empty-book',
-        //       bref: 'o0/Empty/20231001',
-        //     },
-        //   },
-        // },
-        //
-        // // Test closing empty book
-        // {
-        //   name: 'test-close-empty-book',
-        //   pattern: 'close:book',
-        //   params: {
-        //     bref: 'o0/Empty/20231001',
-        //     end: 20231231,
-        //   },
-        //   out: {
-        //     ok: true,
-        //     book_id: 'empty-book',
-        //     bref: 'o0/Empty/20231001',
-        //     note: 'No account entries in this book',
-        //     summary: {
-        //       total_accounts: 0,
-        //       successful_closures: 0,
-        //       failed_closures: 0,
-        //       total_balance_transferred: 0,
-        //       all_accounts_zeroed: true,
-        //     },
-        //     closure_successful: true,
-        //   },
-        // },
-        //
-        // // Edge Cases for Export Book CSV
-        //
-        // // Test export for nonexistent book
-        // {
-        //   name: 'test-export-nonexistent-book',
-        //   pattern: 'export:book,format:csv',
-        //   params: {
-        //     bref: 'o0/NonExistent/20230101',
-        //   },
-        //   out: {
-        //     ok: false,
-        //     why: 'book-not-found',
-        //   },
-        // },
-        //
-        // // Test export for empty book
-        // {
-        //   name: 'test-export-empty-book',
-        //   pattern: 'export:book,format:csv',
-        //   params: {
-        //     bref: 'o0/Empty/20231001',
-        //   },
-        //   out: {
-        //     ok: true,
-        //     book_id: 'empty-book',
-        //     bref: 'o0/Empty/20231001',
-        //     note: 'No accounts found in this book',
-        //     total_accounts: 0,
-        //     successful_exports: 0,
-        //     failed_exports: 0,
-        //     exports: [],
-        //   },
-        // },
-        //
-        // // Test Negative Balance Scenarios
-        //
-        // // Create expense account for negative balance testing
-        // {
-        //   name: 'test-expense-account',
-        //   pattern: 'create:account',
-        //   params: {
-        //     account: {
-        //       id$: 'test-expense',
-        //       oref: 'o0',
-        //       path: 'Expense',
-        //       name: 'Utilities',
-        //       normal: 'debit',
-        //     },
-        //   },
-        //   out: {
-        //     ok: true,
-        //     account: {
-        //       id: 'test-expense',
-        //       aref: 'o0/Expense/Utilities',
-        //       normal: 'debit',
-        //     },
-        //   },
-        // },
-        //
-        // // Create entry that gives expense a credit balance (negative for debit normal)
-        // {
-        //   name: 'test-negative-balance-entry',
-        //   pattern: 'create:entry',
-        //   params: {
-        //     id: 'test-negative',
-        //     oref: 'o0',
-        //     bref: 'o0/Q3/20220701',
-        //     daref: 'o0/Asset/Cash',
-        //     caref: 'o0/Expense/Utilities',
-        //     val: 100,
-        //     desc: 'Refund from utility company',
-        //     date: 20220715,
-        //   },
-        //   out: {
-        //     ok: true,
-        //     credit: {
-        //       val: 100,
-        //       desc: 'Refund from utility company',
-        //     },
-        //     debit: {
-        //       val: 100,
-        //       desc: 'Refund from utility company',
-        //     },
-        //   },
-        // },
-        //
-        // // Balance the expense account with negative balance
-        // {
-        //   name: 'test-negative-balance',
-        //   pattern: 'balance:account',
-        //   params: {
-        //     aref: 'o0/Expense/Utilities',
-        //     bref: 'o0/Q3/20220701',
-        //   },
-        //   out: {
-        //     ok: true,
-        //     account_id: 'test-expense',
-        //     aref: 'o0/Expense/Utilities',
-        //     creditTotal: 100,
-        //     debitTotal: 0,
-        //     balance: -100, // Negative balance for debit normal account
-        //     normal: 'debit',
-        //   },
-        // },
-        //
-        // // Multi-path Account Testing
-        //
-        // // Create account with 3-level path
-        // {
-        //   name: 'test-deep-path-account',
-        //   pattern: 'create:account',
-        //   params: {
-        //     account: {
-        //       id$: 'test-deep-path',
-        //       oref: 'o0',
-        //       path: ['Asset', 'Current', 'Cash'],
-        //       name: 'Petty Cash',
-        //       normal: 'debit',
-        //     },
-        //   },
-        //   out: {
-        //     ok: true,
-        //     account: {
-        //       id: 'test-deep-path',
-        //       path0: 'Asset',
-        //       path1: 'Current',
-        //       path2: 'Cash',
-        //       aref: 'o0/Asset/Current/Cash/Petty Cash',
-        //       path: ['Asset', 'Current', 'Cash'],
-        //       name: 'Petty Cash',
-        //     },
-        //   },
-        // },
-        //
-        // // Test Complex Entry Scenarios
-        //
-        // // Create revenue account for testing
-        // {
-        //   name: 'test-revenue-account',
-        //   pattern: 'create:account',
-        //   params: {
-        //     account: {
-        //       id$: 'test-revenue',
-        //       oref: 'o0',
-        //       path: 'Income',
-        //       name: 'Service Revenue',
-        //       normal: 'credit',
-        //     },
-        //   },
-        //   out: {
-        //     ok: true,
-        //     account: {
-        //       id: 'test-revenue',
-        //       aref: 'o0/Income/Service Revenue',
-        //       normal: 'credit',
-        //     },
-        //   },
-        // },
-        //
-        // // Test entry with debit/credit object format
-        // {
-        //   name: 'test-entry-object-format',
-        //   pattern: 'create:entry',
-        //   params: {
-        //     id: 'test-obj-format',
-        //     oref: 'o0',
-        //     bref: 'o0/Q3/20220701',
-        //     debit: {
-        //       aref: 'o0/Asset/Cash',
-        //     },
-        //     credit: {
-        //       aref: 'o0/Income/Service Revenue',
-        //     },
-        //     val: 500,
-        //     desc: 'Consulting services',
-        //     date: 20220801,
-        //   },
-        //   out: {
-        //     ok: true,
-        //     credit: {
-        //       val: 500,
-        //       desc: 'Consulting services',
-        //       caref: 'o0/Income/Service Revenue',
-        //     },
-        //     debit: {
-        //       val: 500,
-        //       desc: 'Consulting services',
-        //       daref: 'o0/Asset/Cash',
-        //     },
-        //   },
-        // },
-        //
-        // // Test Large Value Entry
-        // {
-        //   name: 'test-large-value-entry',
-        //   pattern: 'create:entry',
-        //   params: {
-        //     id: 'test-large-val',
-        //     oref: 'o0',
-        //     bref: 'o0/Q3/20220701',
-        //     daref: 'o0/Asset/Cash',
-        //     caref: 'o0/Income/Service Revenue',
-        //     val: 999999999.99,
-        //     desc: 'Large transaction',
-        //     date: 20220815,
-        //   },
-        //   out: {
-        //     ok: true,
-        //     credit: {
-        //       val: 999999999.99,
-        //     },
-        //     debit: {
-        //       val: 999999999.99,
-        //     },
-        //   },
-        // },
-        //
-        // // Test Small Value Entry
-        // {
-        //   name: 'test-small-value-entry',
-        //   pattern: 'create:entry',
-        //   params: {
-        //     id: 'test-small-val',
-        //     oref: 'o0',
-        //     bref: 'o0/Q3/20220701',
-        //     daref: 'o0/Asset/Cash',
-        //     caref: 'o0/Income/Service Revenue',
-        //     val: 0.01,
-        //     desc: 'Penny transaction',
-        //     date: 20220820,
-        //   },
-        //   out: {
-        //     ok: true,
-        //     credit: {
-        //       val: 0.01,
-        //     },
-        //     debit: {
-        //       val: 0.01,
-        //     },
-        //   },
-        // },
+        // Test creating entry with nonexistent debit account
+        {
+            name: 'test-entry-nonexistent-debit',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-bad-debit',
+                oref: 'o0',
+                bref: 'o0/Jan 2023/20230101',
+                daref: 'o0/Asset/NonExistent',
+                caref: 'o0/Income/Sales',
+                val: 100,
+                desc: 'Test',
+                date: 20230115,
+            },
+            out: {
+                ok: false,
+                why: 'debit-account-not-found',
+            },
+        },
+        // Test creating entry with nonexistent credit account
+        {
+            name: 'test-entry-nonexistent-credit',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-bad-credit',
+                oref: 'o0',
+                bref: 'o0/Jan 2023/20230101',
+                daref: 'o0/Asset/Cash',
+                caref: 'o0/Income/NonExistent',
+                val: 100,
+                desc: 'Test',
+                date: 20230115,
+            },
+            out: {
+                ok: false,
+                why: 'credit-account-not-found',
+            },
+        },
+        // Test creating entry with no value
+        {
+            name: 'test-entry-no-val',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-no-val',
+                oref: 'o0',
+                bref: 'o0/Jan 2023/20230101',
+                daref: 'o0/Asset/Cash',
+                caref: 'o0/Income/Sales',
+                desc: 'Test',
+                date: 20230115,
+            },
+            out: {
+                ok: false,
+                why: 'no-val',
+            },
+        },
+        // Test creating entry with no description
+        {
+            name: 'test-entry-no-desc',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-no-desc',
+                oref: 'o0',
+                bref: 'o0/Jan 2023/20230101',
+                daref: 'o0/Asset/Cash',
+                caref: 'o0/Income/Sales',
+                val: 100,
+                date: 20230115,
+            },
+            out: {
+                ok: false,
+                why: 'no-desc',
+            },
+        },
+        // Test creating entry with empty description
+        {
+            name: 'test-entry-empty-desc',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-empty-desc',
+                oref: 'o0',
+                bref: 'o0/Jan 2023/20230101',
+                daref: 'o0/Asset/Cash',
+                caref: 'o0/Income/Sales',
+                val: 100,
+                desc: '',
+                date: 20230115,
+            },
+            out: {
+                ok: false,
+                why: 'no-desc',
+            },
+        },
+        // Test creating entry with no date
+        {
+            name: 'test-entry-no-date',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-no-date',
+                oref: 'o0',
+                bref: 'o0/Jan 2023/20230101',
+                daref: 'o0/Asset/Cash',
+                caref: 'o0/Income/Sales',
+                val: 100,
+                desc: 'Test',
+            },
+            out: {
+                ok: false,
+                why: 'no-date',
+            },
+        },
+        // Test creating entry with base currency info
+        {
+            name: 'test-entry-base-currency',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-base-cur',
+                oref: 'o0',
+                bref: 'o0/Q3/20220701',
+                daref: 'o0/Asset/Cash',
+                caref: 'o0/Income/Sales',
+                val: 100,
+                desc: 'Sale in EUR',
+                date: 20220715,
+                baseval: 85,
+                basecur: 'EUR',
+                baserate: 1.18,
+            },
+            out: {
+                ok: true,
+                credit: {
+                    val: 100,
+                    desc: 'Sale in EUR',
+                    baseval: 85,
+                    basecur: 'EUR',
+                    baserate: 1.18,
+                    date: 20220715,
+                },
+                debit: {
+                    val: 100,
+                    desc: 'Sale in EUR',
+                    baseval: 85,
+                    basecur: 'EUR',
+                    baserate: 1.18,
+                    date: 20220715,
+                },
+            },
+        },
+        // Test creating entry with custom kind
+        {
+            name: 'test-entry-custom-kind',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-custom-kind',
+                oref: 'o0',
+                bref: 'o0/Q3/20220701',
+                daref: 'o0/Asset/Cash',
+                caref: 'o0/Income/Sales',
+                val: 50,
+                desc: 'Adjustment',
+                date: 20220720,
+                kind: 'adjustment',
+            },
+            out: {
+                ok: true,
+                credit: {
+                    val: 50,
+                    desc: 'Adjustment',
+                    kind: 'adjustment',
+                    date: 20220720,
+                },
+                debit: {
+                    val: 50,
+                    desc: 'Adjustment',
+                    kind: 'adjustment',
+                    date: 20220720,
+                },
+            },
+        },
+        // Test list entries with no oref (should fail)
+        {
+            name: 'test-list-entry-no-oref',
+            pattern: 'list:entry',
+            params: {
+                bref: 'o0/Q1/20220101',
+            },
+            out: {
+                ok: false,
+                why: 'org-required',
+            },
+        },
+        // Test list entries with credit only
+        {
+            name: 'test-list-entry-credit-only',
+            pattern: 'list:entry',
+            params: {
+                oref: 'o0',
+                bref: 'o0/Q1/20220101',
+                aref: 'o0/Income/Sales',
+                credit: true,
+                debit: false,
+            },
+            out: {
+                ok: true,
+                credits: [
+                    {
+                        val: 100,
+                        desc: 'Jan Sales',
+                        caref: 'o0/Income/Sales',
+                    },
+                ],
+                debits: [],
+            },
+        },
+        // Test list entries with debit only
+        {
+            name: 'test-list-entry-debit-only',
+            pattern: 'list:entry',
+            params: {
+                oref: 'o0',
+                bref: 'o0/Q1/20220101',
+                aref: 'o0/Asset/Cash',
+                credit: false,
+                debit: true,
+            },
+            out: {
+                ok: true,
+                credits: [],
+                debits: [
+                    {
+                        val: 100,
+                        desc: 'Jan Sales',
+                        daref: 'o0/Asset/Cash',
+                    },
+                ],
+            },
+        },
+        // Edge Cases for Balance Account
+        // Test balance for nonexistent account
+        {
+            name: 'test-balance-nonexistent-account',
+            pattern: 'balance:account',
+            params: {
+                aref: 'o0/Asset/NonExistent',
+                bref: 'o0/Q1/20220101',
+            },
+            out: {
+                ok: false,
+                why: 'account-not-found',
+            },
+        },
+        // Test balance for nonexistent book
+        {
+            name: 'test-balance-nonexistent-book',
+            pattern: 'balance:account',
+            params: {
+                aref: 'o0/Asset/Cash',
+                bref: 'o0/NonExistent/20230101',
+            },
+            out: {
+                ok: false,
+                why: 'book-not-found',
+            },
+        },
+        // Test balance for account with zero balance
+        {
+            name: 'test-balance-zero-account',
+            pattern: 'balance:account',
+            params: {
+                aref: 'o0/Asset/Cash',
+                bref: 'o0/Q1/20220101',
+            },
+            out: {
+                ok: true,
+                account_id: 'shop-a0',
+                aref: 'o0/Asset/Cash',
+                balance: 0,
+            },
+        },
+        // Edge Cases for Close Account
+        // Test closing nonexistent account
+        {
+            name: 'test-close-nonexistent-account',
+            pattern: 'close:account',
+            params: {
+                aref: 'o0/Asset/NonExistent',
+                bref: 'o0/Q3/20220701',
+                end: 20220930,
+            },
+            out: {
+                ok: false,
+                why: 'account-not-found',
+            },
+        },
+        // Test closing account in nonexistent book
+        {
+            name: 'test-close-account-nonexistent-book',
+            pattern: 'close:account',
+            params: {
+                aref: 'o0/Asset/Cash',
+                bref: 'o0/NonExistent/20230101',
+                end: 20230331,
+            },
+            out: {
+                ok: false,
+                why: 'book-not-found',
+            },
+        },
+        // Test closing Opening Balance equity account (should fail)
+        {
+            name: 'test-close-opening-balance-account',
+            pattern: 'close:account',
+            params: {
+                aref: 'o0/Equity/Opening Balance',
+                bref: 'o0/Q3/20220701',
+                end: 20220930,
+            },
+            out: {
+                ok: false,
+                why: 'cannot-close-opening-balance-account',
+            },
+        },
+        // Test closing account with zero balance
+        {
+            name: 'test-close-zero-balance-account',
+            pattern: 'close:account',
+            params: {
+                aref: 'o0/Income/Sales',
+                bref: 'o0/Jan 2023/20230101',
+                end: 20230131,
+            },
+            out: {
+                ok: true,
+                aref: 'o0/Income/Sales',
+                original_balance: 0,
+                closing_balance: 0,
+                opening_balance: 0,
+                opening_balance_aref: null,
+                closing_entries: [],
+                opening_entries: [],
+            },
+        },
+        // Test closing account with nonexistent target book
+        {
+            name: 'test-close-account-bad-target',
+            pattern: 'close:account',
+            params: {
+                aref: 'o0/Asset/Cash',
+                bref: 'o0/Q3/20220701',
+                target_bref: 'o0/NonExistent/20230101',
+                end: 20220930,
+            },
+            out: {
+                ok: false,
+                why: 'target-book-not-found',
+            },
+        },
+        // Edge Cases for Export Account CSV
+        // Test export for nonexistent account
+        {
+            name: 'test-export-nonexistent-account',
+            pattern: 'export:account,format:csv',
+            params: {
+                aref: 'o0/Asset/NonExistent',
+                bref: 'o0/Q1/20220101',
+            },
+            out: {
+                ok: false,
+                why: 'account-not-found',
+            },
+        },
+        // Test export for nonexistent book
+        {
+            name: 'test-export-account-nonexistent-book',
+            pattern: 'export:account,format:csv',
+            params: {
+                aref: 'o0/Asset/Cash',
+                bref: 'o0/NonExistent/20230101',
+            },
+            out: {
+                ok: false,
+                why: 'bookEnt-not-found',
+            },
+        },
+        // Edge Cases for Close Book
+        // Test closing nonexistent book
+        {
+            name: 'test-close-nonexistent-book',
+            pattern: 'close:book',
+            params: {
+                bref: 'o0/NonExistent/20230101',
+                end: 20230331,
+            },
+            out: {
+                ok: false,
+                why: 'book-not-found',
+            },
+        },
+        // Test closing already closed book
+        {
+            name: 'test-close-already-closed-book',
+            pattern: 'close:book',
+            params: {
+                bref: 'o0/Q1/20220101',
+                end: 20220331,
+            },
+            out: {
+                ok: false,
+                why: 'book-already-closed',
+            },
+        },
+        // Test closing book with nonexistent target
+        {
+            name: 'test-close-book-bad-target',
+            pattern: 'close:book',
+            params: {
+                bref: 'o0/Q3/20220701',
+                target_bref: 'o0/NonExistent/20230101',
+                end: 20220930,
+            },
+            out: {
+                ok: false,
+                why: 'target-book-not-found',
+            },
+        },
+        // Create empty book for testing
+        {
+            name: 'test-empty-book',
+            pattern: 'create:book',
+            params: {
+                book: {
+                    id$: 'empty-book',
+                    oref: 'o0',
+                    name: 'Empty',
+                    start: 20231001,
+                    end: 20231231,
+                },
+            },
+            out: {
+                ok: true,
+                book: {
+                    id: 'empty-book',
+                    bref: 'o0/Empty/20231001',
+                },
+            },
+        },
+        // Test closing empty book
+        {
+            name: 'test-close-empty-book',
+            pattern: 'close:book',
+            params: {
+                bref: 'o0/Empty/20231001',
+                end: 20231231,
+            },
+            out: {
+                ok: true,
+                book_id: 'empty-book',
+                bref: 'o0/Empty/20231001',
+                note: 'No account entries in this book',
+                summary: {
+                    total_accounts: 0,
+                    successful_closures: 0,
+                    failed_closures: 0,
+                    total_balance_transferred: 0,
+                    all_accounts_zeroed: true,
+                },
+                closure_successful: true,
+            },
+        },
+        // Edge Cases for Export Book CSV
+        // Test export for nonexistent book
+        {
+            name: 'test-export-nonexistent-book',
+            pattern: 'export:book,format:csv',
+            params: {
+                bref: 'o0/NonExistent/20230101',
+            },
+            out: {
+                ok: false,
+                why: 'book-not-found',
+            },
+        },
+        // Test export for empty book
+        {
+            name: 'test-export-empty-book',
+            pattern: 'export:book,format:csv',
+            params: {
+                bref: 'o0/Empty/20231001',
+            },
+            out: {
+                ok: true,
+                book_id: 'empty-book',
+                bref: 'o0/Empty/20231001',
+                note: 'No accounts found in this book',
+                total_accounts: 0,
+                successful_exports: 0,
+                failed_exports: 0,
+                exports: [],
+            },
+        },
+        // Test Negative Balance Scenarios
+        // Create expense account for negative balance testing
+        {
+            name: 'test-expense-account',
+            pattern: 'create:account',
+            params: {
+                account: {
+                    id$: 'test-expense',
+                    oref: 'o0',
+                    path: 'Expense',
+                    name: 'Utilities',
+                    normal: 'debit',
+                },
+            },
+            out: {
+                ok: true,
+                account: {
+                    id: 'test-expense',
+                    aref: 'o0/Expense/Utilities',
+                    normal: 'debit',
+                },
+            },
+        },
+        // Create entry that gives expense a credit balance (negative for debit normal)
+        {
+            name: 'test-negative-balance-entry',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-negative',
+                oref: 'o0',
+                bref: 'o0/Q3/20220701',
+                daref: 'o0/Asset/Cash',
+                caref: 'o0/Expense/Utilities',
+                val: 100,
+                desc: 'Refund from utility company',
+                date: 20220715,
+            },
+            out: {
+                ok: true,
+                credit: {
+                    val: 100,
+                    desc: 'Refund from utility company',
+                },
+                debit: {
+                    val: 100,
+                    desc: 'Refund from utility company',
+                },
+            },
+        },
+        // Balance the expense account with negative balance
+        {
+            name: 'test-negative-balance',
+            pattern: 'balance:account',
+            params: {
+                aref: 'o0/Expense/Utilities',
+                bref: 'o0/Q3/20220701',
+            },
+            out: {
+                ok: true,
+                account_id: 'test-expense',
+                aref: 'o0/Expense/Utilities',
+                creditTotal: 100,
+                debitTotal: 0,
+                balance: -100, // Negative balance for debit normal account
+                normal: 'debit',
+            },
+        },
+        // Multi-path Account Testing
+        // Create account with 3-level path
+        {
+            name: 'test-deep-path-account',
+            pattern: 'create:account',
+            params: {
+                account: {
+                    id$: 'test-deep-path',
+                    oref: 'o0',
+                    path: ['Asset', 'Current', 'Cash'],
+                    name: 'Petty Cash',
+                    normal: 'debit',
+                },
+            },
+            out: {
+                ok: true,
+                account: {
+                    id: 'test-deep-path',
+                    path0: 'Asset',
+                    path1: 'Current',
+                    path2: 'Cash',
+                    aref: 'o0/Asset/Current/Cash/Petty Cash',
+                    path: ['Asset', 'Current', 'Cash'],
+                    name: 'Petty Cash',
+                },
+            },
+        },
+        // Test Complex Entry Scenarios
+        // Create revenue account for testing
+        {
+            name: 'test-revenue-account',
+            pattern: 'create:account',
+            params: {
+                account: {
+                    id$: 'test-revenue',
+                    oref: 'o0',
+                    path: 'Income',
+                    name: 'Service Revenue',
+                    normal: 'credit',
+                },
+            },
+            out: {
+                ok: true,
+                account: {
+                    id: 'test-revenue',
+                    aref: 'o0/Income/Service Revenue',
+                    normal: 'credit',
+                },
+            },
+        },
+        // Test entry with debit/credit object format
+        {
+            name: 'test-entry-object-format',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-obj-format',
+                oref: 'o0',
+                bref: 'o0/Q3/20220701',
+                debit: {
+                    aref: 'o0/Asset/Cash',
+                },
+                credit: {
+                    aref: 'o0/Income/Service Revenue',
+                },
+                val: 500,
+                desc: 'Consulting services',
+                date: 20220801,
+            },
+            out: {
+                ok: true,
+                credit: {
+                    val: 500,
+                    desc: 'Consulting services',
+                    caref: 'o0/Income/Service Revenue',
+                },
+                debit: {
+                    val: 500,
+                    desc: 'Consulting services',
+                    daref: 'o0/Asset/Cash',
+                },
+            },
+        },
+        // Test Large Value Entry
+        {
+            name: 'test-large-value-entry',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-large-val',
+                oref: 'o0',
+                bref: 'o0/Q3/20220701',
+                daref: 'o0/Asset/Cash',
+                caref: 'o0/Income/Service Revenue',
+                val: 999999999.99,
+                desc: 'Large transaction',
+                date: 20220815,
+            },
+            out: {
+                ok: true,
+                credit: {
+                    val: 999999999.99,
+                },
+                debit: {
+                    val: 999999999.99,
+                },
+            },
+        },
+        // Test Small Value Entry
+        {
+            name: 'test-small-value-entry',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-small-val',
+                oref: 'o0',
+                bref: 'o0/Q3/20220701',
+                daref: 'o0/Asset/Cash',
+                caref: 'o0/Income/Service Revenue',
+                val: 0.01,
+                desc: 'Penny transaction',
+                date: 20220820,
+            },
+            out: {
+                ok: true,
+                credit: {
+                    val: 0.01,
+                },
+                debit: {
+                    val: 0.01,
+                },
+            },
+        },
     ],
 };
 //# sourceMappingURL=basic.messages.js.map
