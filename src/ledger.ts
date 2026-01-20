@@ -141,7 +141,7 @@ function ledger(this: any, options: LedgerOptions) {
         {} as any,
       )
 
-    let aref = account.oref + '/' + path.join('/') + '/' + name
+    let aref = oref + '/' + path.join('/') + '/' + name
 
     let normal = account.normal
     if ('credit' !== normal && 'debit' !== normal) {

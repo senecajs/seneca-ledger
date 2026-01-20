@@ -58,7 +58,7 @@ function ledger(options) {
             .fill(null)
             .reduce((a, _, i) => ((a['path' + i] = null == path[i] ? '' : path[i]),
             a), {});
-        let aref = account.oref + '/' + path.join('/') + '/' + name;
+        let aref = oref + '/' + path.join('/') + '/' + name;
         let normal = account.normal;
         if ('credit' !== normal && 'debit' !== normal) {
             return { ok: false, why: 'invalid-normal' };
