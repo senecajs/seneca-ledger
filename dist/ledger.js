@@ -1,4 +1,5 @@
 "use strict";
+/* Copyright © 2025 Seneca Project Contributors, MIT License. */
 Object.defineProperty(exports, "__esModule", { value: true });
 /* NOTES
  * oref, aref, bref are mostly for human repl convenience
@@ -36,8 +37,8 @@ function ledger(options) {
         .message('void:entry', msgVoidEntry)
         .message('list:entry', msgListEntry);
     async function msgCreateAccount(msg) {
-        let seneca = this;
-        let account = msg.account;
+        const seneca = this;
+        const account = msg.account;
         if (null == account) {
             return { ok: false, why: 'no-account' };
         }
@@ -78,7 +79,7 @@ function ledger(options) {
         return { ok: true, account: accountEnt.data$(false) };
     }
     async function msgGetAccount(msg) {
-        let seneca = this;
+        const seneca = this;
         let accountEnt = await getAccount(seneca, accountCanon, msg);
         if (null == accountEnt) {
             return { ok: false, why: 'account-not-found' };
@@ -86,7 +87,7 @@ function ledger(options) {
         return { ok: true, account: accountEnt.data$(false) };
     }
     async function msgListAccount(msg) {
-        let seneca = this;
+        const seneca = this;
         let org_id = null == msg.org_id ? msg.oref : msg.org_id;
         let q = {};
         if (null != org_id) {
@@ -97,7 +98,7 @@ function ledger(options) {
         return { ok: true, q, list };
     }
     async function msgUpdateAccount(msg) {
-        let seneca = this;
+        const seneca = this;
         let accountEnt = await getAccount(seneca, accountCanon, msg);
         if (null == accountEnt) {
             return { ok: false, why: 'account-not-found' };
@@ -110,7 +111,7 @@ function ledger(options) {
     }
     // TODO: save to ledger/balance by book, default but optional
     async function msgBalanceAccount(msg) {
-        let seneca = this;
+        const seneca = this;
         let accountEnt = await getAccount(seneca, accountCanon, msg);
         if (null == accountEnt) {
             return { ok: false, why: 'account-not-found' };
@@ -283,7 +284,11 @@ function ledger(options) {
                 },
             });
             if (!(createResult === null || createResult === void 0 ? void 0 : createResult.ok)) {
-                return { ok: false, why: 'opening-balance-create-fail', error: obEnt };
+                return {
+                    ok: false,
+                    why: 'opening-balance-create-fail',
+                    error: createResult,
+                };
             }
             obEnt = createResult.account;
         }
@@ -317,8 +322,8 @@ function ledger(options) {
             entryPromises.push(seneca.post('biz:ledger,create:entry', openingEntry));
         }
         const results = await Promise.all(entryPromises);
-        let closingResult = results[0];
-        let openingResult = results[1];
+        const closingResult = results[0];
+        const openingResult = results[1];
         if (!closingResult.ok) {
             return { ok: false, why: 'closing-entry-failed', error: closingResult };
         }
@@ -358,7 +363,7 @@ function ledger(options) {
         };
     }
     async function msgCreateBook(msg) {
-        let seneca = this;
+        const seneca = this;
         let book = msg.book;
         if (null == book) {
             return { ok: false, why: 'no-book' };
@@ -395,7 +400,7 @@ function ledger(options) {
         return { ok: true, book: bookEnt.data$(false) };
     }
     async function msgGetBook(msg) {
-        let seneca = this;
+        const seneca = this;
         let bookEnt = await getBook(seneca, bookCanon, msg);
         if (null == bookEnt) {
             return { ok: false, why: 'book-not-found' };
@@ -403,7 +408,7 @@ function ledger(options) {
         return { ok: true, book: bookEnt.data$(false) };
     }
     async function msgListBook(msg) {
-        let seneca = this;
+        const seneca = this;
         let org_id = null == msg.org_id ? msg.oref : msg.org_id;
         let q = {};
         if (null != org_id) {
@@ -473,8 +478,8 @@ function ledger(options) {
                 book_id: bookEnt.id,
             }));
             const batchResults = await Promise.all(exportPromises);
-            batchResults.forEach((exportResult, i) => {
-                const accountEnt = batch[i];
+            batchResults.forEach((exportResult, idx) => {
+                const accountEnt = batch[idx];
                 exportResults.push({
                     account_id: accountEnt.id,
                     aref: accountEnt.aref,
@@ -569,7 +574,7 @@ function ledger(options) {
                     oref: bookEnt.oref,
                     path: ['Equity'],
                     name: 'Opening Balance',
-                    normal: 'credit',
+                    normal: 'credit'
                 },
             });
             if (!(createResult === null || createResult === void 0 ? void 0 : createResult.ok)) {
@@ -583,7 +588,7 @@ function ledger(options) {
         }
         const accountPromises = accountIds.map((accountId) => getAccount(seneca, accountCanon, { account_id: accountId }));
         const accounts = await Promise.all(accountPromises);
-        const accountsToClose = accounts.filter((acc) => (acc === null || acc === void 0 ? void 0 : acc.aref) !== obAref);
+        const accountsToClose = accounts.filter((acc) => acc !== null && acc.aref !== obAref);
         if (accountsToClose.length === 0) {
             bookEnt.closed = true;
             await bookEnt.save$();
@@ -622,8 +627,8 @@ function ledger(options) {
                 opening_balance_aref: obAref,
             }));
             const batchResults = await Promise.all(closurePromises);
-            batchResults.forEach((closeResult, i) => {
-                const accountEnt = batch[i];
+            batchResults.forEach((closeResult, idx) => {
+                const accountEnt = batch[idx];
                 accountClosures.push({
                     account_id: accountEnt.id,
                     result: closeResult,
@@ -653,7 +658,7 @@ function ledger(options) {
                 };
             }
         }
-        const allAccZeroed = accountClosures.every((ac) => ac.result.closing_balance === 0);
+        const allAccZeroed = accountClosures.every((ac) => ac.result.ok && ac.result.closing_balance === 0);
         const closureSuccessful = failedClosures === 0 && allAccZeroed;
         const outClosure = {
             ok: true,
@@ -683,7 +688,7 @@ function ledger(options) {
         return outClosure;
     }
     async function msgUpdateBook(msg) {
-        let seneca = this;
+        const seneca = this;
         let bookEnt = await getBook(seneca, bookCanon, msg);
         if (null == bookEnt) {
             return { ok: false, why: 'book-not-found' };
@@ -703,7 +708,7 @@ function ledger(options) {
     }
     // TODO: mark ledger/balance stale
     async function msgCreateEntry(msg) {
-        let seneca = this;
+        const seneca = this;
         let out = { ok: false };
         let debit = msg.debit || { aref: msg.daref };
         let credit = msg.credit || { aref: msg.caref };
@@ -788,7 +793,7 @@ function ledger(options) {
         // TODO: generate counter entries
     }
     async function msgListEntry(msg) {
-        let seneca = this;
+        const seneca = this;
         let q = msg.q || {};
         if (null == msg.oref) {
             return { ok: false, why: 'org-required' };
@@ -870,7 +875,7 @@ function calcTotals(accountEnt, creditEnts, debitEnts) {
     return {
         creditTotal,
         debitTotal,
-        balance,
+        balance: balance !== null && balance !== void 0 ? balance : 0,
     };
 }
 // 1748459422656 -> 20250528
@@ -987,7 +992,7 @@ async function generateBookSummaryCSV(bookEnt, successfulExports) {
         summaryContent += `Account,Normal Balance,Type,${bookEnt.closed ? 'Closing Balance' : 'Total Balance'},Entry Count\n`;
         successfulExports.forEach((exp) => {
             const result = exp.result;
-            const accountType = exp.aref.split('/')[1] || 'Uknown';
+            const accountType = exp.aref.split('/')[1] || 'Unknown';
             summaryContent += `${exp.name},${result.normal},${accountType},${bookEnt.closed ? result.closing_balance : result.final_balance},${result.entry_count}\n`;
         });
         return {
