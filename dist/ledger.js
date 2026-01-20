@@ -574,7 +574,7 @@ function ledger(options) {
                     oref: bookEnt.oref,
                     path: ['Equity'],
                     name: 'Opening Balance',
-                    normal: 'credit'
+                    normal: 'credit',
                 },
             });
             if (!(createResult === null || createResult === void 0 ? void 0 : createResult.ok)) {

@@ -167,20 +167,17 @@ export interface UpdateAccountInput extends AccountIdentifier {
 
 /** Input for balance:account message */
 export interface BalanceAccountInput
-  extends Omit<AccountIdentifier, 'id'>,
-    Omit<BookIdentifier, 'id'> {
+  extends Omit<AccountIdentifier, 'id'>, Omit<BookIdentifier, 'id'> {
   save: boolean // true => save to ledger/balance
 }
 
 /** Input for export:account,format:csv message */
 export interface ExportAccountCSVInput
-  extends Omit<AccountIdentifier, 'id'>,
-    Omit<BookIdentifier, 'id'> {}
+  extends Omit<AccountIdentifier, 'id'>, Omit<BookIdentifier, 'id'> {}
 
 /** Input for close:account message */
 export interface CloseAccountInput
-  extends Omit<AccountIdentifier, 'id'>,
-    Omit<BookIdentifier, 'id'> {
+  extends Omit<AccountIdentifier, 'id'>, Omit<BookIdentifier, 'id'> {
   target_book_id?: string
   target_bref?: string
   end?: number
@@ -268,8 +265,7 @@ export interface VoidEntryInput {
 
 /** Input for list:entry message */
 export interface ListEntryInput
-  extends Omit<BookIdentifier, 'id'>,
-    Omit<AccountIdentifier, 'id'> {
+  extends Omit<BookIdentifier, 'id'>, Omit<AccountIdentifier, 'id'> {
   oref: string
   credit?: boolean
   debit?: boolean
