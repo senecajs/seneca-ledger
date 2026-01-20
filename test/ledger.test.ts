@@ -9,7 +9,6 @@ import Ledger from '../src/ledger'
 
 import BasicMessages from './basic.messages'
 
-
 describe('ledger', () => {
   test('happy', async () => {
     expect(LedgerDoc).toBeDefined()
@@ -21,18 +20,13 @@ describe('ledger', () => {
     await seneca.ready()
   })
 
-
   test('basic.messages', async () => {
     const seneca = await makeSeneca()
     await SenecaMsgTest(seneca, BasicMessages)()
   })
 
-
-
-
   // test('maintain', Maintain)
 })
-
 
 async function makeSeneca() {
   const seneca = Seneca({ legacy: false })
@@ -49,4 +43,3 @@ async function makeSeneca() {
 
   return seneca
 }
-
