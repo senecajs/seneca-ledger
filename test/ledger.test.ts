@@ -1,17 +1,21 @@
 /* Copyright © 2022 Seneca Project Contributors, MIT License. */
 
+import { describe, test } from 'node:test'
+import { expect } from '@hapi/code'
+
 import Seneca from 'seneca'
 import SenecaMsgTest from 'seneca-msg-test'
 // import { Maintain } from '@seneca/maintain'
 
-import LedgerDoc from '../src/ledger-doc'
-import Ledger from '../src/ledger'
+import LedgerDoc from '..'
+import Ledger from '..'
 
 import BasicMessages from './basic.messages'
 
 describe('ledger', () => {
   test('happy', async () => {
-    expect(LedgerDoc).toBeDefined()
+    expect(LedgerDoc).exist()
+
     const seneca = Seneca({ legacy: false })
       .test()
       .use('promisify')

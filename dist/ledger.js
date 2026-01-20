@@ -213,7 +213,6 @@ function ledger(options) {
         };
     }
     async function msgCloseAccount(msg) {
-        var _a;
         const seneca = this;
         const [accountEnt, bookEnt] = await Promise.all([
             getAccount(seneca, accountCanon, msg),
@@ -226,7 +225,7 @@ function ledger(options) {
             return { ok: false, why: 'book-not-found' };
         }
         if (accountEnt.name === 'Opening Balance' &&
-            ((_a = accountEnt.path) === null || _a === void 0 ? void 0 : _a.includes('Equity'))) {
+            accountEnt.path?.includes('Equity')) {
             return {
                 ok: false,
                 why: 'cannot-close-opening-balance-account',
@@ -258,8 +257,8 @@ function ledger(options) {
                 aref: accountEnt.aref,
                 book_id: bookEnt.id,
                 bref: bookEnt.bref,
-                target_book_id: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.id,
-                target_bref: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.bref,
+                target_book_id: targetBookEnt?.id,
+                target_bref: targetBookEnt?.bref,
                 original_balance: 0,
                 closing_balance: 0,
                 opening_balance: 0,
@@ -283,7 +282,7 @@ function ledger(options) {
                     normal: 'credit',
                 },
             });
-            if (!(createResult === null || createResult === void 0 ? void 0 : createResult.ok)) {
+            if (!createResult?.ok) {
                 return {
                     ok: false,
                     why: 'opening-balance-create-fail',
@@ -351,11 +350,11 @@ function ledger(options) {
             aref: accountEnt.aref,
             book_id: bookEnt.id,
             bref: bookEnt.bref,
-            target_book_id: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.id,
-            target_bref: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.bref,
+            target_book_id: targetBookEnt?.id,
+            target_bref: targetBookEnt?.bref,
             original_balance: currentBalance,
             closing_balance: verifyClosingBalance.balance,
-            opening_balance: (verifyOpeningBalance === null || verifyOpeningBalance === void 0 ? void 0 : verifyOpeningBalance.balance) || null,
+            opening_balance: verifyOpeningBalance?.balance || null,
             opening_balance_aref: obEnt.aref,
             closing_entries: [closingResult],
             opening_entries: openingResult ? [openingResult] : [],
@@ -550,8 +549,8 @@ function ledger(options) {
                 ok: true,
                 book_id: bookEnt.id,
                 bref: bookEnt.bref,
-                target_book_id: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.id,
-                target_bref: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.bref,
+                target_book_id: targetBookEnt?.id,
+                target_bref: targetBookEnt?.bref,
                 note: 'No account entries in this book',
                 account_closures: [],
                 summary: {
@@ -577,7 +576,7 @@ function ledger(options) {
                     normal: 'credit',
                 },
             });
-            if (!(createResult === null || createResult === void 0 ? void 0 : createResult.ok)) {
+            if (!createResult?.ok) {
                 return {
                     ok: false,
                     why: 'opening-balance-create-fail',
@@ -596,8 +595,8 @@ function ledger(options) {
                 ok: true,
                 book_id: bookEnt.id,
                 bref: bookEnt.bref,
-                target_book_id: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.id,
-                target_bref: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.bref,
+                target_book_id: targetBookEnt?.id,
+                target_bref: targetBookEnt?.bref,
                 note: 'No accounts to close in this book',
                 account_closures: [],
                 summary: {
@@ -621,8 +620,8 @@ function ledger(options) {
             const closurePromises = batch.map((accountEnt) => seneca.post('biz:ledger,close:account', {
                 account_id: accountEnt.id,
                 book_id: bookEnt.id,
-                target_book_id: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.id,
-                target_bref: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.bref,
+                target_book_id: targetBookEnt?.id,
+                target_bref: targetBookEnt?.bref,
                 end: bookEnt.end,
                 opening_balance_aref: obAref,
             }));
@@ -664,8 +663,8 @@ function ledger(options) {
             ok: true,
             book_id: bookEnt.id,
             bref: bookEnt.bref,
-            target_book_id: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.id,
-            target_bref: targetBookEnt === null || targetBookEnt === void 0 ? void 0 : targetBookEnt.bref,
+            target_book_id: targetBookEnt?.id,
+            target_bref: targetBookEnt?.bref,
             closing_date: bookEnt.end,
             account_closures: accountClosures,
             summary: {
@@ -875,7 +874,7 @@ function calcTotals(accountEnt, creditEnts, debitEnts) {
     return {
         creditTotal,
         debitTotal,
-        balance: balance !== null && balance !== void 0 ? balance : 0,
+        balance: balance ?? 0,
     };
 }
 // 1748459422656 -> 20250528
