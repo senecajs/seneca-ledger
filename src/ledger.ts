@@ -1,4 +1,4 @@
-/* Copyright © 2025 Seneca Project Contributors, MIT License. */
+/* Copyright © 2026 Seneca Project Contributors, MIT License. */
 
 import type {
   // Base Types
@@ -1203,12 +1203,15 @@ async function getBook(
   msg: BookIdentifier,
 ): Promise<BookEntity | null> {
   let bookEnt: any = null
+
   if (null != msg.bref) {
     bookEnt = await seneca.entity(bookCanon).load$({ bref: msg.bref })
   }
+
   if (null == bookEnt && null != msg.id) {
     bookEnt = await seneca.entity(bookCanon).load$(msg.id)
   }
+
   if (null == bookEnt && null != msg.book_id) {
     bookEnt = await seneca.entity(bookCanon).load$(msg.book_id)
   }
