@@ -1,5 +1,7 @@
 name: 'TODO'
-on: ['push']
+# Disabled pending configuration
+on: []
+# on: ['push']
 jobs:
   build:
     runs-on: 'ubuntu-latest'
