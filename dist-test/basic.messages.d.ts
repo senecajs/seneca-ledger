@@ -40,6 +40,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -135,6 +136,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -229,6 +231,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -324,6 +327,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -415,6 +419,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -527,6 +532,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -639,6 +645,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -731,6 +738,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -846,6 +854,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -928,6 +937,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -1015,6 +1025,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -1127,6 +1138,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -1201,6 +1213,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -1275,6 +1288,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -1349,6 +1363,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -1431,6 +1446,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -1505,6 +1521,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -1587,6 +1604,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -1661,6 +1679,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -1735,6 +1754,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             book_id: string;
@@ -1817,6 +1837,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -1899,6 +1920,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -1982,6 +2004,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -2065,6 +2088,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -2148,6 +2172,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -2231,6 +2256,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -2326,6 +2352,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -2412,6 +2439,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -2486,6 +2514,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -2572,6 +2601,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -2658,6 +2688,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -2734,6 +2765,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -2819,6 +2851,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -2893,6 +2926,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -2975,6 +3009,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -3057,6 +3092,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -3139,6 +3175,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -3224,6 +3261,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -3311,6 +3349,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -3385,6 +3424,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -3469,6 +3509,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -3609,6 +3650,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -3683,6 +3725,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -3757,6 +3800,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -3831,6 +3875,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -3905,6 +3950,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4013,6 +4059,7 @@ declare const _default: {
             baserate?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4121,6 +4168,7 @@ declare const _default: {
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4199,6 +4247,7 @@ declare const _default: {
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4277,6 +4326,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4351,6 +4401,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4425,6 +4476,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4499,6 +4551,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4573,6 +4626,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4647,6 +4701,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4721,6 +4776,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4803,6 +4859,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4887,6 +4944,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -4969,6 +5027,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -5052,6 +5111,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -5138,6 +5198,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -5246,6 +5307,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -5329,6 +5391,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -5419,6 +5482,7 @@ declare const _default: {
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -5527,6 +5591,7 @@ declare const _default: {
             kind?: undefined;
             credit?: undefined;
             debit?: undefined;
+            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -5557,6 +5622,887 @@ declare const _default: {
                 org_id?: undefined;
                 bref?: undefined;
                 book_id?: undefined;
+                custom?: undefined;
+                baseval?: undefined;
+                basecur?: undefined;
+                baserate?: undefined;
+                date?: undefined;
+                debit_id?: undefined;
+                daref?: undefined;
+                id?: undefined;
+            };
+            account?: undefined;
+            book?: undefined;
+            creditTotal?: undefined;
+            debitTotal?: undefined;
+            credits?: undefined;
+            debits?: undefined;
+            cq?: undefined;
+            dq?: undefined;
+            balance?: undefined;
+            account_id?: undefined;
+            aref?: undefined;
+            book_id?: undefined;
+            bref?: undefined;
+            start?: undefined;
+            end?: undefined;
+            creditCount?: undefined;
+            debitCount?: undefined;
+            normal?: undefined;
+            target_book_id?: undefined;
+            target_bref?: undefined;
+            original_balance?: undefined;
+            closing_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            closing_date?: undefined;
+            why?: undefined;
+            summary?: undefined;
+            closure_successful?: undefined;
+            content?: undefined;
+            entry_count?: undefined;
+            final_balance?: undefined;
+            book_name?: undefined;
+            total_accounts?: undefined;
+            successful_exports?: undefined;
+            failed_exports?: undefined;
+            q?: undefined;
+            list?: undefined;
+            closing_entries?: undefined;
+            opening_entries?: undefined;
+            note?: undefined;
+            exports?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            account: {
+                id$: string;
+                oref: string;
+                path: string;
+                name: string;
+                normal: string;
+                xfoo?: undefined;
+                org_id?: undefined;
+                custom_field?: undefined;
+            };
+            id?: undefined;
+            book?: undefined;
+            oref?: undefined;
+            bref?: undefined;
+            daref?: undefined;
+            caref?: undefined;
+            val?: undefined;
+            desc?: undefined;
+            date?: undefined;
+            custom?: undefined;
+            entry?: undefined;
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
+            account_id?: undefined;
+            org_id?: undefined;
+            baseval?: undefined;
+            basecur?: undefined;
+            baserate?: undefined;
+            kind?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            book_id?: undefined;
+        };
+        out: {
+            ok: boolean;
+            account: {
+                id: string;
+                aref: string;
+                path0?: undefined;
+                path1?: undefined;
+                path2?: undefined;
+                org_id?: undefined;
+                oref?: undefined;
+                path?: undefined;
+                name?: undefined;
+                normal?: undefined;
+                xfoo?: undefined;
+            };
+            book?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            creditTotal?: undefined;
+            debitTotal?: undefined;
+            credits?: undefined;
+            debits?: undefined;
+            cq?: undefined;
+            dq?: undefined;
+            balance?: undefined;
+            account_id?: undefined;
+            aref?: undefined;
+            book_id?: undefined;
+            bref?: undefined;
+            start?: undefined;
+            end?: undefined;
+            creditCount?: undefined;
+            debitCount?: undefined;
+            normal?: undefined;
+            target_book_id?: undefined;
+            target_bref?: undefined;
+            original_balance?: undefined;
+            closing_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            closing_date?: undefined;
+            why?: undefined;
+            summary?: undefined;
+            closure_successful?: undefined;
+            content?: undefined;
+            entry_count?: undefined;
+            final_balance?: undefined;
+            book_name?: undefined;
+            total_accounts?: undefined;
+            successful_exports?: undefined;
+            failed_exports?: undefined;
+            q?: undefined;
+            list?: undefined;
+            closing_entries?: undefined;
+            opening_entries?: undefined;
+            note?: undefined;
+            exports?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            id: string;
+            bref: string;
+            daref: string;
+            caref: string;
+            val: number;
+            desc: string;
+            date: number;
+            account?: undefined;
+            book?: undefined;
+            oref?: undefined;
+            custom?: undefined;
+            entry?: undefined;
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
+            account_id?: undefined;
+            org_id?: undefined;
+            baseval?: undefined;
+            basecur?: undefined;
+            baserate?: undefined;
+            kind?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            book_id?: undefined;
+        };
+        out: {
+            ok: boolean;
+            credit: {
+                id: string;
+                book_id: string;
+                bref: string;
+                xrep?: undefined;
+                val?: undefined;
+                desc?: undefined;
+                kind?: undefined;
+                oref?: undefined;
+                org_id?: undefined;
+                custom?: undefined;
+                baseval?: undefined;
+                basecur?: undefined;
+                baserate?: undefined;
+                date?: undefined;
+                credit_id?: undefined;
+                caref?: undefined;
+            };
+            debit: {
+                id: string;
+                book_id: string;
+                bref: string;
+                xrep?: undefined;
+                val?: undefined;
+                desc?: undefined;
+                kind?: undefined;
+                oref?: undefined;
+                org_id?: undefined;
+                custom?: undefined;
+                baseval?: undefined;
+                basecur?: undefined;
+                baserate?: undefined;
+                date?: undefined;
+                debit_id?: undefined;
+                daref?: undefined;
+            };
+            account?: undefined;
+            book?: undefined;
+            creditTotal?: undefined;
+            debitTotal?: undefined;
+            credits?: undefined;
+            debits?: undefined;
+            cq?: undefined;
+            dq?: undefined;
+            balance?: undefined;
+            account_id?: undefined;
+            aref?: undefined;
+            book_id?: undefined;
+            bref?: undefined;
+            start?: undefined;
+            end?: undefined;
+            creditCount?: undefined;
+            debitCount?: undefined;
+            normal?: undefined;
+            target_book_id?: undefined;
+            target_bref?: undefined;
+            original_balance?: undefined;
+            closing_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            closing_date?: undefined;
+            why?: undefined;
+            summary?: undefined;
+            closure_successful?: undefined;
+            content?: undefined;
+            entry_count?: undefined;
+            final_balance?: undefined;
+            book_name?: undefined;
+            total_accounts?: undefined;
+            successful_exports?: undefined;
+            failed_exports?: undefined;
+            q?: undefined;
+            list?: undefined;
+            closing_entries?: undefined;
+            opening_entries?: undefined;
+            note?: undefined;
+            exports?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            id: string;
+            book_id: string;
+            daref: string;
+            caref: string;
+            val: number;
+            desc: string;
+            date: number;
+            account?: undefined;
+            book?: undefined;
+            oref?: undefined;
+            bref?: undefined;
+            custom?: undefined;
+            entry?: undefined;
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
+            account_id?: undefined;
+            org_id?: undefined;
+            baseval?: undefined;
+            basecur?: undefined;
+            baserate?: undefined;
+            kind?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+        };
+        out: {
+            ok: boolean;
+            credit: {
+                id: string;
+                book_id: string;
+                bref: string;
+                xrep?: undefined;
+                val?: undefined;
+                desc?: undefined;
+                kind?: undefined;
+                oref?: undefined;
+                org_id?: undefined;
+                custom?: undefined;
+                baseval?: undefined;
+                basecur?: undefined;
+                baserate?: undefined;
+                date?: undefined;
+                credit_id?: undefined;
+                caref?: undefined;
+            };
+            debit: {
+                id: string;
+                book_id: string;
+                bref: string;
+                xrep?: undefined;
+                val?: undefined;
+                desc?: undefined;
+                kind?: undefined;
+                oref?: undefined;
+                org_id?: undefined;
+                custom?: undefined;
+                baseval?: undefined;
+                basecur?: undefined;
+                baserate?: undefined;
+                date?: undefined;
+                debit_id?: undefined;
+                daref?: undefined;
+            };
+            account?: undefined;
+            book?: undefined;
+            creditTotal?: undefined;
+            debitTotal?: undefined;
+            credits?: undefined;
+            debits?: undefined;
+            cq?: undefined;
+            dq?: undefined;
+            balance?: undefined;
+            account_id?: undefined;
+            aref?: undefined;
+            book_id?: undefined;
+            bref?: undefined;
+            start?: undefined;
+            end?: undefined;
+            creditCount?: undefined;
+            debitCount?: undefined;
+            normal?: undefined;
+            target_book_id?: undefined;
+            target_bref?: undefined;
+            original_balance?: undefined;
+            closing_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            closing_date?: undefined;
+            why?: undefined;
+            summary?: undefined;
+            closure_successful?: undefined;
+            content?: undefined;
+            entry_count?: undefined;
+            final_balance?: undefined;
+            book_name?: undefined;
+            total_accounts?: undefined;
+            successful_exports?: undefined;
+            failed_exports?: undefined;
+            q?: undefined;
+            list?: undefined;
+            closing_entries?: undefined;
+            opening_entries?: undefined;
+            note?: undefined;
+            exports?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            aref: string;
+            bref: string;
+            account?: undefined;
+            id?: undefined;
+            book?: undefined;
+            oref?: undefined;
+            daref?: undefined;
+            caref?: undefined;
+            val?: undefined;
+            desc?: undefined;
+            date?: undefined;
+            custom?: undefined;
+            entry?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
+            account_id?: undefined;
+            org_id?: undefined;
+            baseval?: undefined;
+            basecur?: undefined;
+            baserate?: undefined;
+            kind?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            book_id?: undefined;
+        };
+        out: {
+            ok: boolean;
+            book_id: string;
+            debitTotal: number;
+            balance: number;
+            account?: undefined;
+            book?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            creditTotal?: undefined;
+            credits?: undefined;
+            debits?: undefined;
+            cq?: undefined;
+            dq?: undefined;
+            account_id?: undefined;
+            aref?: undefined;
+            bref?: undefined;
+            start?: undefined;
+            end?: undefined;
+            creditCount?: undefined;
+            debitCount?: undefined;
+            normal?: undefined;
+            target_book_id?: undefined;
+            target_bref?: undefined;
+            original_balance?: undefined;
+            closing_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            closing_date?: undefined;
+            why?: undefined;
+            summary?: undefined;
+            closure_successful?: undefined;
+            content?: undefined;
+            entry_count?: undefined;
+            final_balance?: undefined;
+            book_name?: undefined;
+            total_accounts?: undefined;
+            successful_exports?: undefined;
+            failed_exports?: undefined;
+            q?: undefined;
+            list?: undefined;
+            closing_entries?: undefined;
+            opening_entries?: undefined;
+            note?: undefined;
+            exports?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            aref: string;
+            book_id: string;
+            account?: undefined;
+            id?: undefined;
+            book?: undefined;
+            oref?: undefined;
+            bref?: undefined;
+            daref?: undefined;
+            caref?: undefined;
+            val?: undefined;
+            desc?: undefined;
+            date?: undefined;
+            custom?: undefined;
+            entry?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
+            account_id?: undefined;
+            org_id?: undefined;
+            baseval?: undefined;
+            basecur?: undefined;
+            baserate?: undefined;
+            kind?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+        };
+        out: {
+            ok: boolean;
+            book_id: string;
+            debitTotal: number;
+            balance: number;
+            account?: undefined;
+            book?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            creditTotal?: undefined;
+            credits?: undefined;
+            debits?: undefined;
+            cq?: undefined;
+            dq?: undefined;
+            account_id?: undefined;
+            aref?: undefined;
+            bref?: undefined;
+            start?: undefined;
+            end?: undefined;
+            creditCount?: undefined;
+            debitCount?: undefined;
+            normal?: undefined;
+            target_book_id?: undefined;
+            target_bref?: undefined;
+            original_balance?: undefined;
+            closing_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            closing_date?: undefined;
+            why?: undefined;
+            summary?: undefined;
+            closure_successful?: undefined;
+            content?: undefined;
+            entry_count?: undefined;
+            final_balance?: undefined;
+            book_name?: undefined;
+            total_accounts?: undefined;
+            successful_exports?: undefined;
+            failed_exports?: undefined;
+            q?: undefined;
+            list?: undefined;
+            closing_entries?: undefined;
+            opening_entries?: undefined;
+            note?: undefined;
+            exports?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            oref: string;
+            bref: string;
+            account?: undefined;
+            id?: undefined;
+            book?: undefined;
+            daref?: undefined;
+            caref?: undefined;
+            val?: undefined;
+            desc?: undefined;
+            date?: undefined;
+            custom?: undefined;
+            entry?: undefined;
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
+            account_id?: undefined;
+            org_id?: undefined;
+            baseval?: undefined;
+            basecur?: undefined;
+            baserate?: undefined;
+            kind?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            book_id?: undefined;
+        };
+        out: {
+            ok: boolean;
+            debitTotal: number;
+            debits: {
+                id: string;
+                val: number;
+                book_id: string;
+            }[];
+            account?: undefined;
+            book?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            creditTotal?: undefined;
+            credits?: undefined;
+            cq?: undefined;
+            dq?: undefined;
+            balance?: undefined;
+            account_id?: undefined;
+            aref?: undefined;
+            book_id?: undefined;
+            bref?: undefined;
+            start?: undefined;
+            end?: undefined;
+            creditCount?: undefined;
+            debitCount?: undefined;
+            normal?: undefined;
+            target_book_id?: undefined;
+            target_bref?: undefined;
+            original_balance?: undefined;
+            closing_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            closing_date?: undefined;
+            why?: undefined;
+            summary?: undefined;
+            closure_successful?: undefined;
+            content?: undefined;
+            entry_count?: undefined;
+            final_balance?: undefined;
+            book_name?: undefined;
+            total_accounts?: undefined;
+            successful_exports?: undefined;
+            failed_exports?: undefined;
+            q?: undefined;
+            list?: undefined;
+            closing_entries?: undefined;
+            opening_entries?: undefined;
+            note?: undefined;
+            exports?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            oref: string;
+            book_id: string;
+            account?: undefined;
+            id?: undefined;
+            book?: undefined;
+            bref?: undefined;
+            daref?: undefined;
+            caref?: undefined;
+            val?: undefined;
+            desc?: undefined;
+            date?: undefined;
+            custom?: undefined;
+            entry?: undefined;
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
+            account_id?: undefined;
+            org_id?: undefined;
+            baseval?: undefined;
+            basecur?: undefined;
+            baserate?: undefined;
+            kind?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+        };
+        out: {
+            ok: boolean;
+            debitTotal: number;
+            debits: {
+                id: string;
+                val: number;
+                book_id: string;
+            }[];
+            account?: undefined;
+            book?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            creditTotal?: undefined;
+            credits?: undefined;
+            cq?: undefined;
+            dq?: undefined;
+            balance?: undefined;
+            account_id?: undefined;
+            aref?: undefined;
+            book_id?: undefined;
+            bref?: undefined;
+            start?: undefined;
+            end?: undefined;
+            creditCount?: undefined;
+            debitCount?: undefined;
+            normal?: undefined;
+            target_book_id?: undefined;
+            target_bref?: undefined;
+            original_balance?: undefined;
+            closing_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            closing_date?: undefined;
+            why?: undefined;
+            summary?: undefined;
+            closure_successful?: undefined;
+            content?: undefined;
+            entry_count?: undefined;
+            final_balance?: undefined;
+            book_name?: undefined;
+            total_accounts?: undefined;
+            successful_exports?: undefined;
+            failed_exports?: undefined;
+            q?: undefined;
+            list?: undefined;
+            closing_entries?: undefined;
+            opening_entries?: undefined;
+            note?: undefined;
+            exports?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            bref: string;
+            end: number;
+            account?: undefined;
+            id?: undefined;
+            book?: undefined;
+            oref?: undefined;
+            daref?: undefined;
+            caref?: undefined;
+            val?: undefined;
+            desc?: undefined;
+            date?: undefined;
+            custom?: undefined;
+            entry?: undefined;
+            aref?: undefined;
+            target_bref?: undefined;
+            account_id?: undefined;
+            org_id?: undefined;
+            baseval?: undefined;
+            basecur?: undefined;
+            baserate?: undefined;
+            kind?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            book_id?: undefined;
+        };
+        out: {
+            ok: boolean;
+            book_id: string;
+            closure_successful: boolean;
+            account?: undefined;
+            book?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            creditTotal?: undefined;
+            debitTotal?: undefined;
+            credits?: undefined;
+            debits?: undefined;
+            cq?: undefined;
+            dq?: undefined;
+            balance?: undefined;
+            account_id?: undefined;
+            aref?: undefined;
+            bref?: undefined;
+            start?: undefined;
+            end?: undefined;
+            creditCount?: undefined;
+            debitCount?: undefined;
+            normal?: undefined;
+            target_book_id?: undefined;
+            target_bref?: undefined;
+            original_balance?: undefined;
+            closing_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            closing_date?: undefined;
+            why?: undefined;
+            summary?: undefined;
+            content?: undefined;
+            entry_count?: undefined;
+            final_balance?: undefined;
+            book_name?: undefined;
+            total_accounts?: undefined;
+            successful_exports?: undefined;
+            failed_exports?: undefined;
+            q?: undefined;
+            list?: undefined;
+            closing_entries?: undefined;
+            opening_entries?: undefined;
+            note?: undefined;
+            exports?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            id: string;
+            bref: string;
+            daref: string;
+            caref: string;
+            val: number;
+            desc: string;
+            date: number;
+            account?: undefined;
+            book?: undefined;
+            oref?: undefined;
+            custom?: undefined;
+            entry?: undefined;
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
+            account_id?: undefined;
+            org_id?: undefined;
+            baseval?: undefined;
+            basecur?: undefined;
+            baserate?: undefined;
+            kind?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            book_id?: undefined;
+        };
+        out: {
+            ok: boolean;
+            why: string;
+            account?: undefined;
+            book?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            creditTotal?: undefined;
+            debitTotal?: undefined;
+            credits?: undefined;
+            debits?: undefined;
+            cq?: undefined;
+            dq?: undefined;
+            balance?: undefined;
+            account_id?: undefined;
+            aref?: undefined;
+            book_id?: undefined;
+            bref?: undefined;
+            start?: undefined;
+            end?: undefined;
+            creditCount?: undefined;
+            debitCount?: undefined;
+            normal?: undefined;
+            target_book_id?: undefined;
+            target_bref?: undefined;
+            original_balance?: undefined;
+            closing_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            closing_date?: undefined;
+            summary?: undefined;
+            closure_successful?: undefined;
+            content?: undefined;
+            entry_count?: undefined;
+            final_balance?: undefined;
+            book_name?: undefined;
+            total_accounts?: undefined;
+            successful_exports?: undefined;
+            failed_exports?: undefined;
+            q?: undefined;
+            list?: undefined;
+            closing_entries?: undefined;
+            opening_entries?: undefined;
+            note?: undefined;
+            exports?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            id: string;
+            bref: string;
+            daref: string;
+            caref: string;
+            val: number;
+            desc: string;
+            date: number;
+            account?: undefined;
+            book?: undefined;
+            oref?: undefined;
+            custom?: undefined;
+            entry?: undefined;
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
+            account_id?: undefined;
+            org_id?: undefined;
+            baseval?: undefined;
+            basecur?: undefined;
+            baserate?: undefined;
+            kind?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            book_id?: undefined;
+        };
+        out: {
+            ok: boolean;
+            credit: {
+                book_id: string;
+                xrep?: undefined;
+                val?: undefined;
+                desc?: undefined;
+                kind?: undefined;
+                oref?: undefined;
+                org_id?: undefined;
+                bref?: undefined;
+                custom?: undefined;
+                baseval?: undefined;
+                basecur?: undefined;
+                baserate?: undefined;
+                date?: undefined;
+                credit_id?: undefined;
+                caref?: undefined;
+                id?: undefined;
+            };
+            debit: {
+                book_id: string;
+                xrep?: undefined;
+                val?: undefined;
+                desc?: undefined;
+                kind?: undefined;
+                oref?: undefined;
+                org_id?: undefined;
+                bref?: undefined;
                 custom?: undefined;
                 baseval?: undefined;
                 basecur?: undefined;
