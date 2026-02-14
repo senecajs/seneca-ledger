@@ -209,7 +209,7 @@ export interface UpdateBookInput extends BookIdentifier {
 }
 
 /** Input for export:book,format:csv message */
-export interface ExportBookCSVInput extends BookIdentifier {
+export interface ExportBookCSVInput extends Omit<BookIdentifier, 'id'> {
   batch_size?: number
 }
 
@@ -230,9 +230,9 @@ export interface EntryAccountRef {
 
 /** Input for create:entry message */
 export interface CreateEntryInput extends BookIdentifier {
-  id?: string
   account_id?: string
   aref?: string // Account ref: org_ref/path/name
+
   debit?: EntryAccountRef
   credit?: EntryAccountRef
 
