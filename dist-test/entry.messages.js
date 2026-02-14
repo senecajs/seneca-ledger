@@ -225,10 +225,11 @@ exports.default = {
                 },
             },
             out: {
-                ok: true, book: {
+                ok: true,
+                book: {
                     id: 'mb-b-eur',
-                    bref: 'o0/Q1-EUR/20260101'
-                }
+                    bref: 'o0/Q1-EUR/20260101',
+                },
             },
         },
         // Test creating entry with base currency info
