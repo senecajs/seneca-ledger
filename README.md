@@ -20,6 +20,94 @@
 $ npm install @seneca/ledger
 ```
 
+## Quick Example
+
+```js
+// Setup
+const seneca = Seneca().use('promisify').use('entity').use('ledger')
+await seneca.ready()
+
+// Create an account
+await seneca.post('biz:ledger,create:account', {
+  account: { oref: 'o0', path: 'Asset', name: 'Cash', normal: 'debit' },
+})
+
+// Get an account
+await seneca.post('biz:ledger,get:account', { aref: 'o0/Asset/Cash' })
+
+// List accounts
+await seneca.post('biz:ledger,list:account', { org_id: 'o0' })
+
+// Update an account
+await seneca.post('biz:ledger,update:account', {
+  aref: 'o0/Asset/Cash',
+  account: { custom_field: 'value' },
+})
+
+// Create a book (accounting period)
+await seneca.post('biz:ledger,create:book', {
+  book: { oref: 'o0', name: 'Q1', start: 20220101, end: 20220331 },
+})
+
+// Get a book
+await seneca.post('biz:ledger,get:book', { bref: 'o0/Q1/20220101' })
+
+// List books
+await seneca.post('biz:ledger,list:book', { oref: 'o0' })
+
+// Update a book
+await seneca.post('biz:ledger,update:book', {
+  bref: 'o0/Q1/20220101',
+  book: { end: 20220331 },
+})
+
+// Create a journal entry (double-entry: debit + credit)
+await seneca.post('biz:ledger,create:entry', {
+  bref: 'o0/Q1/20220101',
+  daref: 'o0/Asset/Cash',
+  caref: 'o0/Income/Sales',
+  val: 100,
+  desc: 'Jan Sales',
+  date: 20220131,
+})
+
+// List entries
+await seneca.post('biz:ledger,list:entry', {
+  oref: 'o0',
+  bref: 'o0/Q1/20220101',
+})
+
+// Balance an account
+await seneca.post('biz:ledger,balance:account', {
+  aref: 'o0/Asset/Cash',
+  bref: 'o0/Q1/20220101',
+})
+
+// Close an account (zero balance and optionally carry forward to target book)
+await seneca.post('biz:ledger,close:account', {
+  aref: 'o0/Asset/Cash',
+  bref: 'o0/Q1/20220101',
+  target_bref: 'o0/Q2/20220401',
+})
+
+// Close a book (close all accounts and mark book as closed)
+await seneca.post('biz:ledger,close:book', {
+  bref: 'o0/Q1/20220101',
+  target_bref: 'o0/Q2/20220401',
+})
+
+// Export account to CSV
+await seneca.post('biz:ledger,export:account,format:csv', {
+  aref: 'o0/Asset/Cash',
+  bref: 'o0/Q1/20220101',
+})
+
+// Export book to CSV (all accounts summary)
+await seneca.post('biz:ledger,export:book,format:csv', {
+  bref: 'o0/Q1/20220101',
+})
+```
+
 <!--START:options-->
 
 ## Options
