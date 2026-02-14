@@ -1,6 +1,6 @@
 {
   "name": "@seneca/ledger",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "main": "dist/ledger.js",
   "type": "commonjs",
   "types": "dist/ledger.d.ts",

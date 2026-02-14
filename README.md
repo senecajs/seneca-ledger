@@ -118,30 +118,33 @@ _None._
 
 <!--START:action-list-->
 
+
 ## Action Patterns
 
-- [balance:account,biz:ledger](#-balanceaccountbizledger-)
-- [balance:book,biz:ledger](#-balancebookbizledger-)
-- [biz:ledger,close:account](#-bizledgercloseaccount-)
-- [biz:ledger,close:book](#-bizledgerclosebook-)
-- [biz:ledger,create:account](#-bizledgercreateaccount-)
-- [biz:ledger,create:book](#-bizledgercreatebook-)
-- [biz:ledger,create:entry](#-bizledgercreateentry-)
-- [biz:ledger,export:account,format:csv](#-bizledgerexportaccountformatcsv-)
-- [biz:ledger,export:book,format:csv](#-bizledgerexportbookformatcsv-)
-- [biz:ledger,get:account](#-bizledgergetaccount-)
-- [biz:ledger,get:book](#-bizledgergetbook-)
-- [biz:ledger,list:account](#-bizledgerlistaccount-)
-- [biz:ledger,list:book](#-bizledgerlistbook-)
-- [biz:ledger,list:balance](#-bizledgerlistbalance-)
-- [biz:ledger,list:entry](#-bizledgerlistentry-)
-- [biz:ledger,update:account](#-bizledgerupdateaccount-)
-- [biz:ledger,update:book](#-bizledgerupdatebook-)
-- [biz:ledger,void:entry](#-bizledgervoidentry-)
+* [balance:account,biz:ledger](#-balanceaccountbizledger-)
+* [balance:book,biz:ledger](#-balancebookbizledger-)
+* [biz:ledger,close:account](#-bizledgercloseaccount-)
+* [biz:ledger,close:book](#-bizledgerclosebook-)
+* [biz:ledger,create:account](#-bizledgercreateaccount-)
+* [biz:ledger,create:book](#-bizledgercreatebook-)
+* [biz:ledger,create:entry](#-bizledgercreateentry-)
+* [biz:ledger,export:account,format:csv](#-bizledgerexportaccountformatcsv-)
+* [biz:ledger,export:book,format:csv](#-bizledgerexportbookformatcsv-)
+* [biz:ledger,get:account](#-bizledgergetaccount-)
+* [biz:ledger,get:book](#-bizledgergetbook-)
+* [biz:ledger,list:account](#-bizledgerlistaccount-)
+* [biz:ledger,list:book](#-bizledgerlistbook-)
+* [biz:ledger,list:balance](#-bizledgerlistbalance-)
+* [biz:ledger,list:entry](#-bizledgerlistentry-)
+* [biz:ledger,update:account](#-bizledgerupdateaccount-)
+* [biz:ledger,update:book](#-bizledgerupdatebook-)
+* [biz:ledger,void:entry](#-bizledgervoidentry-)
+
 
 <!--END:action-list-->
 
 <!--START:action-desc-->
+
 
 ## Action Descriptions
 
@@ -149,109 +152,129 @@ _None._
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `balance:book,biz:ledger` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,close:account` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,close:book` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,create:account` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,create:book` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,create:entry` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,export:account,format:csv` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,export:book,format:csv` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,get:account` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,get:book` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,list:account` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,list:book` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,list:balance` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,list:entry` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,update:account` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,update:book` &raquo;
 
 No description provided.
 
----
 
+
+----------
 ### &laquo; `biz:ledger,void:entry` &raquo;
 
 No description provided.
 
----
+
+
+----------
+
 
 <!--END:action-desc-->
 
