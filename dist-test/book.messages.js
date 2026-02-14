@@ -27,7 +27,7 @@ exports.default = {
                     oref: 'o0',
                     name: 'Q1',
                     start: 20220101,
-                    end: 20220331
+                    end: 20220331,
                 },
             },
             out: {

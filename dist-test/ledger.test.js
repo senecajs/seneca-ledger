@@ -14,6 +14,7 @@ const __2 = __importDefault(require(".."));
 const basic_messages_1 = __importDefault(require("./basic.messages"));
 const account_messages_1 = __importDefault(require("./account.messages"));
 const book_messages_1 = __importDefault(require("./book.messages"));
+const entry_messages_1 = __importDefault(require("./entry.messages"));
 (0, node_test_1.describe)('ledger', () => {
     (0, node_test_1.test)('happy', async () => {
         (0, code_1.expect)(__1.default).exist();
@@ -35,6 +36,10 @@ const book_messages_1 = __importDefault(require("./book.messages"));
     (0, node_test_1.test)('book.messages', async () => {
         const seneca = await makeSeneca();
         await (0, seneca_msg_test_1.default)(seneca, book_messages_1.default)();
+    });
+    (0, node_test_1.test)('entry.messages', async () => {
+        const seneca = await makeSeneca();
+        await (0, seneca_msg_test_1.default)(seneca, entry_messages_1.default)();
     });
     // test('maintain', Maintain)
 });

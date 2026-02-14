@@ -13,6 +13,7 @@ import Ledger from '..'
 import BasicMessages from './basic.messages'
 import AccountMessages from './account.messages'
 import BookMessages from './book.messages'
+import EntryMessages from './entry.messages'
 
 describe('ledger', () => {
   test('happy', async () => {
@@ -41,6 +42,10 @@ describe('ledger', () => {
     await SenecaMsgTest(seneca, BookMessages)()
   })
 
+  test('entry.messages', async () => {
+    const seneca = await makeSeneca()
+    await SenecaMsgTest(seneca, EntryMessages)()
+  })
   // test('maintain', Maintain)
 })
 

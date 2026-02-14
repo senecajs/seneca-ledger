@@ -26,6 +26,34 @@ export default {
       },
     },
 
+    {
+      name: 'test-custom-time-book',
+      pattern: 'create:book',
+      params: {
+        book: {
+          id$: 'test-time-book',
+          oref: 'o0',
+          name: 'Jan 2023',
+          start: 20230101,
+          end: 20230131,
+          time: { kind: 'utc', timezone: 'America/New_York' },
+        },
+      },
+      out: {
+        ok: true,
+        book: {
+          id: 'test-time-book',
+          org_id: 'o0',
+          oref: 'o0',
+          bref: 'o0/Jan 2023/20230101',
+          name: 'Jan 2023',
+          start: 20230101,
+          end: 20230131,
+          time: { kind: 'utc', timezone: 'America/New_York' },
+        },
+      },
+    },
+
     // Test creating entry with nonexistent debit account
     {
       name: 'test-entry-nonexistent-debit',
@@ -46,6 +74,35 @@ export default {
       },
     },
 
+    {
+      name: 'cash-a0',
+      pattern: 'create:account',
+      params: {
+        account: {
+          id$: 'cash-a0',
+          oref: 'o0',
+          path: 'Asset',
+          name: 'Cash',
+          normal: 'debit',
+        },
+      },
+      out: {
+        ok: true,
+        account: {
+          id: 'cash-a0',
+          path0: 'Asset',
+          path1: '',
+          path2: '',
+          org_id: 'o0',
+          oref: 'o0',
+          aref: 'o0/Asset/Cash',
+          path: ['Asset'],
+          name: 'Cash',
+          normal: 'debit',
+        },
+      },
+    },
+
     // Test creating entry with nonexistent credit account
     {
       name: 'test-entry-nonexistent-credit',
@@ -63,6 +120,28 @@ export default {
       out: {
         ok: false,
         why: 'credit-account-not-found',
+      },
+    },
+
+    {
+      name: 'test-create-sales-account',
+      pattern: 'create:account',
+      params: {
+        account: {
+          id$: 'income-sales',
+          oref: 'o0',
+          path: 'Income',
+          name: 'Sales',
+          normal: 'credit',
+        },
+      },
+      out: {
+        ok: true,
+        account: {
+          id: 'income-sales',
+          aref: 'o0/Income/Sales',
+          normal: 'credit',
+        },
       },
     },
 
@@ -143,6 +222,27 @@ export default {
       },
     },
 
+    {
+      name: 'mb-book-eur',
+      pattern: 'create:book',
+      params: {
+        book: {
+          id$: 'mb-b-eur',
+          oref: 'o0',
+          name: 'Q1-EUR',
+          start: 20260101,
+          end: 20260331,
+        },
+      },
+      out: {
+        ok: true,
+        book: {
+          id: 'mb-b-eur',
+          bref: 'o0/Q1-EUR/20260101',
+        },
+      },
+    },
+
     // Test creating entry with base currency info
     {
       name: 'test-entry-base-currency',
@@ -150,12 +250,12 @@ export default {
       params: {
         id: 'test-base-cur',
         oref: 'o0',
-        bref: 'o0/Q3/20220701',
+        bref: 'o0/Q1-EUR/20260101',
         daref: 'o0/Asset/Cash',
         caref: 'o0/Income/Sales',
         val: 100,
         desc: 'Sale in EUR',
-        date: 20220715,
+        date: 20260215,
         baseval: 85,
         basecur: 'EUR',
         baserate: 1.18,
@@ -168,7 +268,7 @@ export default {
           baseval: 85,
           basecur: 'EUR',
           baserate: 1.18,
-          date: 20220715,
+          date: 20260215,
         },
         debit: {
           val: 100,
@@ -176,7 +276,7 @@ export default {
           baseval: 85,
           basecur: 'EUR',
           baserate: 1.18,
-          date: 20220715,
+          date: 20260215,
         },
       },
     },
@@ -188,12 +288,12 @@ export default {
       params: {
         id: 'test-custom-kind',
         oref: 'o0',
-        bref: 'o0/Q3/20220701',
+        bref: 'o0/Q1-EUR/20260101',
         daref: 'o0/Asset/Cash',
         caref: 'o0/Income/Sales',
         val: 50,
         desc: 'Adjustment',
-        date: 20220720,
+        date: 20260220,
         kind: 'adjustment',
       },
       out: {
@@ -202,13 +302,13 @@ export default {
           val: 50,
           desc: 'Adjustment',
           kind: 'adjustment',
-          date: 20220720,
+          date: 20260220,
         },
         debit: {
           val: 50,
           desc: 'Adjustment',
           kind: 'adjustment',
-          date: 20220720,
+          date: 20260220,
         },
       },
     },
@@ -232,7 +332,7 @@ export default {
       pattern: 'list:entry',
       params: {
         oref: 'o0',
-        bref: 'o0/Q1/20220101',
+        bref: 'o0/Q1-EUR/20260101',
         aref: 'o0/Income/Sales',
         credit: true,
         debit: false,
@@ -242,7 +342,12 @@ export default {
         credits: [
           {
             val: 100,
-            desc: 'Jan Sales',
+            desc: '`test-entry-base-currency:out.credit.desc`',
+            caref: 'o0/Income/Sales',
+          },
+          {
+            val: 50,
+            desc: '`test-entry-custom-kind:out.credit.desc`',
             caref: 'o0/Income/Sales',
           },
         ],
@@ -267,7 +372,12 @@ export default {
         debits: [
           {
             val: 100,
-            desc: 'Jan Sales',
+            desc: '`test-entry-base-currency:out.debit.desc`',
+            daref: 'o0/Asset/Cash',
+          },
+          {
+            val: 50,
+            desc: '`test-entry-custom-kind:out.debit.desc`',
             daref: 'o0/Asset/Cash',
           },
         ],
@@ -281,23 +391,23 @@ export default {
       params: {
         id: 'test-obj-format',
         oref: 'o0',
-        bref: 'o0/Q3/20220701',
+        bref: 'o0/Q1-EUR/20260101',
         debit: {
           aref: 'o0/Asset/Cash',
         },
         credit: {
-          aref: 'o0/Income/Service Revenue',
+          aref: 'o0/Income/Sales',
         },
         val: 500,
         desc: 'Consulting services',
-        date: 20220801,
+        date: 20260108,
       },
       out: {
         ok: true,
         credit: {
           val: 500,
           desc: 'Consulting services',
-          caref: 'o0/Income/Service Revenue',
+          caref: 'o0/Income/Sales',
         },
         debit: {
           val: 500,
@@ -307,19 +417,19 @@ export default {
       },
     },
 
-    // Test Large Value Entry
+    // // Test Large Value Entry
     {
       name: 'test-large-value-entry',
       pattern: 'create:entry',
       params: {
         id: 'test-large-val',
         oref: 'o0',
-        bref: 'o0/Q3/20220701',
+        bref: 'o0/Q1-EUR/20260101',
         daref: 'o0/Asset/Cash',
-        caref: 'o0/Income/Service Revenue',
+        caref: 'o0/Income/Sales',
         val: 999999999.99,
         desc: 'Large transaction',
-        date: 20220815,
+        date: 20260115,
       },
       out: {
         ok: true,
@@ -332,19 +442,19 @@ export default {
       },
     },
 
-    // Test Small Value Entry
+    // // Test Small Value Entry
     {
       name: 'test-small-value-entry',
       pattern: 'create:entry',
       params: {
         id: 'test-small-val',
         oref: 'o0',
-        bref: 'o0/Q3/20220701',
+        bref: 'o0/Q1-EUR/20260101',
         daref: 'o0/Asset/Cash',
-        caref: 'o0/Income/Service Revenue',
+        caref: 'o0/Income/Sales',
         val: 0.01,
         desc: 'Penny transaction',
-        date: 20220820,
+        date: 20260120,
       },
       out: {
         ok: true,
