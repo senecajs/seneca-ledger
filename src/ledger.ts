@@ -76,7 +76,7 @@ function ledger(this: any, options: LedgerOptions) {
   const bookCanon = options.entity.base + '/book'
   const debitCanon = options.entity.base + '/debit'
   const creditCanon = options.entity.base + '/credit'
-  const balanceCanon = options.entity.base + '/balance'
+  // const balanceCanon = options.entity.base + '/balance'
 
   const makeRef = seneca.util.Nid({ length: 16 })
 
@@ -86,7 +86,6 @@ function ledger(this: any, options: LedgerOptions) {
     .message('get:account', msgGetAccount)
     .message('list:account', msgListAccount)
     .message('update:account', msgUpdateAccount)
-    .message('list:account', msgListAccount)
     .message('balance:account', msgBalanceAccount)
     .message('export:account,format:csv', msgExportAccountCSV)
     .message('close:account', msgCloseAccount)

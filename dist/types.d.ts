@@ -170,7 +170,7 @@ export interface UpdateBookInput extends BookIdentifier {
     book: Partial<BookEntity>;
 }
 /** Input for export:book,format:csv message */
-export interface ExportBookCSVInput extends BookIdentifier {
+export interface ExportBookCSVInput extends Omit<BookIdentifier, 'id'> {
     batch_size?: number;
 }
 /** Input for close:book message */
@@ -188,7 +188,6 @@ export interface EntryAccountRef {
 }
 /** Input for create:entry message */
 export interface CreateEntryInput extends BookIdentifier {
-    id?: string;
     account_id?: string;
     aref?: string;
     debit?: EntryAccountRef;

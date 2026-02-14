@@ -1,1 +1,1 @@
-{"version":3,"file":"ledger.d.ts","sourceRoot":"","sources":["../src/ledger.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAYV,aAAa,EAgDd,MAAM,SAAS,CAAA;AAShB,iBAAS,MAAM,CAAC,IAAI,EAAE,GAAG,EAAE,OAAO,EAAE,aAAa,QAsmChD;AAqQD,eAAe,MAAM,CAAA"}
+{"version":3,"file":"ledger.d.ts","sourceRoot":"","sources":["../src/ledger.ts"],"names":[],"mappings":"AAEA,OAAO,KAAK,EAYV,aAAa,EAgDd,MAAM,SAAS,CAAA;AAShB,iBAAS,MAAM,CAAC,IAAI,EAAE,GAAG,EAAE,OAAO,EAAE,aAAa,QAqmChD;AAqQD,eAAe,MAAM,CAAA"}
