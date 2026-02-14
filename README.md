@@ -20,14 +20,6 @@
 $ npm install @seneca/ledger
 ```
 
-## Quick Example
-
-```js
-Seneca().use('ledger', {})
-
-TODO
-```
-
 <!--START:options-->
 
 ## Options
