@@ -1156,6 +1156,10 @@ function ledger(this: Seneca, options: LedgerOptions) {
 
     let bookEnt = await getBook(seneca, bookCanon, msg)
 
+    if (null == bookEnt && (null != msg.bref || null != msg.book_id)) {
+      return { ok: false, why: 'book-not-found' }
+    }
+
     if (null != bookEnt) {
       q.book_id = bookEnt.id
     }
