@@ -1,6 +1,6 @@
 {
   "name": "@seneca/ledger",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "main": "dist/ledger.js",
   "type": "commonjs",
   "types": "dist/ledger.d.ts",
@@ -43,8 +43,8 @@
     "@seneca/entity-util": "^3.2.0",
     "@seneca/maintain": "^0.1.0",
     "@seneca/repl": "^9.1.0",
-    "@types/node": "^25.0.9",
-    "prettier": "3.8.0",
+    "@types/node": "^25.9.3",
+    "prettier": "3.8.4",
     "seneca-doc": "^2.1.3",
     "seneca-msg-test": "^4.1.0",
     "typescript": "^5.9.3"
