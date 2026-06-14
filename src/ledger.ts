@@ -1044,7 +1044,12 @@ function ledger(this: Seneca, options: LedgerOptions) {
       return { ok: false, why: 'book-closed' }
     }
 
-    if (bookEnt.start > msg.date || bookEnt.end < msg.date) {
+    // end <= 0 is the sentinel for an open-ended (ongoing) book: only the
+    // start bound applies until the book is given a real end date.
+    if (
+      bookEnt.start > msg.date ||
+      (bookEnt.end > 0 && bookEnt.end < msg.date)
+    ) {
       return { ok: false, why: 'invalid-entry-period' }
     }
 
@@ -1270,26 +1275,29 @@ function calcTotals(
 
 // 1748459422656 -> 20250528
 function formatDateToYYYYMMDD(unixTime: number): number {
-  let year = new Date(unixTime).getUTCFullYear()
+  const date = new Date(unixTime)
+  let year = date.getUTCFullYear()
 
   if (year <= 1970) {
     throw new Error('invalid-time')
   }
 
-  let month = (new Date(unixTime).getUTCMonth() + 1).toString().padStart(2, '0')
-  let day = new Date(unixTime).getUTCDate().toString().padStart(2, '0')
+  let month = (date.getUTCMonth() + 1).toString().padStart(2, '0')
+  let day = date.getUTCDate().toString().padStart(2, '0')
 
   return Number(`${year}${month}${day}`)
 }
 
-// 1748459422656 -> 191022
-function timestamp2timestr(unixTime: number): number {
+// 1748459422656 -> '191022'. Returned as a zero-padded 'HHMMSS' string:
+// times before 10:00 (e.g. '090503') lose their leading zero — and meaning —
+// when coerced to a number, so the clock value must stay a string.
+function timestamp2timestr(unixTime: number): string {
   const date = new Date(unixTime)
 
-  return Number(
+  return (
     date.getUTCHours().toString().padStart(2, '0') +
-      date.getUTCMinutes().toString().padStart(2, '0') +
-      date.getUTCSeconds().toString().padStart(2, '0'),
+    date.getUTCMinutes().toString().padStart(2, '0') +
+    date.getUTCSeconds().toString().padStart(2, '0')
   )
 }
 
@@ -1454,6 +1462,9 @@ Object.assign(ledger, {
   defaults,
   intern: {
     getBook,
+    formatDateToYYYYMMDD,
+    timestamp2timestr,
+    calcTotals,
   },
 })
 

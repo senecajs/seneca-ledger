@@ -167,7 +167,7 @@ export interface CreateBookInput {
         name: string;
         start: number;
         end?: number;
-        time?: any;
+        time?: TimeSpec;
     };
 }
 /** Input for get:book message */
@@ -285,7 +285,7 @@ export interface BalanceAccountResult extends BaseResult, BalanceTotals {
     normal: DC;
     when: number;
     date: number;
-    time: number;
+    time: string;
 }
 /** Result for export:account,format:csv message */
 export interface ExportAccountCSVResult extends BaseResult {
@@ -429,7 +429,7 @@ export type CalcTotalsFn = (accountEnt: AccountEntity | null, creditEnts: Credit
 /** Format date to YYYYMMDD helper function */
 export type FormatDateToYYYYMMDDFn = (unixTime: number) => number;
 /** Timestamp to time string helper function */
-export type Timestamp2TimestrFn = (unixTime: number) => number;
+export type Timestamp2TimestrFn = (unixTime: number) => string;
 /** Process entries helper function */
 export type ProcessEntriesFn = (entriesResult: ListEntryResult, bookStart: number, accountNormal: DC) => ProcessedEntry[];
 /** Generate account CSV helper function */
@@ -460,6 +460,9 @@ export interface LedgerPlugin {
     defaults: LedgerOptions;
     intern: {
         getBook: GetBookFn;
+        formatDateToYYYYMMDD: FormatDateToYYYYMMDDFn;
+        timestamp2timestr: Timestamp2TimestrFn;
+        calcTotals: CalcTotalsFn;
     };
 }
 declare const ledger: LedgerPlugin;

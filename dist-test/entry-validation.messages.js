@@ -408,6 +408,63 @@ exports.default = {
                 },
             },
         },
+        // --- open-ended (ongoing) book ---
+        // a book with no end date carries the end <= 0 sentinel
+        {
+            name: 'seed-book-ongoing',
+            pattern: 'create:book',
+            params: {
+                book: {
+                    id$: 'book-ongoing',
+                    oref: 'o0',
+                    name: 'Ongoing',
+                    start: 20260101,
+                },
+            },
+            out: {
+                ok: true,
+                book: { id: 'book-ongoing', bref: 'o0/Ongoing/20260101', end: -1 },
+            },
+        },
+        // entries must post to an open-ended book: only the start bound applies
+        {
+            name: 'test-entry-open-ended-book',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-ongoing-entry',
+                oref: 'o0',
+                bref: 'o0/Ongoing/20260101',
+                daref: 'o0/Asset/Cash',
+                caref: 'o0/Income/Sales',
+                val: 100,
+                desc: 'Sale in ongoing book',
+                date: 20260615,
+            },
+            out: {
+                ok: true,
+                credit: { val: 100, book_id: 'book-ongoing' },
+                debit: { val: 100, book_id: 'book-ongoing' },
+            },
+        },
+        // the start bound still applies on an open-ended book
+        {
+            name: 'test-entry-open-ended-book-before-start',
+            pattern: 'create:entry',
+            params: {
+                id: 'test-ongoing-bad',
+                oref: 'o0',
+                bref: 'o0/Ongoing/20260101',
+                daref: 'o0/Asset/Cash',
+                caref: 'o0/Income/Sales',
+                val: 100,
+                desc: 'Before start',
+                date: 20251231,
+            },
+            out: {
+                ok: false,
+                why: 'invalid-entry-period',
+            },
+        },
     ],
 };
 //# sourceMappingURL=entry-validation.messages.js.map
