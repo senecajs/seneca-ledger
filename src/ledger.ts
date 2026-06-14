@@ -2,6 +2,7 @@
 
 import type {
   // Base Types
+  Seneca,
   DC,
   EntryKind,
 
@@ -69,7 +70,7 @@ import type {
  * ledger/account: aref
  */
 
-function ledger(this: any, options: LedgerOptions) {
+function ledger(this: Seneca, options: LedgerOptions) {
   const seneca = this
 
   const accountCanon = options.entity.base + '/account'
@@ -102,7 +103,7 @@ function ledger(this: any, options: LedgerOptions) {
     .message('list:entry', msgListEntry)
 
   async function msgCreateAccount(
-    this: any,
+    this: Seneca,
     msg: CreateAccountInput,
   ): Promise<CreateAccountResult | InvalidResult> {
     const seneca = this
@@ -165,7 +166,7 @@ function ledger(this: any, options: LedgerOptions) {
   }
 
   async function msgGetAccount(
-    this: any,
+    this: Seneca,
     msg: GetAccountInput,
   ): Promise<GetAccountResult | InvalidResult> {
     const seneca = this
@@ -180,7 +181,7 @@ function ledger(this: any, options: LedgerOptions) {
   }
 
   async function msgListAccount(
-    this: any,
+    this: Seneca,
     msg: ListAccountInput,
   ): Promise<ListAccountResult> {
     const seneca = this
@@ -198,7 +199,7 @@ function ledger(this: any, options: LedgerOptions) {
   }
 
   async function msgUpdateAccount(
-    this: any,
+    this: Seneca,
     msg: UpdateAccountInput,
   ): Promise<UpdateAccountResult | InvalidResult> {
     const seneca = this
@@ -220,7 +221,7 @@ function ledger(this: any, options: LedgerOptions) {
 
   // TODO: save to ledger/balance by book, default but optional
   async function msgBalanceAccount(
-    this: any,
+    this: Seneca,
     msg: BalanceAccountInput,
   ): Promise<BalanceAccountResult | InvalidResult> {
     const seneca = this
@@ -286,7 +287,7 @@ function ledger(this: any, options: LedgerOptions) {
   }
 
   async function msgExportAccountCSV(
-    this: any,
+    this: Seneca,
     msg: ExportAccountCSVInput,
   ): Promise<ExportAccountCSVResult | InvalidResult> {
     const seneca = this
@@ -365,7 +366,7 @@ function ledger(this: any, options: LedgerOptions) {
   }
 
   async function msgCloseAccount(
-    this: any,
+    this: Seneca,
     msg: CloseAccountInput,
   ): Promise<ClosedAccount | InvalidResult> {
     const seneca = this
@@ -507,11 +508,11 @@ function ledger(this: any, options: LedgerOptions) {
     const closingResult = results[0]
     const openingResult = results[1]
 
-    if (!closingResult.ok) {
+    if (!closingResult || !closingResult.ok) {
       return { ok: false, why: 'closing-entry-failed', error: closingResult }
     }
 
-    if (targetBookEnt && !openingResult.ok) {
+    if (targetBookEnt && openingResult && !openingResult.ok) {
       return { ok: false, why: 'opening-entry-failed', error: openingResult }
     }
 
@@ -556,7 +557,7 @@ function ledger(this: any, options: LedgerOptions) {
   }
 
   async function msgCreateBook(
-    this: any,
+    this: Seneca,
     msg: CreateBookInput,
   ): Promise<CreateBookResult | InvalidResult> {
     const seneca = this
@@ -607,7 +608,7 @@ function ledger(this: any, options: LedgerOptions) {
   }
 
   async function msgGetBook(
-    this: any,
+    this: Seneca,
     msg: GetBookInput,
   ): Promise<GetBookResult | InvalidResult> {
     const seneca = this
@@ -622,7 +623,7 @@ function ledger(this: any, options: LedgerOptions) {
   }
 
   async function msgListBook(
-    this: any,
+    this: Seneca,
     msg: ListBookInput,
   ): Promise<ListBookResult> {
     const seneca = this
@@ -642,7 +643,7 @@ function ledger(this: any, options: LedgerOptions) {
   }
 
   async function msgExportBookCSV(
-    this: any,
+    this: Seneca,
     msg: ExportBookCSVInput,
   ): Promise<ExportBookCSVResult | InvalidResult> {
     const seneca = this
@@ -726,7 +727,7 @@ function ledger(this: any, options: LedgerOptions) {
       const batchResults = await Promise.all(exportPromises)
 
       batchResults.forEach((exportResult, idx) => {
-        const accountEnt = batch[idx]
+        const accountEnt = batch[idx]!
 
         exportResults.push({
           account_id: accountEnt.id,
@@ -762,7 +763,7 @@ function ledger(this: any, options: LedgerOptions) {
   }
 
   async function msgCloseBook(
-    this: any,
+    this: Seneca,
     msg: CloseBookInput,
   ): Promise<ClosedBook | InvalidResult> {
     const seneca = this
@@ -918,7 +919,7 @@ function ledger(this: any, options: LedgerOptions) {
       const batchResults = await Promise.all(closurePromises)
 
       batchResults.forEach((closeResult, idx) => {
-        const accountEnt = batch[idx]
+        const accountEnt = batch[idx]!
 
         accountClosures.push({
           account_id: accountEnt.id,
@@ -992,7 +993,7 @@ function ledger(this: any, options: LedgerOptions) {
   }
 
   async function msgUpdateBook(
-    this: any,
+    this: Seneca,
     msg: UpdateBookInput,
   ): Promise<UpdateBookResult | InvalidResult> {
     const seneca = this
@@ -1012,18 +1013,18 @@ function ledger(this: any, options: LedgerOptions) {
     return { ok: true, book: bookEnt.data$(false) }
   }
 
-  async function msgListBalance(this: any, msg: ListBalanceInput) {
+  async function msgListBalance(this: Seneca, _msg: ListBalanceInput) {
     // TODO: list ledger/balance for book
   }
 
-  async function msgBalanceBook(this: any, msg: BalanceBookInput) {
+  async function msgBalanceBook(this: Seneca, _msg: BalanceBookInput) {
     // TODO: for all accounts in book (from entries), balance account,
     // and save to ledger/balance
   }
 
   // TODO: mark ledger/balance stale
   async function msgCreateEntry(
-    this: any,
+    this: Seneca,
     msg: CreateEntryInput,
   ): Promise<CreateEntryResult | InvalidResult> {
     const seneca = this
@@ -1135,12 +1136,12 @@ function ledger(this: any, options: LedgerOptions) {
     return out
   }
 
-  async function msgVoidEntry(this: any, msg: VoidEntryInput) {
+  async function msgVoidEntry(this: Seneca, _msg: VoidEntryInput) {
     // TODO: generate counter entries
   }
 
   async function msgListEntry(
-    this: any,
+    this: Seneca,
     msg: ListEntryInput,
   ): Promise<ListEntryResult | InvalidResult> {
     const seneca = this
@@ -1197,7 +1198,7 @@ function ledger(this: any, options: LedgerOptions) {
 }
 
 async function getBook(
-  seneca: any,
+  seneca: Seneca,
   bookCanon: string,
   msg: BookIdentifier,
 ): Promise<BookEntity | null> {
@@ -1219,7 +1220,7 @@ async function getBook(
 }
 
 async function getAccount(
-  seneca: any,
+  seneca: Seneca,
   accountCanon: string,
   msg: AccountIdentifier,
 ): Promise<AccountEntity | null> {
@@ -1349,14 +1350,11 @@ function generateAccountCSV(
   csv += 'Date,Description,Debit,Credit,Balance\n'
 
   let runningBalance = 0
-  let hasOpeningEntry = false
 
   const openingEntry = entries.find((e) => e.kind === 'opening')
 
   const isDebit = accountEnt.normal === 'debit'
   if (openingEntry) {
-    hasOpeningEntry = true
-
     if (isDebit) {
       runningBalance =
         openingEntry.type === 'debit' ? openingEntry.val : -openingEntry.val

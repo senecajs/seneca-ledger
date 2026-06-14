@@ -1,8 +1,21 @@
 /* Copyright © 2026 Seneca Project Contributors, MIT License. */
 
+import type { Instance } from 'seneca'
+
 // ============================================================================
 // Base Types
 // ============================================================================
+
+/**
+ * The Seneca instance.
+ *
+ * Seneca is not strictly typed: its exported `Instance` resolves to
+ * `Record<string, any>`, so member access is effectively untyped. We alias it
+ * here to mark every `this`/`seneca` boundary as a deliberate, contained
+ * exception to the project's otherwise-strict typing, rather than scattering
+ * bare `any` across the codebase.
+ */
+export type Seneca = Instance
 
 /** Debit or Credit indicator */
 export type DC = 'debit' | 'credit'

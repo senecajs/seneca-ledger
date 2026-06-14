@@ -322,10 +322,10 @@ function ledger(options) {
         const results = await Promise.all(entryPromises);
         const closingResult = results[0];
         const openingResult = results[1];
-        if (!closingResult.ok) {
+        if (!closingResult || !closingResult.ok) {
             return { ok: false, why: 'closing-entry-failed', error: closingResult };
         }
-        if (targetBookEnt && !openingResult.ok) {
+        if (targetBookEnt && openingResult && !openingResult.ok) {
             return { ok: false, why: 'opening-entry-failed', error: openingResult };
         }
         const verifyPromises = [
@@ -697,10 +697,10 @@ function ledger(options) {
         await bookEnt.data$(msg.book).save$();
         return { ok: true, book: bookEnt.data$(false) };
     }
-    async function msgListBalance(msg) {
+    async function msgListBalance(_msg) {
         // TODO: list ledger/balance for book
     }
-    async function msgBalanceBook(msg) {
+    async function msgBalanceBook(_msg) {
         // TODO: for all accounts in book (from entries), balance account,
         // and save to ledger/balance
     }
@@ -787,7 +787,7 @@ function ledger(options) {
         out.debit = debitEnt.data$(false);
         return out;
     }
-    async function msgVoidEntry(msg) {
+    async function msgVoidEntry(_msg) {
         // TODO: generate counter entries
     }
     async function msgListEntry(msg) {
@@ -944,11 +944,9 @@ function generateAccountCSV(accountEnt, bookEnt, entries, balanceResult) {
     let csv = `# ${accountEnt.name} - ${bookEnt.name} - ${bookEnt.oref}\n`;
     csv += 'Date,Description,Debit,Credit,Balance\n';
     let runningBalance = 0;
-    let hasOpeningEntry = false;
     const openingEntry = entries.find((e) => e.kind === 'opening');
     const isDebit = accountEnt.normal === 'debit';
     if (openingEntry) {
-        hasOpeningEntry = true;
         if (isDebit) {
             runningBalance =
                 openingEntry.type === 'debit' ? openingEntry.val : -openingEntry.val;
