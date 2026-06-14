@@ -8,6 +8,10 @@
     "resolveJsonModule": true,
     "sourceMap": true,
     "strict": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitReturns": true,
+    "types": ["node"],
     "target": "ES2022",
     "composite": true
   }
