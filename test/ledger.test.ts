@@ -10,11 +10,27 @@ import SenecaMsgTest from 'seneca-msg-test'
 import LedgerDoc from '..'
 import Ledger from '..'
 
-import BasicMessages from './basic.messages'
-import AccountMessages from './account.messages'
-import BookMessages from './book.messages'
-import EntryMessages from './entry.messages'
-import InputMessages from './input.messages'
+import LedgerLifecycleMessages from './ledger-lifecycle.messages'
+import AccountValidationMessages from './account-validation.messages'
+import AccountRetrievalMessages from './account-retrieval.messages'
+import AccountBalanceCloseExportMessages from './account-balance-close-export.messages'
+import BookSingleMessages from './book-single.messages'
+import BookIsolationMessages from './book-isolation.messages'
+import EntryValidationMessages from './entry-validation.messages'
+
+// Each suite runs against its own fresh seneca instance so test contexts stay
+// isolated. The lifecycle suite is the only intentionally ordered, stateful
+// scenario; every other suite is a coherent set of edge cases that seeds just
+// the state it needs (see ./seed).
+const suites = {
+  'ledger-lifecycle': LedgerLifecycleMessages,
+  'account-validation': AccountValidationMessages,
+  'account-retrieval': AccountRetrievalMessages,
+  'account-balance-close-export': AccountBalanceCloseExportMessages,
+  'book-single': BookSingleMessages,
+  'book-isolation': BookIsolationMessages,
+  'entry-validation': EntryValidationMessages,
+}
 
 describe('ledger', () => {
   test('happy', async () => {
@@ -28,30 +44,13 @@ describe('ledger', () => {
     await seneca.ready()
   })
 
-  test('basic.messages', async () => {
-    const seneca = await makeSeneca()
-    await SenecaMsgTest(seneca, BasicMessages)()
-  })
+  for (const [name, messages] of Object.entries(suites)) {
+    test(name, async () => {
+      const seneca = await makeSeneca()
+      await SenecaMsgTest(seneca, messages)()
+    })
+  }
 
-  test('account.messages', async () => {
-    const seneca = await makeSeneca()
-    await SenecaMsgTest(seneca, AccountMessages)()
-  })
-
-  test('book.messages', async () => {
-    const seneca = await makeSeneca()
-    await SenecaMsgTest(seneca, BookMessages)()
-  })
-
-  test('entry.messages', async () => {
-    const seneca = await makeSeneca()
-    await SenecaMsgTest(seneca, EntryMessages)()
-  })
-
-  test('input.messages', async () => {
-    const seneca = await makeSeneca()
-    await SenecaMsgTest(seneca, InputMessages)()
-  })
   // test('maintain', Maintain)
 })
 

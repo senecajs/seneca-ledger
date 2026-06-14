@@ -1,11 +1,14 @@
 "use strict";
+/* Copyright © 2026 Seneca Project Contributors, MIT License. */
 Object.defineProperty(exports, "__esModule", { value: true });
+// create:account behaviour: input validation plus the accepted path / org
+// variants. Self-contained — every call is independent and needs no seed.
 exports.default = {
     print: false,
     pattern: 'biz:ledger',
     allow: { missing: true },
     calls: [
-        // Test creating account with missing account object
+        // Reject create with missing account object
         {
             name: 'test-missing-account',
             pattern: 'create:account',
@@ -15,7 +18,7 @@ exports.default = {
                 why: 'no-account',
             },
         },
-        // Test creating account with no org
+        // Reject create with no org
         {
             name: 'test-no-org-account',
             pattern: 'create:account',
@@ -31,7 +34,7 @@ exports.default = {
                 why: 'no-org',
             },
         },
-        // Test creating account with no name
+        // Reject create with no name
         {
             name: 'test-no-name-account',
             pattern: 'create:account',
@@ -47,7 +50,7 @@ exports.default = {
                 why: 'no-name',
             },
         },
-        // Test creating account with empty name
+        // Reject create with empty name
         {
             name: 'test-empty-name-account',
             pattern: 'create:account',
@@ -64,7 +67,7 @@ exports.default = {
                 why: 'no-name',
             },
         },
-        // Test creating account with invalid normal (not debit or credit)
+        // Reject create with invalid normal (not debit or credit)
         {
             name: 'test-invalid-normal',
             pattern: 'create:account',
@@ -81,7 +84,7 @@ exports.default = {
                 why: 'invalid-normal',
             },
         },
-        // Test creating account with array path
+        // Accept array path (2 levels)
         {
             name: 'test-array-path-account',
             pattern: 'create:account',
@@ -110,7 +113,33 @@ exports.default = {
                 },
             },
         },
-        // Test creating account with org_id instead of oref
+        // Accept deep array path (3 levels)
+        {
+            name: 'test-deep-path-account',
+            pattern: 'create:account',
+            params: {
+                account: {
+                    id$: 'test-deep-path',
+                    oref: 'o0',
+                    path: ['Asset', 'Current', 'Cash'],
+                    name: 'Petty Cash',
+                    normal: 'debit',
+                },
+            },
+            out: {
+                ok: true,
+                account: {
+                    id: 'test-deep-path',
+                    path0: 'Asset',
+                    path1: 'Current',
+                    path2: 'Cash',
+                    aref: 'o0/Asset/Current/Cash/Petty Cash',
+                    path: ['Asset', 'Current', 'Cash'],
+                    name: 'Petty Cash',
+                },
+            },
+        },
+        // Accept org_id in place of oref
         {
             name: 'test-org-id-account',
             pattern: 'create:account',
@@ -139,6 +168,28 @@ exports.default = {
                 },
             },
         },
+        // Accept credit-normal income account
+        {
+            name: 'test-revenue-account',
+            pattern: 'create:account',
+            params: {
+                account: {
+                    id$: 'test-revenue',
+                    oref: 'o0',
+                    path: 'Income',
+                    name: 'Service Revenue',
+                    normal: 'credit',
+                },
+            },
+            out: {
+                ok: true,
+                account: {
+                    id: 'test-revenue',
+                    aref: 'o0/Income/Service Revenue',
+                    normal: 'credit',
+                },
+            },
+        },
     ],
 };
-//# sourceMappingURL=input.messages.js.map
+//# sourceMappingURL=account-validation.messages.js.map

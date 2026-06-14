@@ -1,12 +1,53 @@
 "use strict";
+/* Copyright © 2026 Seneca Project Contributors, MIT License. */
 Object.defineProperty(exports, "__esModule", { value: true });
+// create:entry / list:entry behaviour: required-field validation, base
+// currency, custom kind, object form, value extremes, and per-book listing.
+// Seeds a Cash + Sales account and two books (a UTC-timed book used by the
+// not-found checks, and a EUR book that holds the posted entries).
+const seed_1 = require("./seed");
 exports.default = {
     print: false,
     pattern: 'biz:ledger',
     allow: { missing: true },
     calls: [
-        // Edge Cases for Entry Creation
-        // Test creating entry with nonexistent book
+        // --- seed ---
+        seed_1.account.cash,
+        seed_1.account.sales,
+        {
+            name: 'seed-book-jan-2023',
+            pattern: 'create:book',
+            params: {
+                book: {
+                    id$: 'test-time-book',
+                    oref: 'o0',
+                    name: 'Jan 2023',
+                    start: 20230101,
+                    end: 20230131,
+                    time: { kind: 'utc', timezone: 'America/New_York' },
+                },
+            },
+            out: {
+                ok: true,
+                book: { id: 'test-time-book', bref: 'o0/Jan 2023/20230101' },
+            },
+        },
+        {
+            name: 'seed-book-eur',
+            pattern: 'create:book',
+            params: {
+                book: {
+                    id$: 'mb-b-eur',
+                    oref: 'o0',
+                    name: 'Q1-EUR',
+                    start: 20260101,
+                    end: 20260331,
+                },
+            },
+            out: { ok: true, book: { id: 'mb-b-eur', bref: 'o0/Q1-EUR/20260101' } },
+        },
+        // --- create:entry validation ---
+        // entry into a nonexistent book
         {
             name: 'test-entry-nonexistent-book',
             pattern: 'create:entry',
@@ -25,34 +66,7 @@ exports.default = {
                 why: 'book-not-found',
             },
         },
-        {
-            name: 'test-custom-time-book',
-            pattern: 'create:book',
-            params: {
-                book: {
-                    id$: 'test-time-book',
-                    oref: 'o0',
-                    name: 'Jan 2023',
-                    start: 20230101,
-                    end: 20230131,
-                    time: { kind: 'utc', timezone: 'America/New_York' },
-                },
-            },
-            out: {
-                ok: true,
-                book: {
-                    id: 'test-time-book',
-                    org_id: 'o0',
-                    oref: 'o0',
-                    bref: 'o0/Jan 2023/20230101',
-                    name: 'Jan 2023',
-                    start: 20230101,
-                    end: 20230131,
-                    time: { kind: 'utc', timezone: 'America/New_York' },
-                },
-            },
-        },
-        // Test creating entry with nonexistent debit account
+        // entry with a nonexistent debit account
         {
             name: 'test-entry-nonexistent-debit',
             pattern: 'create:entry',
@@ -71,35 +85,7 @@ exports.default = {
                 why: 'debit-account-not-found',
             },
         },
-        {
-            name: 'cash-a0',
-            pattern: 'create:account',
-            params: {
-                account: {
-                    id$: 'cash-a0',
-                    oref: 'o0',
-                    path: 'Asset',
-                    name: 'Cash',
-                    normal: 'debit',
-                },
-            },
-            out: {
-                ok: true,
-                account: {
-                    id: 'cash-a0',
-                    path0: 'Asset',
-                    path1: '',
-                    path2: '',
-                    org_id: 'o0',
-                    oref: 'o0',
-                    aref: 'o0/Asset/Cash',
-                    path: ['Asset'],
-                    name: 'Cash',
-                    normal: 'debit',
-                },
-            },
-        },
-        // Test creating entry with nonexistent credit account
+        // entry with a nonexistent credit account
         {
             name: 'test-entry-nonexistent-credit',
             pattern: 'create:entry',
@@ -118,28 +104,7 @@ exports.default = {
                 why: 'credit-account-not-found',
             },
         },
-        {
-            name: 'test-create-sales-account',
-            pattern: 'create:account',
-            params: {
-                account: {
-                    id$: 'income-sales',
-                    oref: 'o0',
-                    path: 'Income',
-                    name: 'Sales',
-                    normal: 'credit',
-                },
-            },
-            out: {
-                ok: true,
-                account: {
-                    id: 'income-sales',
-                    aref: 'o0/Income/Sales',
-                    normal: 'credit',
-                },
-            },
-        },
-        // Test creating entry with no value
+        // entry with no value
         {
             name: 'test-entry-no-val',
             pattern: 'create:entry',
@@ -157,7 +122,7 @@ exports.default = {
                 why: 'no-val',
             },
         },
-        // Test creating entry with no description
+        // entry with no description
         {
             name: 'test-entry-no-desc',
             pattern: 'create:entry',
@@ -175,7 +140,7 @@ exports.default = {
                 why: 'no-desc',
             },
         },
-        // Test creating entry with empty description
+        // entry with empty description
         {
             name: 'test-entry-empty-desc',
             pattern: 'create:entry',
@@ -194,7 +159,7 @@ exports.default = {
                 why: 'no-desc',
             },
         },
-        // Test creating entry with no date
+        // entry with no date
         {
             name: 'test-entry-no-date',
             pattern: 'create:entry',
@@ -212,27 +177,8 @@ exports.default = {
                 why: 'no-date',
             },
         },
-        {
-            name: 'mb-book-eur',
-            pattern: 'create:book',
-            params: {
-                book: {
-                    id$: 'mb-b-eur',
-                    oref: 'o0',
-                    name: 'Q1-EUR',
-                    start: 20260101,
-                    end: 20260331,
-                },
-            },
-            out: {
-                ok: true,
-                book: {
-                    id: 'mb-b-eur',
-                    bref: 'o0/Q1-EUR/20260101',
-                },
-            },
-        },
-        // Test creating entry with base currency info
+        // --- create:entry success variants ---
+        // entry carrying base currency info
         {
             name: 'test-entry-base-currency',
             pattern: 'create:entry',
@@ -269,7 +215,7 @@ exports.default = {
                 },
             },
         },
-        // Test creating entry with custom kind
+        // entry with a custom kind
         {
             name: 'test-entry-custom-kind',
             pattern: 'create:entry',
@@ -300,7 +246,8 @@ exports.default = {
                 },
             },
         },
-        // Test list entries with no oref (should fail)
+        // --- list:entry ---
+        // list entries with no oref (should fail)
         {
             name: 'test-list-entry-no-oref',
             pattern: 'list:entry',
@@ -312,7 +259,20 @@ exports.default = {
                 why: 'org-required',
             },
         },
-        // Test list entries with credit only
+        // list entries with a nonexistent book (must not silently list cross-book)
+        {
+            name: 'test-list-entry-nonexistent-book',
+            pattern: 'list:entry',
+            params: {
+                oref: 'o0',
+                bref: 'o0/NonExistent/20230101',
+            },
+            out: {
+                ok: false,
+                why: 'book-not-found',
+            },
+        },
+        // list entries, credit side only
         {
             name: 'test-list-entry-credit-only',
             pattern: 'list:entry',
@@ -340,13 +300,13 @@ exports.default = {
                 debits: [],
             },
         },
-        // Test list entries with debit only
+        // list entries, debit side only
         {
             name: 'test-list-entry-debit-only',
             pattern: 'list:entry',
             params: {
                 oref: 'o0',
-                bref: 'o0/Q1/20220101',
+                bref: 'o0/Q1-EUR/20260101',
                 aref: 'o0/Asset/Cash',
                 credit: false,
                 debit: true,
@@ -368,7 +328,7 @@ exports.default = {
                 ],
             },
         },
-        // Test entry with debit/credit object format
+        // entry using the debit/credit object format
         {
             name: 'test-entry-object-format',
             pattern: 'create:entry',
@@ -400,7 +360,7 @@ exports.default = {
                 },
             },
         },
-        // // Test Large Value Entry
+        // large value entry
         {
             name: 'test-large-value-entry',
             pattern: 'create:entry',
@@ -424,7 +384,7 @@ exports.default = {
                 },
             },
         },
-        // // Test Small Value Entry
+        // small value entry
         {
             name: 'test-small-value-entry',
             pattern: 'create:entry',
@@ -450,4 +410,4 @@ exports.default = {
         },
     ],
 };
-//# sourceMappingURL=entry.messages.js.map
+//# sourceMappingURL=entry-validation.messages.js.map

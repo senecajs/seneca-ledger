@@ -11,11 +11,26 @@ const seneca_msg_test_1 = __importDefault(require("seneca-msg-test"));
 // import { Maintain } from '@seneca/maintain'
 const __1 = __importDefault(require(".."));
 const __2 = __importDefault(require(".."));
-const basic_messages_1 = __importDefault(require("./basic.messages"));
-const account_messages_1 = __importDefault(require("./account.messages"));
-const book_messages_1 = __importDefault(require("./book.messages"));
-const entry_messages_1 = __importDefault(require("./entry.messages"));
-const input_messages_1 = __importDefault(require("./input.messages"));
+const ledger_lifecycle_messages_1 = __importDefault(require("./ledger-lifecycle.messages"));
+const account_validation_messages_1 = __importDefault(require("./account-validation.messages"));
+const account_retrieval_messages_1 = __importDefault(require("./account-retrieval.messages"));
+const account_balance_close_export_messages_1 = __importDefault(require("./account-balance-close-export.messages"));
+const book_single_messages_1 = __importDefault(require("./book-single.messages"));
+const book_isolation_messages_1 = __importDefault(require("./book-isolation.messages"));
+const entry_validation_messages_1 = __importDefault(require("./entry-validation.messages"));
+// Each suite runs against its own fresh seneca instance so test contexts stay
+// isolated. The lifecycle suite is the only intentionally ordered, stateful
+// scenario; every other suite is a coherent set of edge cases that seeds just
+// the state it needs (see ./seed).
+const suites = {
+    'ledger-lifecycle': ledger_lifecycle_messages_1.default,
+    'account-validation': account_validation_messages_1.default,
+    'account-retrieval': account_retrieval_messages_1.default,
+    'account-balance-close-export': account_balance_close_export_messages_1.default,
+    'book-single': book_single_messages_1.default,
+    'book-isolation': book_isolation_messages_1.default,
+    'entry-validation': entry_validation_messages_1.default,
+};
 (0, node_test_1.describe)('ledger', () => {
     (0, node_test_1.test)('happy', async () => {
         (0, code_1.expect)(__1.default).exist();
@@ -26,26 +41,12 @@ const input_messages_1 = __importDefault(require("./input.messages"));
             .use(__2.default);
         await seneca.ready();
     });
-    (0, node_test_1.test)('basic.messages', async () => {
-        const seneca = await makeSeneca();
-        await (0, seneca_msg_test_1.default)(seneca, basic_messages_1.default)();
-    });
-    (0, node_test_1.test)('account.messages', async () => {
-        const seneca = await makeSeneca();
-        await (0, seneca_msg_test_1.default)(seneca, account_messages_1.default)();
-    });
-    (0, node_test_1.test)('book.messages', async () => {
-        const seneca = await makeSeneca();
-        await (0, seneca_msg_test_1.default)(seneca, book_messages_1.default)();
-    });
-    (0, node_test_1.test)('entry.messages', async () => {
-        const seneca = await makeSeneca();
-        await (0, seneca_msg_test_1.default)(seneca, entry_messages_1.default)();
-    });
-    (0, node_test_1.test)('input.messages', async () => {
-        const seneca = await makeSeneca();
-        await (0, seneca_msg_test_1.default)(seneca, input_messages_1.default)();
-    });
+    for (const [name, messages] of Object.entries(suites)) {
+        (0, node_test_1.test)(name, async () => {
+            const seneca = await makeSeneca();
+            await (0, seneca_msg_test_1.default)(seneca, messages)();
+        });
+    }
     // test('maintain', Maintain)
 });
 async function makeSeneca() {

@@ -168,7 +168,7 @@ function ledger(options) {
             return { ok: false, why: 'account-not-found' };
         }
         if (!bookEnt) {
-            return { ok: false, why: 'bookEnt-not-found' };
+            return { ok: false, why: 'book-not-found' };
         }
         const [balanceResult, entriesResult] = await Promise.all([
             seneca.post('biz:ledger,balance:account', {
@@ -798,6 +798,9 @@ function ledger(options) {
         }
         q.oref = msg.oref;
         let bookEnt = await getBook(seneca, bookCanon, msg);
+        if (null == bookEnt && (null != msg.bref || null != msg.book_id)) {
+            return { ok: false, why: 'book-not-found' };
+        }
         if (null != bookEnt) {
             q.book_id = bookEnt.id;
         }

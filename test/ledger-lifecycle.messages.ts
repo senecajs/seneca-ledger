@@ -1,4 +1,16 @@
-// Basic ledger: sent email invite to a friend
+/* Copyright © 2026 Seneca Project Contributors, MIT License. */
+
+// End-to-end ledger lifecycle for a single org (o0), run in order against one
+// shared seneca. This is a genuinely sequential integration scenario: each
+// section builds on the state the previous one left behind.
+//
+//   1. SETUP         chart of accounts, books, journal entries, list & balance
+//   2. CLOSE ACCOUNT close:account across books and balance verification
+//   3. CLOSE BOOK    close:book, cross-book balances, opening-balance checks
+//   4. EXPORT        export:account and export:book CSV output
+//
+// Isolated, order-independent edge cases live in the dedicated account / book /
+// entry suites; only the connected lifecycle belongs here.
 
 export default {
   print: false,
@@ -6,9 +18,9 @@ export default {
   allow: { missing: true },
 
   calls: [
-    // See https://fundsnetservices.com/debits-and-credits
-
-    // Chart of Accounts
+    // =====================================================================
+    // 1. SETUP — chart of accounts, books, journal entries, list & balance.
+    // =====================================================================
 
     {
       name: 'shop-a0',
@@ -395,7 +407,7 @@ export default {
 
     // Balance
     {
-      name: 'shop-le0',
+      name: 'shop-ba0',
       pattern: 'balance:account',
       params: {
         id: 'shop-e1',
@@ -419,6 +431,10 @@ export default {
         balance: 80,
       },
     },
+
+    // =====================================================================
+    // 2. CLOSE ACCOUNT — close:account scenarios and balance verification.
+    // =====================================================================
 
     // Create a liability account for testing close:account
     {
@@ -708,7 +724,7 @@ export default {
 
     // Test create a entry before the book start date
     {
-      name: 'shop-add-q2-entry',
+      name: 'shop-invalid-entry-start',
       pattern: 'create:entry',
       params: {
         id: 'shop-invalid-entry-start',
@@ -728,7 +744,7 @@ export default {
 
     // Test create a entry after the book end date
     {
-      name: 'shop-add-q2-entry',
+      name: 'shop-invalid-entry-end',
       pattern: 'create:entry',
       params: {
         id: 'shop-invalid-entry-end',
@@ -745,6 +761,10 @@ export default {
         why: 'invalid-entry-period',
       },
     },
+
+    // =====================================================================
+    // 3. CLOSE BOOK — close:book, cross-book balances, opening-balance checks.
+    // =====================================================================
 
     // Test close:book method - Close Q1 book and transfer all accounts to Q2
     {
@@ -1012,7 +1032,7 @@ export default {
 
     // Add some entries to Q2 to test closing without target
     {
-      name: 'shop-add-q2-entry',
+      name: 'shop-e3',
       pattern: 'create:entry',
       params: {
         id: 'shop-e3',
@@ -1063,7 +1083,7 @@ export default {
 
     // Create Q3 book for target closing
     {
-      name: 'shop-b1',
+      name: 'shop-b2',
       pattern: 'create:book',
       params: {
         book: {
@@ -1153,6 +1173,10 @@ export default {
         why: 'book-closed',
       },
     },
+
+    // =====================================================================
+    // 4. EXPORT — export:account and export:book CSV output.
+    // =====================================================================
 
     // Export Cash Q1 o0 Account
     {
@@ -1451,6 +1475,7 @@ export default {
         bref: 'o0/Q1/20220101',
       },
       out: {
+        ok: true,
         book_id: 'shop-b0',
         bref: 'o0/Q1/20220101',
         book_name: 'Q1',
@@ -1531,195 +1556,6 @@ export default {
             'Sales,credit,Income,300,1\n' +
             'Cash,debit,Asset,280,1\n' +
             'Office,debit,Asset,70,1\n',
-        },
-      },
-    },
-
-    // Edge Cases for Account Retrieval
-
-    // Test get account that doesn't exist
-    {
-      name: 'test-get-nonexistent-account',
-      pattern: 'get:account',
-      params: {
-        aref: 'o0/Asset/NonExistent',
-      },
-      out: {
-        ok: false,
-        why: 'account-not-found',
-      },
-    },
-
-    // Test get account by id
-    {
-      name: 'test-get-account-by-id',
-      pattern: 'get:account',
-      params: {
-        id: 'shop-a0',
-      },
-      out: {
-        ok: true,
-        account: {
-          id: 'shop-a0',
-        },
-      },
-    },
-
-    // Test get account by account_id
-    {
-      name: 'test-get-account-by-account-id',
-      pattern: 'get:account',
-      params: {
-        account_id: 'shop-a1',
-      },
-      out: {
-        ok: true,
-        account: {
-          id: 'shop-a1',
-          aref: 'o0/Income/Sales',
-        },
-      },
-    },
-
-    // Test list accounts with org filter
-    {
-      name: 'test-list-accounts-org',
-      pattern: 'list:account',
-      params: {
-        org_id: 'o0',
-      },
-      out: {
-        ok: true,
-        q: { org_id: 'o0' },
-      },
-    },
-
-    // Test list all accounts (no filter)
-    {
-      name: 'test-list-all-accounts',
-      pattern: 'list:account',
-      params: {},
-      out: {
-        ok: true,
-        q: {},
-      },
-    },
-
-    // Test update account that doesn't exist
-    {
-      name: 'test-update-nonexistent-account',
-      pattern: 'update:account',
-      params: {
-        aref: 'o0/Asset/NonExistent',
-        account: {
-          custom_field: 'value',
-        },
-      },
-      out: {
-        ok: false,
-        why: 'account-not-found',
-      },
-    },
-
-    // Test update account with no update data
-    {
-      name: 'test-update-account-no-data',
-      pattern: 'update:account',
-      params: {
-        id: 'shop-a0',
-      },
-      out: {
-        ok: false,
-        why: 'no-account-update',
-      },
-    },
-
-    // Edge Cases for Book Creation
-
-    // Test creating book with missing book object
-    {
-      name: 'test-missing-book',
-      pattern: 'create:book',
-      params: {},
-      out: {
-        ok: false,
-        why: 'no-book',
-      },
-    },
-
-    // Test creating book with no start date
-    {
-      name: 'test-no-start-book',
-      pattern: 'create:book',
-      params: {
-        book: {
-          oref: 'o0',
-          name: 'Test Period',
-        },
-      },
-      out: {
-        ok: false,
-        why: 'no-start',
-      },
-    },
-
-    // Test creating book with no org
-    {
-      name: 'test-no-org-book',
-      pattern: 'create:book',
-      params: {
-        book: {
-          name: 'Test Period',
-          start: 20230101,
-        },
-      },
-      out: {
-        ok: false,
-        why: 'no-org',
-      },
-    },
-
-    // Test creating book with no name
-    {
-      name: 'test-no-name-book',
-      pattern: 'create:book',
-      params: {
-        book: {
-          oref: 'o0',
-          start: 20230101,
-        },
-      },
-      out: {
-        ok: false,
-        why: 'no-name',
-      },
-    },
-
-    // Test creating book with custom time spec
-    {
-      name: 'test-custom-time-book',
-      pattern: 'create:book',
-      params: {
-        book: {
-          id$: 'test-time-book',
-          oref: 'o0',
-          name: 'Jan 2023',
-          start: 20230101,
-          end: 20230131,
-          time: { kind: 'utc', timezone: 'America/New_York' },
-        },
-      },
-      out: {
-        ok: true,
-        book: {
-          id: 'test-time-book',
-          org_id: 'o0',
-          oref: 'o0',
-          bref: 'o0/Jan 2023/20230101',
-          name: 'Jan 2023',
-          start: 20230101,
-          end: 20230131,
-          time: { kind: 'utc', timezone: 'America/New_York' },
         },
       },
     },
