@@ -59,6 +59,7 @@ declare const _default: {
             book: {
                 id: string;
                 bref: string;
+                end?: undefined;
             };
             why?: undefined;
             credit?: undefined;
@@ -99,6 +100,7 @@ declare const _default: {
             book: {
                 id: string;
                 bref: string;
+                end?: undefined;
             };
             why?: undefined;
             credit?: undefined;
@@ -258,6 +260,7 @@ declare const _default: {
                 date: number;
                 kind?: undefined;
                 caref?: undefined;
+                book_id?: undefined;
             };
             debit: {
                 val: number;
@@ -268,6 +271,7 @@ declare const _default: {
                 date: number;
                 kind?: undefined;
                 daref?: undefined;
+                book_id?: undefined;
             };
             book?: undefined;
             why?: undefined;
@@ -306,6 +310,7 @@ declare const _default: {
                 basecur?: undefined;
                 baserate?: undefined;
                 caref?: undefined;
+                book_id?: undefined;
             };
             debit: {
                 val: number;
@@ -316,6 +321,7 @@ declare const _default: {
                 basecur?: undefined;
                 baserate?: undefined;
                 daref?: undefined;
+                book_id?: undefined;
             };
             book?: undefined;
             why?: undefined;
@@ -486,6 +492,7 @@ declare const _default: {
                 baserate?: undefined;
                 date?: undefined;
                 kind?: undefined;
+                book_id?: undefined;
             };
             debit: {
                 val: number;
@@ -496,6 +503,7 @@ declare const _default: {
                 baserate?: undefined;
                 date?: undefined;
                 kind?: undefined;
+                book_id?: undefined;
             };
             book?: undefined;
             why?: undefined;
@@ -534,9 +542,102 @@ declare const _default: {
                 date?: undefined;
                 kind?: undefined;
                 caref?: undefined;
+                book_id?: undefined;
             };
             debit: {
                 val: number;
+                desc?: undefined;
+                baseval?: undefined;
+                basecur?: undefined;
+                baserate?: undefined;
+                date?: undefined;
+                kind?: undefined;
+                daref?: undefined;
+                book_id?: undefined;
+            };
+            book?: undefined;
+            why?: undefined;
+            credits?: undefined;
+            debits?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            book: {
+                id$: string;
+                oref: string;
+                name: string;
+                start: number;
+                end?: undefined;
+                time?: undefined;
+            };
+            id?: undefined;
+            oref?: undefined;
+            bref?: undefined;
+            daref?: undefined;
+            caref?: undefined;
+            val?: undefined;
+            desc?: undefined;
+            date?: undefined;
+            baseval?: undefined;
+            basecur?: undefined;
+            baserate?: undefined;
+            kind?: undefined;
+            aref?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+        };
+        out: {
+            ok: boolean;
+            book: {
+                id: string;
+                bref: string;
+                end: number;
+            };
+            why?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            credits?: undefined;
+            debits?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            id: string;
+            oref: string;
+            bref: string;
+            daref: string;
+            caref: string;
+            val: number;
+            desc: string;
+            date: number;
+            book?: undefined;
+            baseval?: undefined;
+            basecur?: undefined;
+            baserate?: undefined;
+            kind?: undefined;
+            aref?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+        };
+        out: {
+            ok: boolean;
+            credit: {
+                val: number;
+                book_id: string;
+                desc?: undefined;
+                baseval?: undefined;
+                basecur?: undefined;
+                baserate?: undefined;
+                date?: undefined;
+                kind?: undefined;
+                caref?: undefined;
+            };
+            debit: {
+                val: number;
+                book_id: string;
                 desc?: undefined;
                 baseval?: undefined;
                 basecur?: undefined;

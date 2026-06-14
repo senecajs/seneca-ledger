@@ -205,8 +205,8 @@ export interface CreateBookInput {
     oref?: string
     name: string // Not unique, repeated for time periods
     start: number // YYYYMMDD
-    end?: number // YYYYMMDD
-    time?: any // time spec - timezone etc
+    end?: number // YYYYMMDD. Omit / <= 0 for an open-ended (ongoing) book
+    time?: TimeSpec // time spec - timezone etc
   }
 }
 
@@ -355,9 +355,9 @@ export interface BalanceAccountResult extends BaseResult, BalanceTotals {
   creditCount: number
   debitCount: number
   normal: DC
-  when: number
-  date: number
-  time: number
+  when: number // Unix epoch ms — the canonical, precise timestamp
+  date: number // YYYYMMDD
+  time: string // Zero-padded 'HHMMSS' clock string (string to keep leading zeros)
 }
 
 /** Result for export:account,format:csv message */
@@ -542,7 +542,7 @@ export type CalcTotalsFn = (
 export type FormatDateToYYYYMMDDFn = (unixTime: number) => number
 
 /** Timestamp to time string helper function */
-export type Timestamp2TimestrFn = (unixTime: number) => number
+export type Timestamp2TimestrFn = (unixTime: number) => string
 
 /** Process entries helper function */
 export type ProcessEntriesFn = (
@@ -629,6 +629,9 @@ export interface LedgerPlugin {
   defaults: LedgerOptions
   intern: {
     getBook: GetBookFn
+    formatDateToYYYYMMDD: FormatDateToYYYYMMDDFn
+    timestamp2timestr: Timestamp2TimestrFn
+    calcTotals: CalcTotalsFn
   }
 }
 
