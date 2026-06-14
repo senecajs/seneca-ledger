@@ -302,7 +302,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
     }
 
     if (!bookEnt) {
-      return { ok: false, why: 'bookEnt-not-found' }
+      return { ok: false, why: 'book-not-found' }
     }
 
     const [balanceResult, entriesResult]: [

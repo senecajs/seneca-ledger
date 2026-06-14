@@ -189,7 +189,7 @@ exports.default = {
             },
             out: {
                 ok: false,
-                why: 'bookEnt-not-found',
+                why: 'book-not-found',
             },
         },
         // Multi-path Account Testing

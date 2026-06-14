@@ -23,7 +23,6 @@ declare const _default: {
             entry?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -45,9 +44,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -74,7 +70,6 @@ declare const _default: {
             entry?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -107,9 +102,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -130,7 +122,6 @@ declare const _default: {
             entry?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -161,9 +152,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -184,7 +172,6 @@ declare const _default: {
             entry?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -219,9 +206,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -248,7 +232,6 @@ declare const _default: {
             entry?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -270,9 +253,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -293,7 +273,6 @@ declare const _default: {
             entry?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -315,9 +294,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -338,7 +314,6 @@ declare const _default: {
             entry?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -360,9 +335,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -389,7 +361,6 @@ declare const _default: {
             entry?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -422,9 +393,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -449,21 +417,16 @@ declare const _default: {
             account?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
             credit: {
                 val: number;
                 id: string;
-                book_id?: undefined;
-                bref?: undefined;
             };
             debit: {
                 val: number;
                 id: string;
-                book_id?: undefined;
-                bref?: undefined;
             };
             why?: undefined;
             book?: undefined;
@@ -481,9 +444,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -510,7 +470,6 @@ declare const _default: {
             entry?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -543,9 +502,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -566,7 +522,6 @@ declare const _default: {
             custom?: undefined;
             entry?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -594,9 +549,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -617,7 +569,6 @@ declare const _default: {
             custom?: undefined;
             entry?: undefined;
             target_bref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -639,9 +590,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -662,7 +610,6 @@ declare const _default: {
             custom?: undefined;
             entry?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -684,9 +631,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -713,7 +657,6 @@ declare const _default: {
             entry?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -744,9 +687,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -767,7 +707,6 @@ declare const _default: {
             entry?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -795,9 +734,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -818,7 +754,6 @@ declare const _default: {
             entry?: undefined;
             target_bref?: undefined;
             aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -840,9 +775,6 @@ declare const _default: {
             target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
-            debitTotal?: undefined;
-            balance?: undefined;
-            debits?: undefined;
         };
     } | {
         name: string;
@@ -855,56 +787,74 @@ declare const _default: {
                 name: string;
                 normal: string;
             };
-            bref?: undefined;
             book?: undefined;
             id?: undefined;
-            oref?: undefined;
-            end?: undefined;
+            bref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
             desc?: undefined;
             date?: undefined;
-            custom?: undefined;
-            entry?: undefined;
-            target_bref?: undefined;
-            aref?: undefined;
             book_id?: undefined;
+            aref?: undefined;
+            oref?: undefined;
+            end?: undefined;
         };
         out: {
             ok: boolean;
             account: {
                 id: string;
                 aref: string;
-                path0?: undefined;
-                path1?: undefined;
-                path2?: undefined;
-                org_id?: undefined;
-                oref?: undefined;
-                path?: undefined;
-                name?: undefined;
-                normal?: undefined;
             };
-            why?: undefined;
             book?: undefined;
-            q?: undefined;
-            list?: undefined;
             credit?: undefined;
             debit?: undefined;
             book_id?: undefined;
-            bref?: undefined;
-            target_book_id?: undefined;
-            target_bref?: undefined;
-            summary?: undefined;
-            closure_successful?: undefined;
-            note?: undefined;
-            total_accounts?: undefined;
-            successful_exports?: undefined;
-            failed_exports?: undefined;
-            exports?: undefined;
             debitTotal?: undefined;
             balance?: undefined;
             debits?: undefined;
+            closure_successful?: undefined;
+            why?: undefined;
+        };
+    } | {
+        name: string;
+        pattern: string;
+        params: {
+            book: {
+                id$: string;
+                oref: string;
+                name: string;
+                start: number;
+                end: number;
+            };
+            account?: undefined;
+            id?: undefined;
+            bref?: undefined;
+            daref?: undefined;
+            caref?: undefined;
+            val?: undefined;
+            desc?: undefined;
+            date?: undefined;
+            book_id?: undefined;
+            aref?: undefined;
+            oref?: undefined;
+            end?: undefined;
+        };
+        out: {
+            ok: boolean;
+            book: {
+                id: string;
+                bref: string;
+            };
+            account?: undefined;
+            credit?: undefined;
+            debit?: undefined;
+            book_id?: undefined;
+            debitTotal?: undefined;
+            balance?: undefined;
+            debits?: undefined;
+            closure_successful?: undefined;
+            why?: undefined;
         };
     } | {
         name: string;
@@ -917,15 +867,12 @@ declare const _default: {
             val: number;
             desc: string;
             date: number;
+            account?: undefined;
             book?: undefined;
+            book_id?: undefined;
+            aref?: undefined;
             oref?: undefined;
             end?: undefined;
-            account?: undefined;
-            custom?: undefined;
-            entry?: undefined;
-            target_bref?: undefined;
-            aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -933,33 +880,20 @@ declare const _default: {
                 id: string;
                 book_id: string;
                 bref: string;
-                val?: undefined;
             };
             debit: {
                 id: string;
                 book_id: string;
                 bref: string;
-                val?: undefined;
             };
-            why?: undefined;
-            book?: undefined;
-            q?: undefined;
-            list?: undefined;
             account?: undefined;
+            book?: undefined;
             book_id?: undefined;
-            bref?: undefined;
-            target_book_id?: undefined;
-            target_bref?: undefined;
-            summary?: undefined;
-            closure_successful?: undefined;
-            note?: undefined;
-            total_accounts?: undefined;
-            successful_exports?: undefined;
-            failed_exports?: undefined;
-            exports?: undefined;
             debitTotal?: undefined;
             balance?: undefined;
             debits?: undefined;
+            closure_successful?: undefined;
+            why?: undefined;
         };
     } | {
         name: string;
@@ -972,15 +906,12 @@ declare const _default: {
             val: number;
             desc: string;
             date: number;
-            bref?: undefined;
+            account?: undefined;
             book?: undefined;
+            bref?: undefined;
+            aref?: undefined;
             oref?: undefined;
             end?: undefined;
-            account?: undefined;
-            custom?: undefined;
-            entry?: undefined;
-            target_bref?: undefined;
-            aref?: undefined;
         };
         out: {
             ok: boolean;
@@ -988,33 +919,20 @@ declare const _default: {
                 id: string;
                 book_id: string;
                 bref: string;
-                val?: undefined;
             };
             debit: {
                 id: string;
                 book_id: string;
                 bref: string;
-                val?: undefined;
             };
-            why?: undefined;
-            book?: undefined;
-            q?: undefined;
-            list?: undefined;
             account?: undefined;
+            book?: undefined;
             book_id?: undefined;
-            bref?: undefined;
-            target_book_id?: undefined;
-            target_bref?: undefined;
-            summary?: undefined;
-            closure_successful?: undefined;
-            note?: undefined;
-            total_accounts?: undefined;
-            successful_exports?: undefined;
-            failed_exports?: undefined;
-            exports?: undefined;
             debitTotal?: undefined;
             balance?: undefined;
             debits?: undefined;
+            closure_successful?: undefined;
+            why?: undefined;
         };
     } | {
         name: string;
@@ -1022,44 +940,30 @@ declare const _default: {
         params: {
             aref: string;
             bref: string;
+            account?: undefined;
             book?: undefined;
             id?: undefined;
-            oref?: undefined;
-            end?: undefined;
-            account?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
             desc?: undefined;
             date?: undefined;
-            custom?: undefined;
-            entry?: undefined;
-            target_bref?: undefined;
             book_id?: undefined;
+            oref?: undefined;
+            end?: undefined;
         };
         out: {
             ok: boolean;
             book_id: string;
             debitTotal: number;
             balance: number;
-            why?: undefined;
-            book?: undefined;
-            q?: undefined;
-            list?: undefined;
             account?: undefined;
+            book?: undefined;
             credit?: undefined;
             debit?: undefined;
-            bref?: undefined;
-            target_book_id?: undefined;
-            target_bref?: undefined;
-            summary?: undefined;
-            closure_successful?: undefined;
-            note?: undefined;
-            total_accounts?: undefined;
-            successful_exports?: undefined;
-            failed_exports?: undefined;
-            exports?: undefined;
             debits?: undefined;
+            closure_successful?: undefined;
+            why?: undefined;
         };
     } | {
         name: string;
@@ -1067,44 +971,30 @@ declare const _default: {
         params: {
             aref: string;
             book_id: string;
-            bref?: undefined;
+            account?: undefined;
             book?: undefined;
             id?: undefined;
-            oref?: undefined;
-            end?: undefined;
-            account?: undefined;
+            bref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
             desc?: undefined;
             date?: undefined;
-            custom?: undefined;
-            entry?: undefined;
-            target_bref?: undefined;
+            oref?: undefined;
+            end?: undefined;
         };
         out: {
             ok: boolean;
             book_id: string;
             debitTotal: number;
             balance: number;
-            why?: undefined;
-            book?: undefined;
-            q?: undefined;
-            list?: undefined;
             account?: undefined;
+            book?: undefined;
             credit?: undefined;
             debit?: undefined;
-            bref?: undefined;
-            target_book_id?: undefined;
-            target_bref?: undefined;
-            summary?: undefined;
-            closure_successful?: undefined;
-            note?: undefined;
-            total_accounts?: undefined;
-            successful_exports?: undefined;
-            failed_exports?: undefined;
-            exports?: undefined;
             debits?: undefined;
+            closure_successful?: undefined;
+            why?: undefined;
         };
     } | {
         name: string;
@@ -1112,20 +1002,17 @@ declare const _default: {
         params: {
             oref: string;
             bref: string;
+            account?: undefined;
             book?: undefined;
             id?: undefined;
-            end?: undefined;
-            account?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
             desc?: undefined;
             date?: undefined;
-            custom?: undefined;
-            entry?: undefined;
-            target_bref?: undefined;
-            aref?: undefined;
             book_id?: undefined;
+            aref?: undefined;
+            end?: undefined;
         };
         out: {
             ok: boolean;
@@ -1135,25 +1022,14 @@ declare const _default: {
                 val: number;
                 book_id: string;
             }[];
-            why?: undefined;
-            book?: undefined;
-            q?: undefined;
-            list?: undefined;
             account?: undefined;
+            book?: undefined;
             credit?: undefined;
             debit?: undefined;
             book_id?: undefined;
-            bref?: undefined;
-            target_book_id?: undefined;
-            target_bref?: undefined;
-            summary?: undefined;
-            closure_successful?: undefined;
-            note?: undefined;
-            total_accounts?: undefined;
-            successful_exports?: undefined;
-            failed_exports?: undefined;
-            exports?: undefined;
             balance?: undefined;
+            closure_successful?: undefined;
+            why?: undefined;
         };
     } | {
         name: string;
@@ -1161,20 +1037,17 @@ declare const _default: {
         params: {
             oref: string;
             book_id: string;
-            bref?: undefined;
+            account?: undefined;
             book?: undefined;
             id?: undefined;
-            end?: undefined;
-            account?: undefined;
+            bref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
             desc?: undefined;
             date?: undefined;
-            custom?: undefined;
-            entry?: undefined;
-            target_bref?: undefined;
             aref?: undefined;
+            end?: undefined;
         };
         out: {
             ok: boolean;
@@ -1184,25 +1057,14 @@ declare const _default: {
                 val: number;
                 book_id: string;
             }[];
-            why?: undefined;
-            book?: undefined;
-            q?: undefined;
-            list?: undefined;
             account?: undefined;
+            book?: undefined;
             credit?: undefined;
             debit?: undefined;
             book_id?: undefined;
-            bref?: undefined;
-            target_book_id?: undefined;
-            target_bref?: undefined;
-            summary?: undefined;
-            closure_successful?: undefined;
-            note?: undefined;
-            total_accounts?: undefined;
-            successful_exports?: undefined;
-            failed_exports?: undefined;
-            exports?: undefined;
             balance?: undefined;
+            closure_successful?: undefined;
+            why?: undefined;
         };
     } | {
         name: string;
@@ -1210,44 +1072,30 @@ declare const _default: {
         params: {
             bref: string;
             end: number;
+            account?: undefined;
             book?: undefined;
             id?: undefined;
-            oref?: undefined;
-            account?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
             desc?: undefined;
             date?: undefined;
-            custom?: undefined;
-            entry?: undefined;
-            target_bref?: undefined;
-            aref?: undefined;
             book_id?: undefined;
+            aref?: undefined;
+            oref?: undefined;
         };
         out: {
             ok: boolean;
             book_id: string;
             closure_successful: boolean;
-            why?: undefined;
-            book?: undefined;
-            q?: undefined;
-            list?: undefined;
             account?: undefined;
+            book?: undefined;
             credit?: undefined;
             debit?: undefined;
-            bref?: undefined;
-            target_book_id?: undefined;
-            target_bref?: undefined;
-            summary?: undefined;
-            note?: undefined;
-            total_accounts?: undefined;
-            successful_exports?: undefined;
-            failed_exports?: undefined;
-            exports?: undefined;
             debitTotal?: undefined;
             balance?: undefined;
             debits?: undefined;
+            why?: undefined;
         };
     } | {
         name: string;
@@ -1260,39 +1108,25 @@ declare const _default: {
             val: number;
             desc: string;
             date: number;
+            account?: undefined;
             book?: undefined;
+            book_id?: undefined;
+            aref?: undefined;
             oref?: undefined;
             end?: undefined;
-            account?: undefined;
-            custom?: undefined;
-            entry?: undefined;
-            target_bref?: undefined;
-            aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
             why: string;
-            book?: undefined;
-            q?: undefined;
-            list?: undefined;
             account?: undefined;
+            book?: undefined;
             credit?: undefined;
             debit?: undefined;
             book_id?: undefined;
-            bref?: undefined;
-            target_book_id?: undefined;
-            target_bref?: undefined;
-            summary?: undefined;
-            closure_successful?: undefined;
-            note?: undefined;
-            total_accounts?: undefined;
-            successful_exports?: undefined;
-            failed_exports?: undefined;
-            exports?: undefined;
             debitTotal?: undefined;
             balance?: undefined;
             debits?: undefined;
+            closure_successful?: undefined;
         };
     } | {
         name: string;
@@ -1305,49 +1139,33 @@ declare const _default: {
             val: number;
             desc: string;
             date: number;
+            account?: undefined;
             book?: undefined;
+            book_id?: undefined;
+            aref?: undefined;
             oref?: undefined;
             end?: undefined;
-            account?: undefined;
-            custom?: undefined;
-            entry?: undefined;
-            target_bref?: undefined;
-            aref?: undefined;
-            book_id?: undefined;
         };
         out: {
             ok: boolean;
             credit: {
                 book_id: string;
-                val?: undefined;
                 id?: undefined;
                 bref?: undefined;
             };
             debit: {
                 book_id: string;
-                val?: undefined;
                 id?: undefined;
                 bref?: undefined;
             };
-            why?: undefined;
-            book?: undefined;
-            q?: undefined;
-            list?: undefined;
             account?: undefined;
+            book?: undefined;
             book_id?: undefined;
-            bref?: undefined;
-            target_book_id?: undefined;
-            target_bref?: undefined;
-            summary?: undefined;
-            closure_successful?: undefined;
-            note?: undefined;
-            total_accounts?: undefined;
-            successful_exports?: undefined;
-            failed_exports?: undefined;
-            exports?: undefined;
             debitTotal?: undefined;
             balance?: undefined;
             debits?: undefined;
+            closure_successful?: undefined;
+            why?: undefined;
         };
     })[];
 };

@@ -201,7 +201,7 @@ export default {
       },
       out: {
         ok: false,
-        why: 'bookEnt-not-found',
+        why: 'book-not-found',
       },
     },
 

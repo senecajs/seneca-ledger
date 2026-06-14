@@ -168,7 +168,7 @@ function ledger(options) {
             return { ok: false, why: 'account-not-found' };
         }
         if (!bookEnt) {
-            return { ok: false, why: 'bookEnt-not-found' };
+            return { ok: false, why: 'book-not-found' };
         }
         const [balanceResult, entriesResult] = await Promise.all([
             seneca.post('biz:ledger,balance:account', {
