@@ -46,8 +46,8 @@ declare const _default: {
             id: string;
             account_id?: undefined;
             org_id?: undefined;
-            aref?: undefined;
             account?: undefined;
+            aref?: undefined;
         };
         out: {
             ok: boolean;
@@ -64,8 +64,8 @@ declare const _default: {
         params: {
             account_id: string;
             org_id?: undefined;
-            aref?: undefined;
             account?: undefined;
+            aref?: undefined;
             id?: undefined;
         };
         out: {
@@ -83,8 +83,8 @@ declare const _default: {
         params: {
             account_id?: undefined;
             org_id: string;
-            aref?: undefined;
             account?: undefined;
+            aref?: undefined;
             id?: undefined;
         };
         out: {
@@ -101,8 +101,8 @@ declare const _default: {
         params: {
             account_id?: undefined;
             org_id?: undefined;
-            aref?: undefined;
             account?: undefined;
+            aref?: undefined;
             id?: undefined;
         };
         out: {
@@ -137,9 +137,9 @@ declare const _default: {
         params: {
             account_id?: undefined;
             org_id?: undefined;
-            aref?: undefined;
             account?: undefined;
             id: string;
+            aref?: undefined;
         };
         out: {
             q?: {};
