@@ -23,9 +23,9 @@ declare const _default: {
                 path: string;
                 name: string;
                 normal: string;
-                oref?: undefined;
-                id$?: undefined;
                 org_id?: undefined;
+                id$?: undefined;
+                oref?: undefined;
             };
         };
         out: {
@@ -41,9 +41,9 @@ declare const _default: {
                 oref: string;
                 path: string;
                 normal: string;
-                name?: undefined;
-                id$?: undefined;
                 org_id?: undefined;
+                id$?: undefined;
+                name?: undefined;
             };
         };
         out: {
@@ -60,8 +60,8 @@ declare const _default: {
                 path: string;
                 name: string;
                 normal: string;
-                id$?: undefined;
                 org_id?: undefined;
+                id$?: undefined;
             };
         };
         out: {
@@ -161,27 +161,27 @@ declare const _default: {
         pattern: string;
         params: {
             account: {
+                org_id?: undefined;
                 id$: string;
                 oref: string;
                 path: string;
                 name: string;
                 normal: string;
-                org_id?: undefined;
             };
         };
         out: {
             ok: boolean;
             account: {
-                id: string;
-                aref: string;
-                normal: string;
+                org_id?: undefined;
                 path0?: undefined;
                 path1?: undefined;
                 path2?: undefined;
-                org_id?: undefined;
-                oref?: undefined;
+                id: string;
+                aref: string;
+                normal: string;
                 path?: undefined;
                 name?: undefined;
+                oref?: undefined;
             };
             why?: undefined;
         };
