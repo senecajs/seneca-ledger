@@ -1,4 +1,5 @@
 {
+  "references": [{ "path": "../src" }],
   "compilerOptions": {
     "esModuleInterop": true,
     "module": "nodenext",
