@@ -1,8 +1,8 @@
+![Seneca](http://senecajs.org/files/assets/seneca-logo.png)
+
+> A [Seneca.js](http://senecajs.org) plugin
+
 # @seneca/ledger
-
-> _Seneca Ledger_ is a plugin for [Seneca](http://senecajs.org)
-
-    Ledger business logic plugin for the Seneca platform.
 
 [![npm version](https://img.shields.io/npm/v/@seneca/ledger.svg)](https://npmjs.com/package/@seneca/ledger)
 [![build](https://github.com/senecajs/seneca-ledger/actions/workflows/build.yml/badge.svg)](https://github.com/senecajs/seneca-ledger/actions/workflows/build.yml)
@@ -13,6 +13,8 @@
 
 | ![Voxgig](https://www.voxgig.com/res/img/vgt01r.png) | This open source module is sponsored and supported by [Voxgig](https://www.voxgig.com). |
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------- |
+
+Ledger business logic plugin for the Seneca platform.
 
 ## Install
 
@@ -110,7 +112,25 @@ await seneca.post('biz:ledger,export:book,format:csv', {
 
 <!--START:options-->
 
-## Options
+## More Examples
+
+See [test/](test/) for more usage examples.
+
+## Motivation
+
+A [Seneca.js](http://senecajs.org) plugin.
+
+## Support
+
+If you're using this module and need help, you can:
+
+- Post a [github issue](https://github.com/senecajs/seneca-ledger/issues)
+- Tweet to [@senecajs](http://twitter.com/senecajs)
+- Ask on the [Gitter](https://gitter.im/senecajs/seneca)
+
+## API
+
+### Options
 
 _None._
 
@@ -118,174 +138,153 @@ _None._
 
 <!--START:action-list-->
 
+### Action Patterns
 
-## Action Patterns
-
-* [balance:account,biz:ledger](#-balanceaccountbizledger-)
-* [balance:book,biz:ledger](#-balancebookbizledger-)
-* [biz:ledger,close:account](#-bizledgercloseaccount-)
-* [biz:ledger,close:book](#-bizledgerclosebook-)
-* [biz:ledger,create:account](#-bizledgercreateaccount-)
-* [biz:ledger,create:book](#-bizledgercreatebook-)
-* [biz:ledger,create:entry](#-bizledgercreateentry-)
-* [biz:ledger,export:account,format:csv](#-bizledgerexportaccountformatcsv-)
-* [biz:ledger,export:book,format:csv](#-bizledgerexportbookformatcsv-)
-* [biz:ledger,get:account](#-bizledgergetaccount-)
-* [biz:ledger,get:book](#-bizledgergetbook-)
-* [biz:ledger,list:account](#-bizledgerlistaccount-)
-* [biz:ledger,list:book](#-bizledgerlistbook-)
-* [biz:ledger,list:balance](#-bizledgerlistbalance-)
-* [biz:ledger,list:entry](#-bizledgerlistentry-)
-* [biz:ledger,update:account](#-bizledgerupdateaccount-)
-* [biz:ledger,update:book](#-bizledgerupdatebook-)
-* [biz:ledger,void:entry](#-bizledgervoidentry-)
-
+- [balance:account,biz:ledger](#-balanceaccountbizledger-)
+- [balance:book,biz:ledger](#-balancebookbizledger-)
+- [biz:ledger,close:account](#-bizledgercloseaccount-)
+- [biz:ledger,close:book](#-bizledgerclosebook-)
+- [biz:ledger,create:account](#-bizledgercreateaccount-)
+- [biz:ledger,create:book](#-bizledgercreatebook-)
+- [biz:ledger,create:entry](#-bizledgercreateentry-)
+- [biz:ledger,export:account,format:csv](#-bizledgerexportaccountformatcsv-)
+- [biz:ledger,export:book,format:csv](#-bizledgerexportbookformatcsv-)
+- [biz:ledger,get:account](#-bizledgergetaccount-)
+- [biz:ledger,get:book](#-bizledgergetbook-)
+- [biz:ledger,list:account](#-bizledgerlistaccount-)
+- [biz:ledger,list:book](#-bizledgerlistbook-)
+- [biz:ledger,list:balance](#-bizledgerlistbalance-)
+- [biz:ledger,list:entry](#-bizledgerlistentry-)
+- [biz:ledger,update:account](#-bizledgerupdateaccount-)
+- [biz:ledger,update:book](#-bizledgerupdatebook-)
+- [biz:ledger,void:entry](#-bizledgervoidentry-)
 
 <!--END:action-list-->
 
 <!--START:action-desc-->
 
-
-## Action Descriptions
+### Action Descriptions
 
 ### &laquo; `balance:account,biz:ledger` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `balance:book,biz:ledger` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,close:account` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,close:book` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,create:account` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,create:book` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,create:entry` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,export:account,format:csv` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,export:book,format:csv` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,get:account` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,get:book` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,list:account` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,list:book` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,list:balance` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,list:entry` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,update:account` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,update:book` &raquo;
 
 No description provided.
 
+---
 
-
-----------
 ### &laquo; `biz:ledger,void:entry` &raquo;
 
 No description provided.
 
-
-
-----------
-
+---
 
 <!--END:action-desc-->
 
-## More Examples
-
-## Motivation
-
-## Support
-
-## API
-
 ## Contributing
 
+The [Senecajs org](https://github.com/senecajs/) encourages open participation. If you feel you can help in any way, be it with documentation, examples, extra testing, or new features please get in touch.
+
+### Running tests
+
+```sh
+npm run test
+```
+
 ## Background
+
+Part of the [Senecajs org](https://github.com/senecajs/).
