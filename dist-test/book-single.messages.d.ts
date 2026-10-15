@@ -46,6 +46,9 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             bref: string;
             id?: undefined;
             oref?: undefined;
@@ -56,12 +59,10 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
             book?: undefined;
         };
         out: {
+            target_bref?: undefined;
             ok: boolean;
             why: string;
             q?: undefined;
@@ -69,7 +70,6 @@ declare const _default: {
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -85,6 +85,9 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             id: string;
             oref?: undefined;
             daref?: undefined;
@@ -94,19 +97,18 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
             bref?: undefined;
             book?: undefined;
         };
         out: {
+            target_bref?: undefined;
+            why?: undefined;
             ok: boolean;
             book: {
+                end?: undefined;
                 id: string;
                 bref: string;
                 oref?: undefined;
-                end?: undefined;
                 org_id?: undefined;
                 name?: undefined;
                 start?: undefined;
@@ -117,7 +119,6 @@ declare const _default: {
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -127,12 +128,14 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            why?: undefined;
         };
     } | {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             oref: string;
             id?: undefined;
             daref?: undefined;
@@ -142,13 +145,12 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
             bref?: undefined;
             book?: undefined;
         };
         out: {
+            target_bref?: undefined;
+            why?: undefined;
             ok: boolean;
             q: {
                 org_id: string;
@@ -168,7 +170,6 @@ declare const _default: {
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -178,13 +179,15 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            why?: undefined;
             book?: undefined;
         };
     } | {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             bref: string;
             book: {
                 end: number;
@@ -203,11 +206,9 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
         };
         out: {
+            target_bref?: undefined;
             q?: undefined;
             list?: undefined;
             ok: boolean;
@@ -215,7 +216,6 @@ declare const _default: {
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -231,6 +231,9 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             id: string;
             oref?: undefined;
             daref?: undefined;
@@ -240,13 +243,11 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
             bref?: undefined;
             book?: undefined;
         };
         out: {
+            target_bref?: undefined;
             q?: undefined;
             list?: undefined;
             ok: boolean;
@@ -254,7 +255,6 @@ declare const _default: {
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -270,6 +270,8 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
             bref: string;
             end: number;
             id?: undefined;
@@ -281,11 +283,10 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
             book?: undefined;
         };
         out: {
+            target_bref?: undefined;
             q?: undefined;
             list?: undefined;
             ok: boolean;
@@ -293,7 +294,6 @@ declare const _default: {
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -309,6 +309,9 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             id: string;
             oref: string;
             bref: string;
@@ -323,12 +326,11 @@ declare const _default: {
             entry: {
                 xrep: string;
             };
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
             book?: undefined;
         };
         out: {
+            target_bref?: undefined;
+            why?: undefined;
             q?: undefined;
             list?: undefined;
             ok: boolean;
@@ -341,7 +343,6 @@ declare const _default: {
                 id: string;
             };
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -351,13 +352,15 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            why?: undefined;
             book?: undefined;
         };
     } | {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             id?: undefined;
             oref?: undefined;
             daref?: undefined;
@@ -375,12 +378,11 @@ declare const _default: {
                 end: number;
                 time?: undefined;
             };
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
             bref?: undefined;
         };
         out: {
+            target_bref?: undefined;
+            why?: undefined;
             q?: undefined;
             list?: undefined;
             credit?: undefined;
@@ -400,7 +402,6 @@ declare const _default: {
                 };
             };
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -410,12 +411,12 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            why?: undefined;
         };
     } | {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
             id?: undefined;
             oref?: undefined;
             daref?: undefined;
@@ -428,10 +429,10 @@ declare const _default: {
             bref: string;
             target_bref: string;
             end: number;
-            aref?: undefined;
             book?: undefined;
         };
         out: {
+            why?: undefined;
             q?: undefined;
             list?: undefined;
             credit?: undefined;
@@ -454,13 +455,13 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            why?: undefined;
             book?: undefined;
         };
     } | {
         name: string;
         pattern: string;
         params: {
+            target_bref?: undefined;
             id?: undefined;
             oref?: undefined;
             daref?: undefined;
@@ -473,10 +474,10 @@ declare const _default: {
             aref: string;
             bref: string;
             end: number;
-            target_bref?: undefined;
             book?: undefined;
         };
         out: {
+            target_bref?: undefined;
             q?: undefined;
             list?: undefined;
             credit?: undefined;
@@ -484,7 +485,6 @@ declare const _default: {
             target_book_id?: undefined;
             ok: boolean;
             why: string;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -500,6 +500,7 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
             id?: undefined;
             oref?: undefined;
             daref?: undefined;
@@ -509,19 +510,18 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
             bref: string;
             target_bref: string;
             end: number;
             book?: undefined;
         };
         out: {
+            target_bref?: undefined;
             q?: undefined;
             list?: undefined;
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             ok: boolean;
             why: string;
             summary?: undefined;
@@ -539,6 +539,8 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
             id?: undefined;
             oref?: undefined;
             daref?: undefined;
@@ -548,19 +550,18 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
             bref: string;
             end: number;
             book?: undefined;
         };
         out: {
+            target_bref?: undefined;
+            why?: undefined;
             q?: undefined;
             list?: undefined;
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             ok: boolean;
             book_id: string;
             bref: string;
@@ -577,13 +578,15 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            why?: undefined;
             book?: undefined;
         };
     } | {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             id?: undefined;
             oref?: undefined;
             daref?: undefined;
@@ -593,19 +596,17 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
             bref: string;
             book?: undefined;
         };
         out: {
+            target_bref?: undefined;
+            why?: undefined;
             q?: undefined;
             list?: undefined;
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             ok: boolean;
@@ -616,13 +617,15 @@ declare const _default: {
             successful_exports: number;
             failed_exports: number;
             exports: never[];
-            why?: undefined;
             book?: undefined;
         };
     } | {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             id?: undefined;
             oref?: undefined;
             daref?: undefined;
@@ -632,19 +635,16 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
             bref?: undefined;
             book?: undefined;
         };
         out: {
+            target_bref?: undefined;
             q?: undefined;
             list?: undefined;
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -662,6 +662,9 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             id?: undefined;
             oref?: undefined;
             daref?: undefined;
@@ -671,9 +674,6 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
             bref?: undefined;
             book: {
                 end?: undefined;
@@ -685,12 +685,12 @@ declare const _default: {
             };
         };
         out: {
+            target_bref?: undefined;
             q?: undefined;
             list?: undefined;
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -708,6 +708,9 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             id?: undefined;
             oref?: undefined;
             daref?: undefined;
@@ -717,13 +720,10 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
             bref?: undefined;
             book: {
-                oref?: undefined;
                 end?: undefined;
+                oref?: undefined;
                 name: string;
                 start: number;
                 id$?: undefined;
@@ -731,12 +731,12 @@ declare const _default: {
             };
         };
         out: {
+            target_bref?: undefined;
             q?: undefined;
             list?: undefined;
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -754,6 +754,9 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             id?: undefined;
             oref?: undefined;
             daref?: undefined;
@@ -763,9 +766,6 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
             bref?: undefined;
             book: {
                 end?: undefined;
@@ -777,12 +777,12 @@ declare const _default: {
             };
         };
         out: {
+            target_bref?: undefined;
             q?: undefined;
             list?: undefined;
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -800,6 +800,9 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            target_bref?: undefined;
+            end?: undefined;
             id?: undefined;
             oref?: undefined;
             daref?: undefined;
@@ -809,9 +812,6 @@ declare const _default: {
             date?: undefined;
             custom?: undefined;
             entry?: undefined;
-            aref?: undefined;
-            target_bref?: undefined;
-            end?: undefined;
             bref?: undefined;
             book: {
                 id$: string;
@@ -826,12 +826,13 @@ declare const _default: {
             };
         };
         out: {
+            target_bref?: undefined;
+            why?: undefined;
             q?: undefined;
             list?: undefined;
             credit?: undefined;
             debit?: undefined;
             target_book_id?: undefined;
-            target_bref?: undefined;
             summary?: undefined;
             closure_successful?: undefined;
             book_id?: undefined;
@@ -841,7 +842,6 @@ declare const _default: {
             successful_exports?: undefined;
             failed_exports?: undefined;
             exports?: undefined;
-            why?: undefined;
             ok: boolean;
             book: {
                 id: string;
