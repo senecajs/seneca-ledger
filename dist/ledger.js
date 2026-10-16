@@ -13,7 +13,6 @@ function ledger(options) {
     const bookCanon = options.entity.base + '/book';
     const debitCanon = options.entity.base + '/debit';
     const creditCanon = options.entity.base + '/credit';
-    // const balanceCanon = options.entity.base + '/balance'
     const makeRef = seneca.util.Nid({ length: 16 });
     seneca
         .fix('biz:ledger')
@@ -129,12 +128,6 @@ function ledger(options) {
         };
         let credits = await seneca.entity(creditCanon).list$(cq);
         let debits = await seneca.entity(debitCanon).list$(dq);
-        // let creditTotal = credits.map((entry: any) => entry.val)
-        //   .reduce((total: number, val: number) => val + total, 0)
-        // let debitTotal = debits.map((entry: any) => entry.val)
-        //   .reduce((total: number, val: number) => val + total, 0)
-        // let balance = 'credit' === accountEnt.normal ? creditTotal - debitTotal :
-        //   debitTotal - creditTotal
         let totals = calcTotals(accountEnt, credits, debits);
         const currUnixTime = Date.now();
         let out = {
@@ -146,9 +139,6 @@ function ledger(options) {
             bref: bookEnt.bref,
             start: bookEnt.start,
             end: bookEnt.end,
-            // creditTotal: creditTotal,
-            // debitTotal: debitTotal,
-            // balance,
             creditCount: credits.length,
             debitCount: debits.length,
             normal: accountEnt.normal,
@@ -707,7 +697,6 @@ function ledger(options) {
     // TODO: mark ledger/balance stale
     async function msgCreateEntry(msg) {
         const seneca = this;
-        let out = { ok: false };
         let debit = msg.debit || { aref: msg.daref };
         let credit = msg.credit || { aref: msg.caref };
         let bookEnt = await getBook(seneca, bookCanon, msg);
@@ -783,12 +772,13 @@ function ledger(options) {
             daref: debitAccountEnt.aref,
         };
         let creditEnt = await seneca.entity(creditCanon).data$(creditEntry).save$();
-        debitEntry.id$ = creditEnt.id;
+        debitEntry = { ...debitEntry, id$: creditEnt.id };
         let debitEnt = await seneca.entity(debitCanon).data$(debitEntry).save$();
-        out.ok = true;
-        out.credit = creditEnt.data$(false);
-        out.debit = debitEnt.data$(false);
-        return out;
+        return {
+            ok: true,
+            credit: creditEnt.data$(false),
+            debit: debitEnt.data$(false),
+        };
     }
     async function msgVoidEntry(_msg) {
         // TODO: generate counter entries
