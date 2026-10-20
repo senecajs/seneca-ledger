@@ -1160,20 +1160,24 @@ function ledger(this: Seneca, options: LedgerOptions) {
     if (null != accountEnt) {
       cq.credit_id = accountEnt.id
     }
-    if (null == msg.credit || !!msg.credit) {
-      credits = await seneca.entity(creditCanon).list$(cq)
-      credits = credits.map((entry: CreditEntity) => entry.data$(false))
-    }
 
     let debits: DebitEntity[] = []
     let dq: { [key: string]: unknown } = { ...q }
     if (null != accountEnt) {
       dq.debit_id = accountEnt.id
     }
-    if (null == msg.debit || !!msg.debit) {
-      debits = await seneca.entity(debitCanon).list$(dq)
-      debits = debits.map((entry: DebitEntity) => entry.data$(false))
-    }
+
+    const [rawCredits, rawDebits] = await Promise.all([
+      null == msg.credit || !!msg.credit
+        ? seneca.entity(creditCanon).list$(cq)
+        : Promise.resolve([]),
+      null == msg.debit || !!msg.debit
+        ? seneca.entity(debitCanon).list$(dq)
+        : Promise.resolve([]),
+    ])
+
+    credits = rawCredits.map((entry: CreditEntity) => entry.data$(false))
+    debits = rawDebits.map((entry: DebitEntity) => entry.data$(false))
 
     let totals = calcTotals(accountEnt, credits, debits)
 
@@ -1195,21 +1199,19 @@ async function getBook(
   bookCanon: string,
   msg: BookIdentifier,
 ): Promise<BookEntity | null> {
-  let bookEnt: BookEntity | null = null
-
   if (null != msg.bref) {
-    bookEnt = await seneca.entity(bookCanon).load$({ bref: msg.bref })
+    return await seneca.entity(bookCanon).load$({ bref: msg.bref })
   }
 
-  if (null == bookEnt && null != msg.id) {
-    bookEnt = await seneca.entity(bookCanon).load$(msg.id)
+  if (null != msg.book_id) {
+    return await seneca.entity(bookCanon).load$(msg.book_id)
   }
 
-  if (null == bookEnt && null != msg.book_id) {
-    bookEnt = await seneca.entity(bookCanon).load$(msg.book_id)
+  if (null != msg.id) {
+    return await seneca.entity(bookCanon).load$(msg.id)
   }
 
-  return bookEnt
+  return null
 }
 
 async function getAccount(
@@ -1217,18 +1219,19 @@ async function getAccount(
   accountCanon: string,
   msg: AccountIdentifier,
 ): Promise<AccountEntity | null> {
-  let accountEnt: AccountEntity | null = null
   if (null != msg.aref) {
-    accountEnt = await seneca.entity(accountCanon).load$({ aref: msg.aref })
-  }
-  if (null == accountEnt && null != msg.id) {
-    accountEnt = await seneca.entity(accountCanon).load$(msg.id)
-  }
-  if (null == accountEnt && null != msg.account_id) {
-    accountEnt = await seneca.entity(accountCanon).load$(msg.account_id)
+    return await seneca.entity(accountCanon).load$({ aref: msg.aref })
   }
 
-  return accountEnt
+  if (null != msg.account_id) {
+    return await seneca.entity(accountCanon).load$(msg.account_id)
+  }
+
+  if (null != msg.id) {
+    return await seneca.entity(accountCanon).load$(msg.id)
+  }
+
+  return null
 }
 
 function calcTotals(
