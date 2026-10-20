@@ -1322,14 +1322,12 @@ function processEntries(
     if (a.kind === 'opening' && b.kind !== 'opening') return -1
     if (a.kind !== 'opening' && b.kind === 'opening') return 1
 
-    if (a.date === b.date) {
-      if (accountNormal === 'debit') {
-        if (a.type === 'debit' && b.type === 'credit') return -1
-        if (a.type === 'credit' && b.type === 'debit') return 1
-      } else if (accountNormal === 'credit') {
-        if (a.type === 'credit' && b.type === 'debit') return -1
-        if (a.type === 'debit' && b.type === 'credit') return 1
-      }
+    if (accountNormal === 'debit') {
+      if (a.type === 'debit' && b.type === 'credit') return -1
+      if (a.type === 'credit' && b.type === 'debit') return 1
+    } else if (accountNormal === 'credit') {
+      if (a.type === 'credit' && b.type === 'debit') return -1
+      if (a.type === 'debit' && b.type === 'credit') return 1
     }
 
     return 0
@@ -1369,7 +1367,7 @@ function generateAccountCSV(
   entries.forEach((entry) => {
     if (entry.kind === 'opening') return
 
-    const dateStr = entry.date || formatDateToYYYYMMDD((entry as any).t_c)
+    const dateStr = entry.date
     const debitVal = entry.type === 'debit' ? entry.val : ''
     const creditVal = entry.type === 'credit' ? entry.val : ''
 
@@ -1420,11 +1418,11 @@ async function generateBookSummaryCSV(
       ok: true,
       content: summaryContent,
     }
-  } catch (err: any) {
+  } catch (err: unknown) {
     return {
       ok: false,
       why: 'summary-generation-failed',
-      error: err.message,
+      error: err instanceof Error ? err.message : String(err),
     }
   }
 }
