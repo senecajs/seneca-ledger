@@ -182,9 +182,22 @@ Calculate the current balance of a ledger account for a given accounting period 
 ```
 {
   ok: '_true_ on success',
-  balance: 'net balance amount',
-  account: 'the account entity',
-  book: 'the book entity'
+  creditTotal: 'sum of credit entry values',
+  debitTotal: 'sum of debit entry values',
+  balance: "net balance according to the account's normal direction",
+  account_id: 'account identifier',
+  aref: 'account reference',
+  book_id: 'book identifier',
+  bref: 'book reference',
+  start: 'book start date',
+  end: 'book end date',
+  creditCount: 'number of credit entries',
+  debitCount: 'number of debit entries',
+  normal: 'account normal direction (`debit` or `credit`)',
+  when: 'calculation timestamp (unix milliseconds)',
+  date: 'calculation date (YYYYMMDD)',
+  time: 'calculation time (HHMMSS string, UTC)',
+  why: 'reason for failure when ok is _false_'
 }
 ```
 
@@ -192,14 +205,14 @@ Calculate the current balance of a ledger account for a given accounting period 
 ----------
 ### &laquo; `balance:book,biz:ledger` &raquo;
 
-Compute and persist balances for all accounts that have entries in the given book. Each balance record stores the net position so that reporting queries can avoid re-summing raw entries. _Note: implementation in progress._
+Not yet implemented.
 
 
 
 ----------
 ### &laquo; `biz:ledger,close:account` &raquo;
 
-Close a ledger account within a book. Calculates the closing balance and, when `target_bref` is supplied, creates an opening-balance entry in the target book so the balance carries forward to the next accounting period.
+Close a ledger account within a book. Creates a closing entry against the opening balance account (default `oref/Equity/Opening Balance`, created if missing) and, when `target_bref` or `target_book_id` is supplied, an opening entry in the target book so the balance carries forward to the next accounting period.
 
 
 
@@ -211,8 +224,21 @@ Close a ledger account within a book. Calculates the closing balance and, when `
 ```
 {
   ok: '_true_ on success',
-  account: 'the closed account entity',
-  close: 'closure details including closing balance'
+  account_id: 'account identifier',
+  aref: 'account reference',
+  book_id: 'book identifier',
+  bref: 'book reference',
+  target_book_id: 'target book identifier, if supplied',
+  target_bref: 'target book reference, if supplied',
+  original_balance: 'account balance before closing',
+  closing_balance: 'account balance in the book after closing',
+  opening_balance: 'account balance in the target book, or _null_',
+  opening_balance_aref: 'reference of the opening balance account, or _null_',
+  closing_entries: 'array of closing entry results',
+  opening_entries: 'array of opening entry results',
+  closing_date: 'date of the closing entry',
+  why: 'reason for failure when ok is _false_',
+  error: 'the failed sub-operation result, when applicable'
 }
 ```
 
@@ -220,7 +246,7 @@ Close a ledger account within a book. Calculates the closing balance and, when `
 ----------
 ### &laquo; `biz:ledger,close:book` &raquo;
 
-Close an accounting period (book) by closing all its accounts and marking the book as closed. When `target_bref` is supplied, non-zero closing balances are carried forward as opening entries in the target book.
+Close an accounting period (book) by closing all its accounts in batches of `batch_size` (default 5) and marking the book as closed. When `target_bref` or `target_book_id` is supplied, closing balances are carried forward as opening entries in the target book.
 
 
 
@@ -232,8 +258,18 @@ Close an accounting period (book) by closing all its accounts and marking the bo
 ```
 {
   ok: '_true_ on success',
-  book: 'the closed book entity',
-  accounts: 'array of closure details for each account'
+  book_id: 'book identifier',
+  bref: 'book reference',
+  target_book_id: 'target book identifier, if supplied',
+  target_bref: 'target book reference, if supplied',
+  closing_date: 'book end date used for closing',
+  account_closures: 'array of per-account closure results',
+  summary: 'totals: `total_accounts`, `successful_closures`, `failed_closures`, `total_balance_transferred`, `all_accounts_zeroed`',
+  op_balance_check: 'opening balance account check in the target book, or _null_',
+  closure_successful: '_true_ if all accounts closed with zero balance',
+  note: 'explanation when no accounts were closed or closure failed',
+  why: 'reason for failure when ok is _false_',
+  error: 'the failed opening balance account creation result, when applicable'
 }
 ```
 
@@ -241,7 +277,7 @@ Close an accounting period (book) by closing all its accounts and marking the bo
 ----------
 ### &laquo; `biz:ledger,create:account` &raquo;
 
-Create a new ledger account within an organisation. An account is identified by its `oref` (organisation reference), `path` (e.g. `Asset` or `Asset/Current`), and `name`. The `normal` field must be either `"debit"` or `"credit"`.
+Create a new ledger account within an organisation. An account is identified by its `oref` (or `org_id`), `path` (e.g. `Asset` or `Asset/Current`), and `name`. The `normal` field must be either `"debit"` or `"credit"`.
 
 
 
@@ -262,7 +298,7 @@ Create a new ledger account within an organisation. An account is identified by 
 ----------
 ### &laquo; `biz:ledger,create:book` &raquo;
 
-Create a new accounting period (book) for an organisation. A book is identified by its `oref`, `name`, and `start` date. Set `end: 0` (or omit `end`) for an open-ended period.
+Create a new accounting period (book) for an organisation. A book is identified by its `oref` (or `org_id`), `name`, and `start` date. Omit `end` (or set it to `0`) for an open-ended period.
 
 
 
@@ -274,7 +310,8 @@ Create a new accounting period (book) for an organisation. A book is identified 
 ```
 {
   ok: '_true_ if book was created',
-  book: 'the saved book entity'
+  book: 'the saved book entity',
+  why: 'reason for failure when ok is _false_'
 }
 ```
 
@@ -282,7 +319,7 @@ Create a new accounting period (book) for an organisation. A book is identified 
 ----------
 ### &laquo; `biz:ledger,create:entry` &raquo;
 
-Create a double-entry journal entry that debits one account and credits another within a given book. Both the debit account (`daref` or `debit`) and credit account (`caref` or `credit`) must exist. The entry `date` must fall within the book's period, and the book must not be closed.
+Create a double-entry journal entry that debits one account and credits another within a given book. Both the debit account (`daref` or `debit`) and credit account (`caref` or `credit`) must exist, and `val`, `desc`, and `date` are required. The entry `date` must fall within the book's period, and the book must not be closed.
 
 
 
@@ -294,8 +331,9 @@ Create a double-entry journal entry that debits one account and credits another 
 ```
 {
   ok: '_true_ on success',
+  credit: 'the saved credit entry entity',
   debit: 'the saved debit entry entity',
-  credit: 'the saved credit entry entity'
+  why: 'reason for failure when ok is _false_'
 }
 ```
 
@@ -315,7 +353,17 @@ Export all entries for a single ledger account within a book as a CSV string. Ea
 ```
 {
   ok: '_true_ on success',
-  csv: 'CSV formatted string of entries'
+  account_id: 'account identifier',
+  aref: 'account reference',
+  normal: 'account normal direction (`debit` or `credit`)',
+  book_id: 'book identifier',
+  bref: 'book reference',
+  content: 'CSV formatted string of entries',
+  entry_count: 'number of entries exported',
+  final_balance: 'account balance for the book',
+  closing_balance: 'value of the closing entry, or 0 if none',
+  why: 'reason for failure when ok is _false_',
+  error: 'the failed balance or entry listing result, when applicable'
 }
 ```
 
@@ -323,7 +371,7 @@ Export all entries for a single ledger account within a book as a CSV string. Ea
 ----------
 ### &laquo; `biz:ledger,export:book,format:csv` &raquo;
 
-Export a summary of all accounts in a book as a CSV string. Each row contains the account reference, name, normal direction, total debits, total credits, and net balance for the period.
+Export every account with entries in a book (excluding the opening balance account) as CSV, processed in batches of `batch_size` (default 5), plus a summary CSV with columns for account name, normal balance, type, total (or closing) balance, and entry count.
 
 
 
@@ -334,8 +382,17 @@ Export a summary of all accounts in a book as a CSV string. Each row contains th
 
 ```
 {
-  ok: '_true_ on success',
-  csv: 'CSV formatted string of account summaries'
+  ok: '_true_ if all account exports succeeded',
+  book_id: 'book identifier',
+  bref: 'book reference',
+  book_name: 'book name',
+  total_accounts: 'number of accounts exported',
+  successful_exports: 'number of successful account exports',
+  failed_exports: 'number of failed account exports',
+  exports: 'array of per-account export results',
+  summary: 'summary CSV result (`ok`, `content`, or `why` and `error` on failure)',
+  note: 'explanation when no accounts were found',
+  why: 'reason for failure when the book is not found'
 }
 ```
 
@@ -343,7 +400,7 @@ Export a summary of all accounts in a book as a CSV string. Each row contains th
 ----------
 ### &laquo; `biz:ledger,get:account` &raquo;
 
-Retrieve a single ledger account by its `aref` (account reference, in the form `oref/path/name`) or by `id`.
+Retrieve a single ledger account by its `aref` (account reference, in the form `oref/path/name`), `account_id`, or `id`.
 
 
 
@@ -355,7 +412,8 @@ Retrieve a single ledger account by its `aref` (account reference, in the form `
 ```
 {
   ok: '_true_ if account was found',
-  account: 'the account entity'
+  account: 'the account entity',
+  why: 'reason for failure when ok is _false_'
 }
 ```
 
@@ -363,7 +421,7 @@ Retrieve a single ledger account by its `aref` (account reference, in the form `
 ----------
 ### &laquo; `biz:ledger,get:book` &raquo;
 
-Retrieve a single accounting period (book) by its `bref` (book reference, in the form `oref/name/start`) or by `id`.
+Retrieve a single accounting period (book) by its `bref` (book reference, in the form `oref/name/start`), `book_id`, or `id`.
 
 
 
@@ -375,7 +433,8 @@ Retrieve a single accounting period (book) by its `bref` (book reference, in the
 ```
 {
   ok: '_true_ if book was found',
-  book: 'the book entity'
+  book: 'the book entity',
+  why: 'reason for failure when ok is _false_'
 }
 ```
 
@@ -383,7 +442,7 @@ Retrieve a single accounting period (book) by its `bref` (book reference, in the
 ----------
 ### &laquo; `biz:ledger,list:account` &raquo;
 
-List all ledger accounts that belong to an organisation (`org_id` or `oref`). Optional filters include `path` to narrow results to a specific account category.
+List ledger accounts that belong to an organisation (`org_id` or `oref`). If neither is given, all accounts are listed.
 
 
 
@@ -395,7 +454,8 @@ List all ledger accounts that belong to an organisation (`org_id` or `oref`). Op
 ```
 {
   ok: '_true_ on success',
-  accounts: 'array of account entities'
+  q: 'the query used to list accounts',
+  list: 'array of account entities'
 }
 ```
 
@@ -403,7 +463,7 @@ List all ledger accounts that belong to an organisation (`org_id` or `oref`). Op
 ----------
 ### &laquo; `biz:ledger,list:book` &raquo;
 
-List all accounting periods (books) that belong to an organisation (`oref`).
+List accounting periods (books) that belong to an organisation (`org_id` or `oref`). If neither is given, all books are listed.
 
 
 
@@ -415,7 +475,8 @@ List all accounting periods (books) that belong to an organisation (`oref`).
 ```
 {
   ok: '_true_ on success',
-  books: 'array of book entities'
+  q: 'the query used to list books',
+  list: 'array of book entities'
 }
 ```
 
@@ -423,14 +484,14 @@ List all accounting periods (books) that belong to an organisation (`oref`).
 ----------
 ### &laquo; `biz:ledger,list:balance` &raquo;
 
-List pre-computed balance records for a book. Balances are written by `balance:book` and reflect the state at the time that action was last run. _Note: implementation in progress._
+Not yet implemented.
 
 
 
 ----------
 ### &laquo; `biz:ledger,list:entry` &raquo;
 
-List journal entries filtered by organisation (`oref`), book (`bref`), account (`aref`), or date range (`from` / `to`). Either debit or credit entries matching the filters are returned.
+List journal entries for an organisation (`oref`, required), optionally filtered by book (`bref` or `book_id`), account (`aref`, `account_id`, or `id`), and an extra query `q`. Set `credit: false` or `debit: false` to skip that side.
 
 
 
@@ -442,7 +503,14 @@ List journal entries filtered by organisation (`oref`), book (`bref`), account (
 ```
 {
   ok: '_true_ on success',
-  entries: 'array of journal entry entities'
+  creditTotal: 'sum of credit entry values',
+  debitTotal: 'sum of debit entry values',
+  balance: 'net balance when an account is given, otherwise 0',
+  credits: 'array of credit entry entities',
+  debits: 'array of debit entry entities',
+  cq: 'the query used to list credit entries',
+  dq: 'the query used to list debit entries',
+  why: 'reason for failure when ok is _false_'
 }
 ```
 
@@ -450,7 +518,7 @@ List journal entries filtered by organisation (`oref`), book (`bref`), account (
 ----------
 ### &laquo; `biz:ledger,update:account` &raquo;
 
-Update custom fields on an existing ledger account. Supply the `aref` (or `id`) to identify the account and an `account` object containing only the fields to change.
+Update fields on an existing ledger account. Supply the `aref` (or `account_id` / `id`) to identify the account and an `account` object containing the fields to change.
 
 
 
@@ -462,7 +530,8 @@ Update custom fields on an existing ledger account. Supply the `aref` (or `id`) 
 ```
 {
   ok: '_true_ if account was updated',
-  account: 'the updated account entity'
+  account: 'the updated account entity',
+  why: 'reason for failure when ok is _false_'
 }
 ```
 
@@ -470,7 +539,7 @@ Update custom fields on an existing ledger account. Supply the `aref` (or `id`) 
 ----------
 ### &laquo; `biz:ledger,update:book` &raquo;
 
-Update fields on an existing accounting period (book). Supply the `bref` (or `id`) to identify the book and a `book` object containing the fields to change (e.g. `end` date or custom metadata).
+Update fields on an existing accounting period (book). Supply the `bref` (or `book_id` / `id`) to identify the book and a `book` object containing the fields to change.
 
 
 
@@ -482,7 +551,8 @@ Update fields on an existing accounting period (book). Supply the `bref` (or `id
 ```
 {
   ok: '_true_ if book was updated',
-  book: 'the updated book entity'
+  book: 'the updated book entity',
+  why: 'reason for failure when ok is _false_'
 }
 ```
 
@@ -490,7 +560,7 @@ Update fields on an existing accounting period (book). Supply the `bref` (or `id
 ----------
 ### &laquo; `biz:ledger,void:entry` &raquo;
 
-Void an existing journal entry by generating counter-entries that reverse the original debit and credit amounts. The original entries are preserved with a `kind: "void"` marker. _Note: implementation in progress._
+Not yet implemented.
 
 
 
