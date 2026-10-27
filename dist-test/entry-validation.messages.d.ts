@@ -27,6 +27,8 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            id?: undefined;
             book: {
                 id$: string;
                 oref: string;
@@ -42,10 +44,8 @@ declare const _default: {
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
-            id?: undefined;
             oref?: undefined;
             bref?: undefined;
             daref?: undefined;
@@ -55,13 +55,13 @@ declare const _default: {
             date?: undefined;
         };
         out: {
+            why?: undefined;
             ok: boolean;
             book: {
                 id: string;
                 bref: string;
                 end?: undefined;
             };
-            why?: undefined;
             credits?: undefined;
             debits?: undefined;
             debit?: undefined;
@@ -71,6 +71,8 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            id?: undefined;
             book: {
                 time?: undefined;
                 id$: string;
@@ -83,10 +85,8 @@ declare const _default: {
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
-            id?: undefined;
             oref?: undefined;
             bref?: undefined;
             daref?: undefined;
@@ -96,13 +96,13 @@ declare const _default: {
             date?: undefined;
         };
         out: {
+            why?: undefined;
             ok: boolean;
             book: {
                 id: string;
                 bref: string;
                 end?: undefined;
             };
-            why?: undefined;
             credits?: undefined;
             debits?: undefined;
             debit?: undefined;
@@ -112,6 +112,7 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
             id: string;
             oref: string;
             bref: string;
@@ -124,7 +125,6 @@ declare const _default: {
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
             book?: undefined;
@@ -142,6 +142,7 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
             id: string;
             oref: string;
             bref: string;
@@ -153,7 +154,6 @@ declare const _default: {
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
             book?: undefined;
@@ -172,6 +172,7 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
             id: string;
             oref: string;
             bref: string;
@@ -183,7 +184,6 @@ declare const _default: {
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
             book?: undefined;
@@ -202,6 +202,7 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
             id: string;
             oref: string;
             bref: string;
@@ -213,7 +214,6 @@ declare const _default: {
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
             book?: undefined;
@@ -232,6 +232,7 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
             id: string;
             oref: string;
             bref: string;
@@ -244,12 +245,12 @@ declare const _default: {
             basecur: string;
             baserate: number;
             kind?: undefined;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
             book?: undefined;
         };
         out: {
+            why?: undefined;
             ok: boolean;
             credit: {
                 val: number;
@@ -273,7 +274,6 @@ declare const _default: {
                 daref?: undefined;
                 book_id?: undefined;
             };
-            why?: undefined;
             credits?: undefined;
             debits?: undefined;
             book?: undefined;
@@ -282,6 +282,7 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
             baseval?: undefined;
             basecur?: undefined;
             baserate?: undefined;
@@ -294,12 +295,12 @@ declare const _default: {
             desc: string;
             date: number;
             kind: string;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
             book?: undefined;
         };
         out: {
+            why?: undefined;
             ok: boolean;
             credit: {
                 baseval?: undefined;
@@ -323,7 +324,6 @@ declare const _default: {
                 daref?: undefined;
                 book_id?: undefined;
             };
-            why?: undefined;
             credits?: undefined;
             debits?: undefined;
             book?: undefined;
@@ -332,16 +332,16 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            id?: undefined;
             baseval?: undefined;
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
             bref: string;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
             book?: undefined;
-            id?: undefined;
             oref?: undefined;
             daref?: undefined;
             caref?: undefined;
@@ -362,17 +362,17 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            id?: undefined;
             baseval?: undefined;
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
             oref: string;
             bref: string;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
             book?: undefined;
-            id?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -392,6 +392,7 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            id?: undefined;
             baseval?: undefined;
             basecur?: undefined;
             baserate?: undefined;
@@ -402,7 +403,6 @@ declare const _default: {
             credit: boolean;
             debit: boolean;
             book?: undefined;
-            id?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -426,6 +426,7 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            id?: undefined;
             baseval?: undefined;
             basecur?: undefined;
             baserate?: undefined;
@@ -436,7 +437,6 @@ declare const _default: {
             credit: boolean;
             debit: boolean;
             book?: undefined;
-            id?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -460,11 +460,11 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
             baseval?: undefined;
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
-            aref?: undefined;
             id: string;
             oref: string;
             bref: string;
@@ -514,11 +514,11 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
             baseval?: undefined;
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
             id: string;
@@ -564,11 +564,12 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
+            id?: undefined;
             baseval?: undefined;
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
             book: {
@@ -579,7 +580,6 @@ declare const _default: {
                 start: number;
                 end?: undefined;
             };
-            id?: undefined;
             oref?: undefined;
             bref?: undefined;
             daref?: undefined;
@@ -605,11 +605,11 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
+            aref?: undefined;
             baseval?: undefined;
             basecur?: undefined;
             baserate?: undefined;
             kind?: undefined;
-            aref?: undefined;
             debit?: undefined;
             credit?: undefined;
             book?: undefined;
