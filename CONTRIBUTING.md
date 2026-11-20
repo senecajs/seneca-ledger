@@ -5,7 +5,7 @@ This project uses [Prettier](https://prettier.io/) to format its code.
 Please, use the library along with the rules added to this project, following
 the code format pattern.
 
-Run `npm run format:check` before pushing; CI runs the same check and fails
+Run `npm run prettier:check` before pushing; CI runs the same check and fails
 on unformatted files. `npm run prettier` formats everything.
 
 ### Configuration Guide Examples:

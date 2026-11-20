@@ -43,6 +43,6 @@ jobs:
       - name: Check formatting
         # Once is enough, and Windows checkouts may use CRLF line endings.
         if: runner.os == 'Linux'
-        run: npm run format:check
+        run: npm run prettier:check
       - run: npm run build --if-present
       - run: npm test
