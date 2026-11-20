@@ -10,6 +10,8 @@ import SenecaMsgTest from 'seneca-msg-test'
 import LedgerDoc from '..'
 import Ledger from '..'
 
+import { makeSeneca } from './helper'
+
 import LedgerLifecycleMessages from './ledger-lifecycle.messages'
 import AccountValidationMessages from './account-validation.messages'
 import AccountRetrievalMessages from './account-retrieval.messages'
@@ -53,19 +55,3 @@ describe('ledger', () => {
 
   // test('maintain', Maintain)
 })
-
-async function makeSeneca() {
-  const seneca = Seneca({ legacy: false })
-    .test()
-    .use('promisify')
-    .use('entity')
-    .use('entity-util', { when: { active: true } })
-    .use(Ledger)
-
-  await seneca.ready()
-
-  // print all message patterns
-  // console.log(seneca.list())
-
-  return seneca
-}
