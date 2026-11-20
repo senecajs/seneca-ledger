@@ -1136,7 +1136,8 @@ function ledger(this: Seneca, options: LedgerOptions) {
   ): Promise<ListEntryResult | InvalidResult> {
     const seneca = this
 
-    let q: Record<string, unknown> = msg.q || {}
+    // Copy the caller's filter so it is not mutated (and so a frozen q works).
+    let q: Record<string, unknown> = { ...msg.q }
 
     if (null == msg.oref) {
       return { ok: false, why: 'org-required' }

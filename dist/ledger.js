@@ -786,7 +786,8 @@ function ledger(options) {
     }
     async function msgListEntry(msg) {
         const seneca = this;
-        let q = msg.q || {};
+        // Copy the caller's filter so it is not mutated (and so a frozen q works).
+        let q = { ...msg.q };
         if (null == msg.oref) {
             return { ok: false, why: 'org-required' };
         }
