@@ -8,7 +8,6 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
-            oref?: undefined;
             account: {
                 id$: string;
                 oref: string;
@@ -21,6 +20,7 @@ declare const _default: {
             entry?: undefined;
             book?: undefined;
             id?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -32,8 +32,6 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
-            why?: undefined;
-            normal?: undefined;
             ok: boolean;
             account: {
                 id: string;
@@ -60,10 +58,12 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -87,19 +87,19 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
-            oref?: undefined;
             id: string;
             account: {
-                path?: undefined;
                 id$?: undefined;
-                oref?: undefined;
+                path?: undefined;
                 name?: undefined;
-                normal?: undefined;
                 xfoo: number;
+                oref?: undefined;
+                normal?: undefined;
             };
             custom?: undefined;
             entry?: undefined;
             book?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -111,8 +111,6 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
-            why?: undefined;
-            normal?: undefined;
             ok: boolean;
             account: {
                 id: string;
@@ -139,10 +137,12 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -167,7 +167,6 @@ declare const _default: {
         pattern: string;
         params: {
             account?: undefined;
-            oref?: undefined;
             book: {
                 id$: string;
                 oref: string;
@@ -179,6 +178,7 @@ declare const _default: {
             custom?: undefined;
             entry?: undefined;
             id?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -190,9 +190,7 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             ok: boolean;
             book: {
                 id: string;
@@ -218,10 +216,12 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -246,18 +246,18 @@ declare const _default: {
         pattern: string;
         params: {
             account?: undefined;
-            oref?: undefined;
             id: string;
             book: {
                 id$?: undefined;
-                oref?: undefined;
                 name?: undefined;
                 end: number;
                 xbar: number;
+                oref?: undefined;
                 start?: undefined;
             };
             custom?: undefined;
             entry?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -269,9 +269,7 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             ok: boolean;
             book: {
                 id: string;
@@ -297,10 +295,12 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -345,9 +345,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             ok: boolean;
             credit: {
                 xrep: string;
@@ -399,10 +397,12 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -443,9 +443,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             ok: boolean;
             credit: {
                 xrep?: undefined;
@@ -497,10 +495,12 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -541,9 +541,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             ok: boolean;
             creditTotal: number;
             debitTotal: number;
@@ -577,8 +575,10 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -619,9 +619,7 @@ declare const _default: {
             end?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             ok: boolean;
             creditTotal: number;
             debitTotal: number;
@@ -679,8 +677,10 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
+            normal?: undefined;
             target_bref?: undefined;
             end?: undefined;
             closing_date?: undefined;
@@ -720,7 +720,6 @@ declare const _default: {
             end?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
             credits?: undefined;
             debits?: undefined;
@@ -745,6 +744,7 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             target_bref?: undefined;
             closing_date?: undefined;
@@ -764,7 +764,6 @@ declare const _default: {
         pattern: string;
         params: {
             account?: undefined;
-            oref?: undefined;
             custom?: undefined;
             entry?: undefined;
             book: {
@@ -776,6 +775,7 @@ declare const _default: {
                 end: number;
             };
             id?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -787,9 +787,7 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             credits?: undefined;
             debits?: undefined;
             cq?: undefined;
@@ -815,10 +813,12 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -859,9 +859,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             credits?: undefined;
             debits?: undefined;
             cq?: undefined;
@@ -913,10 +911,12 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -941,13 +941,13 @@ declare const _default: {
         pattern: string;
         params: {
             account?: undefined;
-            oref?: undefined;
             custom?: undefined;
             entry?: undefined;
             book?: undefined;
             aref: string;
             bref: string;
             id?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -957,7 +957,6 @@ declare const _default: {
             end?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
             credits?: undefined;
             debits?: undefined;
@@ -982,6 +981,7 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             target_bref?: undefined;
             closing_date?: undefined;
@@ -1001,7 +1001,6 @@ declare const _default: {
         pattern: string;
         params: {
             account?: undefined;
-            oref?: undefined;
             custom?: undefined;
             entry?: undefined;
             book?: undefined;
@@ -1010,6 +1009,7 @@ declare const _default: {
             target_bref: string;
             end: number;
             id?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -1017,9 +1017,7 @@ declare const _default: {
             date?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             credits?: undefined;
             debits?: undefined;
             cq?: undefined;
@@ -1041,9 +1039,11 @@ declare const _default: {
             opening_balance: number;
             opening_balance_aref: string;
             closing_date: number;
+            why?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             end?: undefined;
             closure_successful?: undefined;
@@ -1078,7 +1078,6 @@ declare const _default: {
         };
         out: {
             account?: undefined;
-            normal?: undefined;
             credits?: undefined;
             debits?: undefined;
             cq?: undefined;
@@ -1097,6 +1096,7 @@ declare const _default: {
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -1121,11 +1121,11 @@ declare const _default: {
         pattern: string;
         params: {
             account?: undefined;
-            oref?: undefined;
             custom?: undefined;
             entry?: undefined;
             book?: undefined;
             id?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -1137,9 +1137,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             credits?: undefined;
             debits?: undefined;
             cq?: undefined;
@@ -1152,6 +1150,7 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             ok: boolean;
             book_id: string;
             bref: string;
@@ -1171,6 +1170,7 @@ declare const _default: {
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             end?: undefined;
             aref?: undefined;
@@ -1189,11 +1189,11 @@ declare const _default: {
         pattern: string;
         params: {
             account?: undefined;
-            oref?: undefined;
             custom?: undefined;
             entry?: undefined;
             book?: undefined;
             id?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -1205,7 +1205,6 @@ declare const _default: {
             end?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
             credits?: undefined;
             debits?: undefined;
@@ -1219,6 +1218,7 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             ok: boolean;
             aref: string;
@@ -1249,11 +1249,11 @@ declare const _default: {
         pattern: string;
         params: {
             account?: undefined;
-            oref?: undefined;
             custom?: undefined;
             entry?: undefined;
             book?: undefined;
             id?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -1265,9 +1265,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             credits?: undefined;
             debits?: undefined;
             cq?: undefined;
@@ -1280,10 +1278,12 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -1317,11 +1317,11 @@ declare const _default: {
         pattern: string;
         params: {
             account?: undefined;
-            oref?: undefined;
             custom?: undefined;
             entry?: undefined;
             book?: undefined;
             id?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -1333,9 +1333,7 @@ declare const _default: {
             bref: string;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             credits?: undefined;
             debits?: undefined;
             cq?: undefined;
@@ -1348,10 +1346,12 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -1377,11 +1377,11 @@ declare const _default: {
         pattern: string;
         params: {
             account?: undefined;
-            oref?: undefined;
             custom?: undefined;
             entry?: undefined;
             book?: undefined;
             id?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -1393,9 +1393,7 @@ declare const _default: {
             bref: string;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             credits?: undefined;
             debits?: undefined;
             cq?: undefined;
@@ -1408,10 +1406,12 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
@@ -1437,11 +1437,11 @@ declare const _default: {
         pattern: string;
         params: {
             account?: undefined;
-            oref?: undefined;
             custom?: undefined;
             entry?: undefined;
             book?: undefined;
             id?: undefined;
+            oref?: undefined;
             daref?: undefined;
             caref?: undefined;
             val?: undefined;
@@ -1453,9 +1453,7 @@ declare const _default: {
             bref: string;
         };
         out: {
-            why?: undefined;
             account?: undefined;
-            normal?: undefined;
             credits?: undefined;
             debits?: undefined;
             cq?: undefined;
@@ -1468,10 +1466,12 @@ declare const _default: {
             original_balance?: undefined;
             opening_balance?: undefined;
             opening_balance_aref?: undefined;
+            why?: undefined;
             target_book_id?: undefined;
             start?: undefined;
             creditTotal?: undefined;
             debitTotal?: undefined;
+            normal?: undefined;
             balance?: undefined;
             target_bref?: undefined;
             end?: undefined;
