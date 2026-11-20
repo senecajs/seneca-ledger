@@ -500,8 +500,24 @@ export interface LedgerActions {
 }
 export type LedgerAction = keyof LedgerActions;
 /** A seneca entity handle, as returned by `seneca.entity(canon)`. */
+/**
+ * The declared field names of T, without its index signature, so a typo in
+ * a field name is a compile error rather than an `unknown` field.
+ */
+export type DeclaredKeys<T> = keyof {
+    [P in keyof T as string extends P ? never : number extends P ? never : P]: T[P];
+};
 export interface SenecaEntityHandle<T> {
-    list$(q?: EntityQuery): Promise<SenecaEntity<T>[]>;
+    /**
+     * With `fields$`, seneca loads only those fields (plus `id`), so the
+     * result is typed with only those fields.
+     */
+    list$<K extends DeclaredKeys<T>>(q: EntityQuery & {
+        fields$: readonly K[];
+    }): Promise<SenecaEntity<Pick<T, K | Extract<'id', keyof T>>>[]>;
+    list$(q?: EntityQuery & {
+        fields$?: never;
+    }): Promise<SenecaEntity<T>[]>;
     load$(q: string | EntityQuery): Promise<SenecaEntity<T> | null>;
     data$(data: Partial<T>): SenecaEntity<T>;
 }
