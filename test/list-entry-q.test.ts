@@ -3,9 +3,7 @@
 import { test } from 'node:test'
 import { expect } from '@hapi/code'
 
-import Seneca from 'seneca'
-
-import Ledger from '..'
+import { makeSeneca } from './helper'
 
 test('list:entry does not mutate the caller q', async () => {
   const seneca = await makeSeneca()
@@ -24,16 +22,3 @@ test('list:entry does not mutate the caller q', async () => {
   expect(outFrozen.ok).true()
   expect(outFrozen.cq).equal({ val: 20, oref: 'o0' })
 })
-
-async function makeSeneca() {
-  const seneca = Seneca({ legacy: false })
-    .test()
-    .use('promisify')
-    .use('entity')
-    .use('entity-util', { when: { active: true } })
-    .use(Ledger)
-
-  await seneca.ready()
-
-  return seneca
-}
