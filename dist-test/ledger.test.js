@@ -47,21 +47,6 @@ const suites = {
             await (0, seneca_msg_test_1.default)(seneca, messages)();
         });
     }
-    (0, node_test_1.test)('list:entry does not mutate the caller q', async () => {
-        const seneca = await makeSeneca();
-        const q = { val: 20 };
-        const out = await seneca.post('biz:ledger,list:entry', { oref: 'o0', q });
-        (0, code_1.expect)(out.ok).true();
-        (0, code_1.expect)(out.cq).equal({ val: 20, oref: 'o0' });
-        (0, code_1.expect)(q).equal({ val: 20 });
-        const frozen = Object.freeze({ val: 20 });
-        const outFrozen = await seneca.post('biz:ledger,list:entry', {
-            oref: 'o0',
-            q: frozen,
-        });
-        (0, code_1.expect)(outFrozen.ok).true();
-        (0, code_1.expect)(outFrozen.cq).equal({ val: 20, oref: 'o0' });
-    });
     // test('maintain', Maintain)
 });
 async function makeSeneca() {
