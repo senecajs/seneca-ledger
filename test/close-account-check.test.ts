@@ -3,9 +3,7 @@
 import { test } from 'node:test'
 import { expect } from '@hapi/code'
 
-import Seneca from 'seneca'
-
-import Ledger from '..'
+import { makeSeneca } from './helper'
 
 test('close:account fails when a balance check fails', async () => {
   const seneca = await makeSeneca()
@@ -52,16 +50,3 @@ test('close:account fails when a balance check fails', async () => {
   expect(out).include({ ok: false, why: 'closing-balance-check-failed' })
   expect(out.error).include({ ok: false, why: 'forced-balance-failure' })
 })
-
-async function makeSeneca() {
-  const seneca = Seneca({ legacy: false })
-    .test()
-    .use('promisify')
-    .use('entity')
-    .use('entity-util', { when: { active: true } })
-    .use(Ledger)
-
-  await seneca.ready()
-
-  return seneca
-}

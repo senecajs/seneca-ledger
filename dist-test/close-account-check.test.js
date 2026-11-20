@@ -1,15 +1,11 @@
 "use strict";
 /* Copyright © 2026 Seneca Project Contributors, MIT License. */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const node_test_1 = require("node:test");
 const code_1 = require("@hapi/code");
-const seneca_1 = __importDefault(require("seneca"));
-const __1 = __importDefault(require(".."));
+const helper_1 = require("./helper");
 (0, node_test_1.test)('close:account fails when a balance check fails', async () => {
-    const seneca = await makeSeneca();
+    const seneca = await (0, helper_1.makeSeneca)();
     await seneca.post('biz:ledger,create:account', {
         account: { oref: 'o9', path: 'Asset', name: 'Cash', normal: 'debit' },
     });
@@ -47,14 +43,4 @@ const __1 = __importDefault(require(".."));
     (0, code_1.expect)(out).include({ ok: false, why: 'closing-balance-check-failed' });
     (0, code_1.expect)(out.error).include({ ok: false, why: 'forced-balance-failure' });
 });
-async function makeSeneca() {
-    const seneca = (0, seneca_1.default)({ legacy: false })
-        .test()
-        .use('promisify')
-        .use('entity')
-        .use('entity-util', { when: { active: true } })
-        .use(__1.default);
-    await seneca.ready();
-    return seneca;
-}
 //# sourceMappingURL=close-account-check.test.js.map
