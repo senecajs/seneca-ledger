@@ -35,12 +35,12 @@ const docs = {
         },
     },
     msgBalanceAccount: {
-        desc: 'Calculate the current balance of a ledger account for a given accounting period (book). Sums all debit and credit entries in the book and returns the net balance according to the account\'s `normal` direction.',
+        desc: "Calculate the current balance of a ledger account for a given accounting period (book). Sums all debit and credit entries in the book and returns the net balance according to the account's `normal` direction.",
         reply_desc: {
             ok: '_true_ on success',
             creditTotal: 'sum of credit entry values',
             debitTotal: 'sum of debit entry values',
-            balance: 'net balance according to the account\'s normal direction',
+            balance: "net balance according to the account's normal direction",
             account_id: 'account identifier',
             aref: 'account reference',
             book_id: 'book identifier',
@@ -161,7 +161,7 @@ const docs = {
         },
     },
     msgCreateEntry: {
-        desc: 'Create a double-entry journal entry that debits one account and credits another within a given book. Both the debit account (`daref` or `debit`) and credit account (`caref` or `credit`) must exist, and `val`, `desc`, and `date` are required. The entry `date` must fall within the book\'s period, and the book must not be closed.',
+        desc: "Create a double-entry journal entry that debits one account and credits another within a given book. Both the debit account (`daref` or `debit`) and credit account (`caref` or `credit`) must exist, and `val`, `desc`, and `date` are required. The entry `date` must fall within the book's period, and the book must not be closed.",
         reply_desc: {
             ok: '_true_ on success',
             credit: 'the saved credit entry entity',
