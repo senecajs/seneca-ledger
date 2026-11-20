@@ -1106,15 +1106,16 @@ function ledger(this: Seneca, options: LedgerOptions) {
       caref: creditAccountEnt.aref,
     }
 
-    let debitEntry = {
+    let creditEnt = await seneca.entity(creditCanon).data$(creditEntry).save$()
+
+    // The debit entry shares the credit entry's id.
+    const debitEntry = {
       ...sharedEntry,
+      id$: creditEnt.id,
       debit_id: debitAccountEnt.id,
       daref: debitAccountEnt.aref,
     }
 
-    let creditEnt = await seneca.entity(creditCanon).data$(creditEntry).save$()
-
-    debitEntry = { ...debitEntry, id$: creditEnt.id }
     let debitEnt = await seneca.entity(debitCanon).data$(debitEntry).save$()
 
     return {
@@ -1134,7 +1135,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
   ): Promise<ListEntryResult | InvalidResult> {
     const seneca = this
 
-    let q: { oref?: string; book_id?: string } = msg.q || {}
+    let q: Record<string, unknown> = msg.q || {}
 
     if (null == msg.oref) {
       return { ok: false, why: 'org-required' }
@@ -1155,7 +1156,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
     let accountEnt = await getAccount(seneca, accountCanon, msg)
 
     let credits: CreditEntity[] = []
-    let cq: { [key: string]: unknown } = { ...q }
+    let cq: Record<string, unknown> = { ...q }
     if (null != accountEnt) {
       cq.credit_id = accountEnt.id
     }
@@ -1165,7 +1166,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
     }
 
     let debits: DebitEntity[] = []
-    let dq: { [key: string]: unknown } = { ...q }
+    let dq: Record<string, unknown> = { ...q }
     if (null != accountEnt) {
       dq.debit_id = accountEnt.id
     }
