@@ -7,7 +7,6 @@ import Ledger from '..'
 import type { LedgerPlugin, BalanceTotals } from '..'
 
 test('exports', () => {
-  // dist/types.js used to throw "ledger is not defined" when required.
   expect(() => require('../dist/types.js')).not.throw()
 
   // The default export is typed as the full plugin, defaults and intern
