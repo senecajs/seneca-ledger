@@ -523,8 +523,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
     const verifyResults = await Promise.all(verifyPromises)
     const verifyClosingBalance = verifyResults[0] as BalanceAccountResult
     const verifyOpeningBalance = verifyResults[1] as
-      | BalanceAccountResult
-      | undefined
+      BalanceAccountResult | undefined
 
     return {
       ok: true,
