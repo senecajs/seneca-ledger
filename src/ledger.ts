@@ -705,9 +705,9 @@ function ledger(this: Seneca, options: LedgerOptions) {
       )
       .sort(
         (a, b) =>
-          a.normal.localeCompare(b.normal) ||
-          a.name.localeCompare(b.name) ||
-          a.aref.localeCompare(b.aref),
+          a.normal.localeCompare(b.normal, 'en') ||
+          a.name.localeCompare(b.name, 'en') ||
+          a.aref.localeCompare(b.aref, 'en'),
       )
 
     if (validAccounts.length === 0) {
