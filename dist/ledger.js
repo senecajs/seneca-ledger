@@ -766,13 +766,14 @@ function ledger(options) {
             credit_id: creditAccountEnt.id,
             caref: creditAccountEnt.aref,
         };
-        let debitEntry = {
+        let creditEnt = await seneca.entity(creditCanon).data$(creditEntry).save$();
+        // The debit entry shares the credit entry's id.
+        const debitEntry = {
             ...sharedEntry,
+            id$: creditEnt.id,
             debit_id: debitAccountEnt.id,
             daref: debitAccountEnt.aref,
         };
-        let creditEnt = await seneca.entity(creditCanon).data$(creditEntry).save$();
-        debitEntry = { ...debitEntry, id$: creditEnt.id };
         let debitEnt = await seneca.entity(debitCanon).data$(debitEntry).save$();
         return {
             ok: true,
