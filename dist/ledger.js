@@ -315,7 +315,7 @@ function ledger(options) {
         if (!closingResult || !closingResult.ok) {
             return { ok: false, why: 'closing-entry-failed', error: closingResult };
         }
-        if (targetBookEnt && openingResult && !openingResult.ok) {
+        if (openingResult && !openingResult.ok) {
             return { ok: false, why: 'opening-entry-failed', error: openingResult };
         }
         const verifyPromises = [
@@ -554,7 +554,9 @@ function ledger(options) {
             };
         }
         const obAref = msg.opening_balance_aref || `${bookEnt.oref}/Equity/Opening Balance`;
-        let obEnt = await getAccount(seneca, accountCanon, { aref: obAref });
+        let obEnt = await getAccount(seneca, accountCanon, {
+            aref: obAref,
+        });
         if (null == obEnt) {
             const createResult = await seneca.post('biz:ledger,create:account', {
                 account: {
@@ -806,8 +808,7 @@ function ledger(options) {
             cq.credit_id = accountEnt.id;
         }
         if (null == msg.credit || !!msg.credit) {
-            credits = await seneca.entity(creditCanon).list$(cq);
-            credits = credits.map((entry) => entry.data$(false));
+            credits = (await seneca.entity(creditCanon).list$(cq)).map((entry) => entry.data$(false));
         }
         let debits = [];
         let dq = { ...q };
@@ -815,8 +816,7 @@ function ledger(options) {
             dq.debit_id = accountEnt.id;
         }
         if (null == msg.debit || !!msg.debit) {
-            debits = await seneca.entity(debitCanon).list$(dq);
-            debits = debits.map((entry) => entry.data$(false));
+            debits = (await seneca.entity(debitCanon).list$(dq)).map((entry) => entry.data$(false));
         }
         let totals = calcTotals(accountEnt, credits, debits);
         let out = {

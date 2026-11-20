@@ -9,6 +9,12 @@ import type { Instance } from 'seneca';
  * bare `any` across the codebase.
  */
 export type Seneca = Instance;
+/**
+ * A seneca entity query: field filters plus seneca directives such as
+ * `sort$` or `limit$`. Values are `unknown` because callers can filter on any
+ * field.
+ */
+export type EntityQuery = Record<string, unknown>;
 /** Debit or Credit indicator */
 export type DC = 'debit' | 'credit';
 /** Entry kind indicator */
@@ -30,6 +36,15 @@ export interface BookIdentifier {
     book_id?: string;
     bref?: string;
 }
+/**
+ * A loaded seneca entity: the record's fields plus the entity methods the
+ * ledger calls. `data$(false)` returns the plain record.
+ */
+export type SenecaEntity<T> = T & {
+    data$(flag: false): T;
+    data$(data: Partial<T>): SenecaEntity<T>;
+    save$(): Promise<SenecaEntity<T>>;
+};
 /** Account entity */
 export type AccountEntity = {
     id: string;
@@ -42,7 +57,7 @@ export type AccountEntity = {
     path0?: string;
     path1?: string;
     path2?: string;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 /** Book entity */
 export type BookEntity = {
@@ -55,7 +70,7 @@ export type BookEntity = {
     end: number;
     time: TimeSpec;
     closed?: boolean;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 /** Credit entry entity */
 export type CreditEntity = {
@@ -70,12 +85,12 @@ export type CreditEntity = {
     book_id: string;
     credit_id: string;
     caref: string;
-    custom: Record<string, any>;
+    custom: Record<string, unknown>;
     date: number;
     baseval: number;
     basecur: string;
     baserate: number;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 /** Debit entry entity */
 export type DebitEntity = {
@@ -90,12 +105,12 @@ export type DebitEntity = {
     book_id: string;
     debit_id: string;
     daref: string;
-    custom: Record<string, any>;
+    custom: Record<string, unknown>;
     date: number;
     baseval: number;
     basecur: string;
     baserate: number;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 /** Balance entity */
 export type BalanceEntity = {
@@ -106,12 +121,12 @@ export type BalanceEntity = {
     creditTotal: number;
     debitTotal: number;
     when: number;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 /** Time specification for books */
 export type TimeSpec = {
     kind: string;
-    [key: string]: any;
+    [key: string]: unknown;
 };
 /** Ledger plugin options */
 export interface LedgerOptions {
@@ -212,28 +227,22 @@ export interface CreateEntryInput extends BookIdentifier {
     basecur?: string;
     baserate?: number;
     kind?: EntryKind;
-    custom?: Record<string, any>;
-    entry?: Record<string, any>;
+    custom?: Record<string, unknown>;
+    entry?: Record<string, unknown>;
 }
 /** Input for void:entry message */
-export interface VoidEntryInput {
-    [key: string]: any;
-}
+export type VoidEntryInput = Record<string, unknown>;
 /** Input for list:entry message */
 export interface ListEntryInput extends Omit<BookIdentifier, 'id'>, Omit<AccountIdentifier, 'id'> {
     oref: string;
     credit?: boolean;
     debit?: boolean;
-    q?: Record<string, any>;
+    q?: EntityQuery;
 }
 /** Input for list:balance message */
-export interface ListBalanceInput {
-    [key: string]: any;
-}
+export type ListBalanceInput = Record<string, unknown>;
 /** Input for balance:book message */
-export interface BalanceBookInput {
-    [key: string]: any;
-}
+export type BalanceBookInput = Record<string, unknown>;
 /** Base result type */
 export interface BaseResult {
     ok: boolean;
@@ -242,7 +251,7 @@ export interface BaseResult {
 export interface InvalidResult extends BaseResult {
     ok: false;
     why: string;
-    error?: Record<string, any>;
+    error?: InvalidResult;
 }
 /** Result for create:account message */
 export interface CreateAccountResult extends BaseResult {
@@ -257,7 +266,7 @@ export interface GetAccountResult extends BaseResult {
 /** Result for list:account message */
 export interface ListAccountResult extends BaseResult {
     ok: true;
-    q: Record<string, any>;
+    q: EntityQuery;
     list: AccountEntity[];
 }
 /** Result for update:account message */
@@ -313,8 +322,8 @@ export interface ClosedAccount extends BaseResult {
     closing_balance: number;
     opening_balance: number | null;
     opening_balance_aref: string | null;
-    closing_entries: Record<string, any>[];
-    opening_entries: Record<string, any>[];
+    closing_entries: CreateEntryResult[];
+    opening_entries: CreateEntryResult[];
     closing_date: number;
 }
 /** Result for create:book message */
@@ -330,7 +339,7 @@ export interface GetBookResult extends BaseResult {
 /** Result for list:book message */
 export interface ListBookResult extends BaseResult {
     ok: true;
-    q: Record<string, any>;
+    q: EntityQuery;
     list: BookEntity[];
 }
 /** Result for update:book message */
@@ -408,8 +417,8 @@ export interface ListEntryResult extends BaseResult, BalanceTotals {
     ok: true;
     credits: CreditEntity[];
     debits: DebitEntity[];
-    cq: Record<string, any>;
-    dq: Record<string, any>;
+    cq: EntityQuery;
+    dq: EntityQuery;
 }
 /** Processed entry for CSV generation */
 export interface ProcessedEntry {
@@ -421,9 +430,9 @@ export interface ProcessedEntry {
     kind: EntryKind;
 }
 /** Get book helper function */
-export type GetBookFn = (seneca: any, bookCanon: string, msg: BookIdentifier) => Promise<BookEntity | null>;
+export type GetBookFn = (seneca: any, bookCanon: string, msg: BookIdentifier) => Promise<SenecaEntity<BookEntity> | null>;
 /** Get account helper function */
-export type GetAccountFn = (seneca: any, accountCanon: string, msg: AccountIdentifier) => Promise<AccountEntity | null>;
+export type GetAccountFn = (seneca: any, accountCanon: string, msg: AccountIdentifier) => Promise<SenecaEntity<AccountEntity> | null>;
 /** Calculate totals helper function */
 export type CalcTotalsFn = (accountEnt: AccountEntity | null, creditEnts: CreditEntity[], debitEnts: DebitEntity[]) => BalanceTotals;
 /** Format date to YYYYMMDD helper function */
@@ -450,10 +459,10 @@ export type MsgUpdateBookFn = (msg: UpdateBookInput) => Promise<UpdateBookResult
 export type MsgExportBookCSVFn = (msg: ExportBookCSVInput) => Promise<ExportBookCSVResult | InvalidResult>;
 export type MsgCloseBookFn = (msg: CloseBookInput) => Promise<ClosedBook | InvalidResult>;
 export type MsgCreateEntryFn = (msg: CreateEntryInput) => Promise<CreateEntryResult | InvalidResult>;
-export type MsgVoidEntryFn = (msg: VoidEntryInput) => Promise<any>;
+export type MsgVoidEntryFn = (msg: VoidEntryInput) => Promise<void>;
 export type MsgListEntryFn = (msg: ListEntryInput) => Promise<ListEntryResult | InvalidResult>;
-export type MsgListBalanceFn = (msg: ListBalanceInput) => Promise<any>;
-export type MsgBalanceBookFn = (msg: BalanceBookInput) => Promise<any>;
+export type MsgListBalanceFn = (msg: ListBalanceInput) => Promise<void>;
+export type MsgBalanceBookFn = (msg: BalanceBookInput) => Promise<void>;
 /** Ledger plugin function */
 export interface LedgerPlugin {
     (this: any, options: LedgerOptions): void;

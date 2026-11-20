@@ -3,6 +3,8 @@
 import type {
   // Base Types
   Seneca,
+  EntityQuery,
+  SenecaEntity,
   DC,
   EntryKind,
 
@@ -192,7 +194,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
     }
 
     let list = await seneca.entity(accountCanon).list$(q)
-    list = list.map((ent: AccountEntity) => ent.data$(false))
+    list = list.map((ent: SenecaEntity<AccountEntity>) => ent.data$(false))
     return { ok: true, q, list }
   }
 
@@ -427,7 +429,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
     const obAref =
       msg.opening_balance_aref || `${accountEnt.oref}/Equity/Opening Balance`
 
-    let obEnt = await getAccount(seneca, accountCanon, {
+    let obEnt: AccountEntity | null = await getAccount(seneca, accountCanon, {
       aref: obAref,
     })
 
@@ -498,7 +500,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
       return { ok: false, why: 'closing-entry-failed', error: closingResult }
     }
 
-    if (targetBookEnt && openingResult && !openingResult.ok) {
+    if (openingResult && !openingResult.ok) {
       return { ok: false, why: 'opening-entry-failed', error: openingResult }
     }
 
@@ -623,7 +625,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
 
     let list = await seneca.entity(bookCanon).list$(q)
 
-    list = list.map((ent: BookEntity) => ent.data$(false))
+    list = list.map((ent: SenecaEntity<BookEntity>) => ent.data$(false))
 
     return { ok: true, q, list }
   }
@@ -677,7 +679,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
     const accounts = await Promise.all(accountPromises)
 
     const validAccounts = accounts.filter(
-      (acc): acc is AccountEntity =>
+      (acc): acc is SenecaEntity<AccountEntity> =>
         acc !== null && acc.aref !== `${bookEnt.oref}/Equity/Opening Balance`,
     )
 
@@ -824,7 +826,9 @@ function ledger(this: Seneca, options: LedgerOptions) {
     const obAref =
       msg.opening_balance_aref || `${bookEnt.oref}/Equity/Opening Balance`
 
-    let obEnt = await getAccount(seneca, accountCanon, { aref: obAref })
+    let obEnt: AccountEntity | null = await getAccount(seneca, accountCanon, {
+      aref: obAref,
+    })
 
     if (null == obEnt) {
       const createResult: CreateAccountResult | InvalidResult =
@@ -854,7 +858,8 @@ function ledger(this: Seneca, options: LedgerOptions) {
     )
     const accounts = await Promise.all(accountPromises)
     const accountsToClose = accounts.filter(
-      (acc): acc is AccountEntity => acc !== null && acc.aref !== obAref,
+      (acc): acc is SenecaEntity<AccountEntity> =>
+        acc !== null && acc.aref !== obAref,
     )
 
     if (accountsToClose.length === 0) {
@@ -1137,7 +1142,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
     const seneca = this
 
     // Copy the caller's filter so it is not mutated (and so a frozen q works).
-    let q: Record<string, unknown> = { ...msg.q }
+    let q: EntityQuery = { ...msg.q }
 
     if (null == msg.oref) {
       return { ok: false, why: 'org-required' }
@@ -1158,23 +1163,25 @@ function ledger(this: Seneca, options: LedgerOptions) {
     let accountEnt = await getAccount(seneca, accountCanon, msg)
 
     let credits: CreditEntity[] = []
-    let cq: Record<string, unknown> = { ...q }
+    let cq: EntityQuery = { ...q }
     if (null != accountEnt) {
       cq.credit_id = accountEnt.id
     }
     if (null == msg.credit || !!msg.credit) {
-      credits = await seneca.entity(creditCanon).list$(cq)
-      credits = credits.map((entry: CreditEntity) => entry.data$(false))
+      credits = (await seneca.entity(creditCanon).list$(cq)).map(
+        (entry: SenecaEntity<CreditEntity>) => entry.data$(false),
+      )
     }
 
     let debits: DebitEntity[] = []
-    let dq: Record<string, unknown> = { ...q }
+    let dq: EntityQuery = { ...q }
     if (null != accountEnt) {
       dq.debit_id = accountEnt.id
     }
     if (null == msg.debit || !!msg.debit) {
-      debits = await seneca.entity(debitCanon).list$(dq)
-      debits = debits.map((entry: DebitEntity) => entry.data$(false))
+      debits = (await seneca.entity(debitCanon).list$(dq)).map(
+        (entry: SenecaEntity<DebitEntity>) => entry.data$(false),
+      )
     }
 
     let totals = calcTotals(accountEnt, credits, debits)
@@ -1196,8 +1203,8 @@ async function getBook(
   seneca: Seneca,
   bookCanon: string,
   msg: BookIdentifier,
-): Promise<BookEntity | null> {
-  let bookEnt: BookEntity | null = null
+): Promise<SenecaEntity<BookEntity> | null> {
+  let bookEnt: SenecaEntity<BookEntity> | null = null
 
   if (null != msg.bref) {
     bookEnt = await seneca.entity(bookCanon).load$({ bref: msg.bref })
@@ -1218,8 +1225,8 @@ async function getAccount(
   seneca: Seneca,
   accountCanon: string,
   msg: AccountIdentifier,
-): Promise<AccountEntity | null> {
-  let accountEnt: AccountEntity | null = null
+): Promise<SenecaEntity<AccountEntity> | null> {
+  let accountEnt: SenecaEntity<AccountEntity> | null = null
   if (null != msg.aref) {
     accountEnt = await seneca.entity(accountCanon).load$({ aref: msg.aref })
   }
