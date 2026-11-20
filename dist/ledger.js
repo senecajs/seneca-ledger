@@ -91,8 +91,7 @@ function ledger(options) {
         if (null != org_id) {
             q.org_id = org_id;
         }
-        let list = await seneca.entity(accountCanon).list$(q);
-        list = list.map((ent) => ent.data$(false));
+        const list = (await seneca.entity(accountCanon).list$(q)).map((ent) => ent.data$(false));
         return { ok: true, q, list };
     }
     async function msgUpdateAccount(msg) {
@@ -315,7 +314,7 @@ function ledger(options) {
         if (!closingResult || !closingResult.ok) {
             return { ok: false, why: 'closing-entry-failed', error: closingResult };
         }
-        if (targetBookEnt && openingResult && !openingResult.ok) {
+        if (openingResult && !openingResult.ok) {
             return { ok: false, why: 'opening-entry-failed', error: openingResult };
         }
         const verifyPromises = [
@@ -402,8 +401,7 @@ function ledger(options) {
         if (null != org_id) {
             q.org_id = org_id;
         }
-        let list = await seneca.entity(bookCanon).list$(q);
-        list = list.map((ent) => ent.data$(false));
+        const list = (await seneca.entity(bookCanon).list$(q)).map((ent) => ent.data$(false));
         return { ok: true, q, list };
     }
     async function msgExportBookCSV(msg) {
@@ -554,7 +552,9 @@ function ledger(options) {
             };
         }
         const obAref = msg.opening_balance_aref || `${bookEnt.oref}/Equity/Opening Balance`;
-        let obEnt = await getAccount(seneca, accountCanon, { aref: obAref });
+        let obEnt = await getAccount(seneca, accountCanon, {
+            aref: obAref,
+        });
         if (null == obEnt) {
             const createResult = await seneca.post('biz:ledger,create:account', {
                 account: {
@@ -766,14 +766,21 @@ function ledger(options) {
             credit_id: creditAccountEnt.id,
             caref: creditAccountEnt.aref,
         };
-        let debitEntry = {
+        let creditEnt = await seneca
+            .entity(creditCanon)
+            .data$(creditEntry)
+            .save$();
+        // The debit entry shares the credit entry's id.
+        const debitEntry = {
             ...sharedEntry,
+            id$: creditEnt.id,
             debit_id: debitAccountEnt.id,
             daref: debitAccountEnt.aref,
         };
-        let creditEnt = await seneca.entity(creditCanon).data$(creditEntry).save$();
-        debitEntry = { ...debitEntry, id$: creditEnt.id };
-        let debitEnt = await seneca.entity(debitCanon).data$(debitEntry).save$();
+        let debitEnt = await seneca
+            .entity(debitCanon)
+            .data$(debitEntry)
+            .save$();
         return {
             ok: true,
             credit: creditEnt.data$(false),
@@ -785,7 +792,8 @@ function ledger(options) {
     }
     async function msgListEntry(msg) {
         const seneca = this;
-        let q = msg.q || {};
+        // Copy the caller's filter so it is not mutated (and so a frozen q works).
+        let q = { ...msg.q };
         if (null == msg.oref) {
             return { ok: false, why: 'org-required' };
         }
@@ -804,8 +812,7 @@ function ledger(options) {
             cq.credit_id = accountEnt.id;
         }
         if (null == msg.credit || !!msg.credit) {
-            credits = await seneca.entity(creditCanon).list$(cq);
-            credits = credits.map((entry) => entry.data$(false));
+            credits = (await seneca.entity(creditCanon).list$(cq)).map((entry) => entry.data$(false));
         }
         let debits = [];
         let dq = { ...q };
@@ -813,8 +820,7 @@ function ledger(options) {
             dq.debit_id = accountEnt.id;
         }
         if (null == msg.debit || !!msg.debit) {
-            debits = await seneca.entity(debitCanon).list$(dq);
-            debits = debits.map((entry) => entry.data$(false));
+            debits = (await seneca.entity(debitCanon).list$(dq)).map((entry) => entry.data$(false));
         }
         let totals = calcTotals(accountEnt, credits, debits);
         let out = {
@@ -831,7 +837,9 @@ function ledger(options) {
 async function getBook(seneca, bookCanon, msg) {
     let bookEnt = null;
     if (null != msg.bref) {
-        bookEnt = await seneca.entity(bookCanon).load$({ bref: msg.bref });
+        bookEnt = await seneca
+            .entity(bookCanon)
+            .load$({ bref: msg.bref });
     }
     if (null == bookEnt && null != msg.id) {
         bookEnt = await seneca.entity(bookCanon).load$(msg.id);
@@ -844,13 +852,17 @@ async function getBook(seneca, bookCanon, msg) {
 async function getAccount(seneca, accountCanon, msg) {
     let accountEnt = null;
     if (null != msg.aref) {
-        accountEnt = await seneca.entity(accountCanon).load$({ aref: msg.aref });
+        accountEnt = await seneca
+            .entity(accountCanon)
+            .load$({ aref: msg.aref });
     }
     if (null == accountEnt && null != msg.id) {
         accountEnt = await seneca.entity(accountCanon).load$(msg.id);
     }
     if (null == accountEnt && null != msg.account_id) {
-        accountEnt = await seneca.entity(accountCanon).load$(msg.account_id);
+        accountEnt = await seneca
+            .entity(accountCanon)
+            .load$(msg.account_id);
     }
     return accountEnt;
 }
