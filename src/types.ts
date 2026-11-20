@@ -7,13 +7,13 @@ import type { Instance } from 'seneca'
 // ============================================================================
 
 /**
- * The Seneca instance.
+ * The Seneca instance, as passed to the plugin by consumers.
  *
- * Seneca is not strictly typed: its exported `Instance` resolves to
- * `Record<string, any>`, so member access is effectively untyped. We alias it
- * here to mark every `this`/`seneca` boundary as a deliberate, contained
- * exception to the project's otherwise-strict typing, rather than scattering
- * bare `any` across the codebase.
+ * seneca's own typings declare `make_seneca(): any`, so its exported
+ * `Instance` is `any`. This alias stays as the plugin's public `this` type so
+ * any real seneca instance is accepted. Inside the plugin, the instance is
+ * used through `LedgerSeneca` instead, which types the members the ledger
+ * calls.
  */
 export type Seneca = Instance
 
@@ -198,7 +198,7 @@ export interface UpdateAccountInput extends AccountIdentifier {
 /** Input for balance:account message */
 export interface BalanceAccountInput
   extends Omit<AccountIdentifier, 'id'>, Omit<BookIdentifier, 'id'> {
-  save: boolean // true => save to ledger/balance
+  save?: boolean // true => save to ledger/balance (not implemented yet)
 }
 
 /** Input for export:account,format:csv message */
@@ -508,6 +508,83 @@ export interface ListEntryResult extends BaseResult, BalanceTotals {
   debits: DebitEntity[]
   cq: EntityQuery
   dq: EntityQuery
+}
+
+// ============================================================================
+// Typed Seneca Boundary
+// ============================================================================
+
+/**
+ * Every `biz:ledger` action: its message input and its result. Used to type
+ * both `seneca.message(...)` registration and `seneca.post(...)` calls.
+ */
+export interface LedgerActions {
+  'create:account': {
+    in: CreateAccountInput
+    out: CreateAccountResult | InvalidResult
+  }
+  'get:account': { in: GetAccountInput; out: GetAccountResult | InvalidResult }
+  'list:account': { in: ListAccountInput; out: ListAccountResult }
+  'update:account': {
+    in: UpdateAccountInput
+    out: UpdateAccountResult | InvalidResult
+  }
+  'balance:account': {
+    in: BalanceAccountInput
+    out: BalanceAccountResult | InvalidResult
+  }
+  'export:account,format:csv': {
+    in: ExportAccountCSVInput
+    out: ExportAccountCSVResult | InvalidResult
+  }
+  'close:account': { in: CloseAccountInput; out: ClosedAccount | InvalidResult }
+  'create:book': { in: CreateBookInput; out: CreateBookResult | InvalidResult }
+  'get:book': { in: GetBookInput; out: GetBookResult | InvalidResult }
+  'update:book': { in: UpdateBookInput; out: UpdateBookResult | InvalidResult }
+  'list:book': { in: ListBookInput; out: ListBookResult }
+  'export:book,format:csv': {
+    in: ExportBookCSVInput
+    out: ExportBookCSVResult | InvalidResult
+  }
+  'close:book': { in: CloseBookInput; out: ClosedBook | InvalidResult }
+  'list:balance': { in: ListBalanceInput; out: void }
+  'balance:book': { in: BalanceBookInput; out: void }
+  'create:entry': {
+    in: CreateEntryInput
+    out: CreateEntryResult | InvalidResult
+  }
+  'void:entry': { in: VoidEntryInput; out: void }
+  'list:entry': { in: ListEntryInput; out: ListEntryResult | InvalidResult }
+}
+
+export type LedgerAction = keyof LedgerActions
+
+/** A seneca entity handle, as returned by `seneca.entity(canon)`. */
+export interface SenecaEntityHandle<T> {
+  list$(q?: EntityQuery): Promise<SenecaEntity<T>[]>
+  load$(q: string | EntityQuery): Promise<SenecaEntity<T> | null>
+  data$(data: Partial<T>): SenecaEntity<T>
+}
+
+/**
+ * The members of the seneca instance the ledger plugin uses, typed. The
+ * plugin's `this` is the untyped `Seneca`; it is used through this interface.
+ */
+export interface LedgerSeneca {
+  fix(pattern: 'biz:ledger'): LedgerSeneca
+  message<A extends LedgerAction>(
+    pattern: A,
+    action: (
+      this: LedgerSeneca,
+      msg: LedgerActions[A]['in'],
+    ) => Promise<LedgerActions[A]['out']>,
+  ): LedgerSeneca
+  post<A extends LedgerAction>(
+    pattern: `biz:ledger,${A}`,
+    msg: LedgerActions[A]['in'],
+  ): Promise<LedgerActions[A]['out']>
+  entity<T>(canon: string): SenecaEntityHandle<T>
+  util: { Nid(opts: { length: number }): () => string }
 }
 
 // ============================================================================

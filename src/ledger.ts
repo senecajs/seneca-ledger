@@ -3,6 +3,7 @@
 import type {
   // Base Types
   Seneca,
+  LedgerSeneca,
   EntityQuery,
   SenecaEntity,
   DC,
@@ -73,7 +74,7 @@ import type {
  */
 
 function ledger(this: Seneca, options: LedgerOptions) {
-  const seneca = this
+  const seneca: LedgerSeneca = this
 
   const accountCanon = options.entity.base + '/account'
   const bookCanon = options.entity.base + '/book'
@@ -103,7 +104,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
     .message('list:entry', msgListEntry)
 
   async function msgCreateAccount(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: CreateAccountInput,
   ): Promise<CreateAccountResult | InvalidResult> {
     const seneca = this
@@ -149,7 +150,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
     }
 
     let accountEnt = await seneca
-      .entity(accountCanon)
+      .entity<AccountEntity>(accountCanon)
       .data$({
         id$: account.id$,
         ...pathParts,
@@ -166,7 +167,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
   }
 
   async function msgGetAccount(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: GetAccountInput,
   ): Promise<GetAccountResult | InvalidResult> {
     const seneca = this
@@ -181,7 +182,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
   }
 
   async function msgListAccount(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: ListAccountInput,
   ): Promise<ListAccountResult> {
     const seneca = this
@@ -193,13 +194,14 @@ function ledger(this: Seneca, options: LedgerOptions) {
       q.org_id = org_id
     }
 
-    let list = await seneca.entity(accountCanon).list$(q)
-    list = list.map((ent: SenecaEntity<AccountEntity>) => ent.data$(false))
+    const list = (
+      await seneca.entity<AccountEntity>(accountCanon).list$(q)
+    ).map((ent) => ent.data$(false))
     return { ok: true, q, list }
   }
 
   async function msgUpdateAccount(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: UpdateAccountInput,
   ): Promise<UpdateAccountResult | InvalidResult> {
     const seneca = this
@@ -221,7 +223,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
 
   // TODO: save to ledger/balance by book, default but optional
   async function msgBalanceAccount(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: BalanceAccountInput,
   ): Promise<BalanceAccountResult | InvalidResult> {
     const seneca = this
@@ -248,8 +250,8 @@ function ledger(this: Seneca, options: LedgerOptions) {
       book_id: bookEnt.id,
     }
 
-    let credits = await seneca.entity(creditCanon).list$(cq)
-    let debits = await seneca.entity(debitCanon).list$(dq)
+    let credits = await seneca.entity<CreditEntity>(creditCanon).list$(cq)
+    let debits = await seneca.entity<DebitEntity>(debitCanon).list$(dq)
 
     let totals = calcTotals(accountEnt, credits, debits)
     const currUnixTime = Date.now()
@@ -275,7 +277,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
   }
 
   async function msgExportAccountCSV(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: ExportAccountCSVInput,
   ): Promise<ExportAccountCSVResult | InvalidResult> {
     const seneca = this
@@ -354,7 +356,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
   }
 
   async function msgCloseAccount(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: CloseAccountInput,
   ): Promise<ClosedAccount | InvalidResult> {
     const seneca = this
@@ -545,7 +547,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
   }
 
   async function msgCreateBook(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: CreateBookInput,
   ): Promise<CreateBookResult | InvalidResult> {
     const seneca = this
@@ -579,7 +581,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
     let bref = oref + '/' + name + '/' + start
 
     let bookEnt = await seneca
-      .entity(bookCanon)
+      .entity<BookEntity>(bookCanon)
       .data$({
         id$: book.id$,
         org_id,
@@ -596,7 +598,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
   }
 
   async function msgGetBook(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: GetBookInput,
   ): Promise<GetBookResult | InvalidResult> {
     const seneca = this
@@ -611,7 +613,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
   }
 
   async function msgListBook(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: ListBookInput,
   ): Promise<ListBookResult> {
     const seneca = this
@@ -623,15 +625,15 @@ function ledger(this: Seneca, options: LedgerOptions) {
       q.org_id = org_id
     }
 
-    let list = await seneca.entity(bookCanon).list$(q)
-
-    list = list.map((ent: SenecaEntity<BookEntity>) => ent.data$(false))
+    const list = (await seneca.entity<BookEntity>(bookCanon).list$(q)).map(
+      (ent) => ent.data$(false),
+    )
 
     return { ok: true, q, list }
   }
 
   async function msgExportBookCSV(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: ExportBookCSVInput,
   ): Promise<ExportBookCSVResult | InvalidResult> {
     const seneca = this
@@ -643,11 +645,11 @@ function ledger(this: Seneca, options: LedgerOptions) {
     }
 
     const [allCredits, allDebits] = await Promise.all([
-      seneca.entity(creditCanon).list$({
+      seneca.entity<CreditEntity>(creditCanon).list$({
         book_id: bookEnt.id,
         fields$: ['credit_id', 'caref'],
       }),
-      seneca.entity(debitCanon).list$({
+      seneca.entity<DebitEntity>(debitCanon).list$({
         book_id: bookEnt.id,
         fields$: ['debit_id', 'daref'],
       }),
@@ -655,8 +657,8 @@ function ledger(this: Seneca, options: LedgerOptions) {
 
     const accountIds: string[] = [
       ...new Set([
-        ...allCredits.map((entry: CreditEntity) => entry.credit_id),
-        ...allDebits.map((entry: DebitEntity) => entry.debit_id),
+        ...allCredits.map((entry) => entry.credit_id),
+        ...allDebits.map((entry) => entry.debit_id),
       ]),
     ]
 
@@ -704,12 +706,11 @@ function ledger(this: Seneca, options: LedgerOptions) {
     for (let i = 0; i < validAccounts.length; i += batchSize) {
       const batch = validAccounts.slice(i, i + batchSize)
 
-      const exportPromises = batch.map(
-        (accountEnt) =>
-          seneca.post('biz:ledger,export:account,format:csv', {
-            account_id: accountEnt.id,
-            book_id: bookEnt.id,
-          }) as Promise<ExportAccountCSVResult | InvalidResult>,
+      const exportPromises = batch.map((accountEnt) =>
+        seneca.post('biz:ledger,export:account,format:csv', {
+          account_id: accountEnt.id,
+          book_id: bookEnt.id,
+        }),
       )
 
       const batchResults = await Promise.all(exportPromises)
@@ -751,7 +752,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
   }
 
   async function msgCloseBook(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: CloseBookInput,
   ): Promise<ClosedBook | InvalidResult> {
     const seneca = this
@@ -781,17 +782,17 @@ function ledger(this: Seneca, options: LedgerOptions) {
 
     const [allCredits, allDebits] = await Promise.all([
       seneca
-        .entity(creditCanon)
+        .entity<CreditEntity>(creditCanon)
         .list$({ book_id: bookEnt.id, fields$: ['credit_id'] }),
       seneca
-        .entity(debitCanon)
+        .entity<DebitEntity>(debitCanon)
         .list$({ book_id: bookEnt.id, fields$: ['debit_id'] }),
     ])
 
     const accountIds: string[] = [
       ...new Set([
-        ...allCredits.map((entry: CreditEntity) => entry.credit_id),
-        ...allDebits.map((entry: DebitEntity) => entry.debit_id),
+        ...allCredits.map((entry) => entry.credit_id),
+        ...allDebits.map((entry) => entry.debit_id),
       ]),
     ]
 
@@ -895,16 +896,15 @@ function ledger(this: Seneca, options: LedgerOptions) {
     for (let i = 0; i < accountsToClose.length; i += batchSize) {
       const batch = accountsToClose.slice(i, i + batchSize)
 
-      const closurePromises = batch.map(
-        (accountEnt) =>
-          seneca.post('biz:ledger,close:account', {
-            account_id: accountEnt.id,
-            book_id: bookEnt.id,
-            target_book_id: targetBookEnt?.id,
-            target_bref: targetBookEnt?.bref,
-            end: bookEnt.end,
-            opening_balance_aref: obAref,
-          }) as Promise<ClosedAccount | InvalidResult>,
+      const closurePromises = batch.map((accountEnt) =>
+        seneca.post('biz:ledger,close:account', {
+          account_id: accountEnt.id,
+          book_id: bookEnt.id,
+          target_book_id: targetBookEnt?.id,
+          target_bref: targetBookEnt?.bref,
+          end: bookEnt.end,
+          opening_balance_aref: obAref,
+        }),
       )
 
       const batchResults = await Promise.all(closurePromises)
@@ -947,8 +947,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
     }
 
     const allAccZeroed = accountClosures.every(
-      (ac) =>
-        ac.result.ok && (ac.result as ClosedAccount).closing_balance === 0,
+      (ac) => ac.result.ok && ac.result.closing_balance === 0,
     )
     const closureSuccessful = failedClosures === 0 && allAccZeroed
 
@@ -984,7 +983,7 @@ function ledger(this: Seneca, options: LedgerOptions) {
   }
 
   async function msgUpdateBook(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: UpdateBookInput,
   ): Promise<UpdateBookResult | InvalidResult> {
     const seneca = this
@@ -1004,18 +1003,18 @@ function ledger(this: Seneca, options: LedgerOptions) {
     return { ok: true, book: bookEnt.data$(false) }
   }
 
-  async function msgListBalance(this: Seneca, _msg: ListBalanceInput) {
+  async function msgListBalance(this: LedgerSeneca, _msg: ListBalanceInput) {
     // TODO: list ledger/balance for book
   }
 
-  async function msgBalanceBook(this: Seneca, _msg: BalanceBookInput) {
+  async function msgBalanceBook(this: LedgerSeneca, _msg: BalanceBookInput) {
     // TODO: for all accounts in book (from entries), balance account,
     // and save to ledger/balance
   }
 
   // TODO: mark ledger/balance stale
   async function msgCreateEntry(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: CreateEntryInput,
   ): Promise<CreateEntryResult | InvalidResult> {
     const seneca = this
@@ -1112,7 +1111,10 @@ function ledger(this: Seneca, options: LedgerOptions) {
       caref: creditAccountEnt.aref,
     }
 
-    let creditEnt = await seneca.entity(creditCanon).data$(creditEntry).save$()
+    let creditEnt = await seneca
+      .entity<CreditEntity>(creditCanon)
+      .data$(creditEntry)
+      .save$()
 
     // The debit entry shares the credit entry's id.
     const debitEntry = {
@@ -1122,7 +1124,10 @@ function ledger(this: Seneca, options: LedgerOptions) {
       daref: debitAccountEnt.aref,
     }
 
-    let debitEnt = await seneca.entity(debitCanon).data$(debitEntry).save$()
+    let debitEnt = await seneca
+      .entity<DebitEntity>(debitCanon)
+      .data$(debitEntry)
+      .save$()
 
     return {
       ok: true,
@@ -1131,12 +1136,12 @@ function ledger(this: Seneca, options: LedgerOptions) {
     }
   }
 
-  async function msgVoidEntry(this: Seneca, _msg: VoidEntryInput) {
+  async function msgVoidEntry(this: LedgerSeneca, _msg: VoidEntryInput) {
     // TODO: generate counter entries
   }
 
   async function msgListEntry(
-    this: Seneca,
+    this: LedgerSeneca,
     msg: ListEntryInput,
   ): Promise<ListEntryResult | InvalidResult> {
     const seneca = this
@@ -1168,8 +1173,8 @@ function ledger(this: Seneca, options: LedgerOptions) {
       cq.credit_id = accountEnt.id
     }
     if (null == msg.credit || !!msg.credit) {
-      credits = (await seneca.entity(creditCanon).list$(cq)).map(
-        (entry: SenecaEntity<CreditEntity>) => entry.data$(false),
+      credits = (await seneca.entity<CreditEntity>(creditCanon).list$(cq)).map(
+        (entry) => entry.data$(false),
       )
     }
 
@@ -1179,8 +1184,8 @@ function ledger(this: Seneca, options: LedgerOptions) {
       dq.debit_id = accountEnt.id
     }
     if (null == msg.debit || !!msg.debit) {
-      debits = (await seneca.entity(debitCanon).list$(dq)).map(
-        (entry: SenecaEntity<DebitEntity>) => entry.data$(false),
+      debits = (await seneca.entity<DebitEntity>(debitCanon).list$(dq)).map(
+        (entry) => entry.data$(false),
       )
     }
 
@@ -1200,41 +1205,47 @@ function ledger(this: Seneca, options: LedgerOptions) {
 }
 
 async function getBook(
-  seneca: Seneca,
+  seneca: LedgerSeneca,
   bookCanon: string,
   msg: BookIdentifier,
 ): Promise<SenecaEntity<BookEntity> | null> {
   let bookEnt: SenecaEntity<BookEntity> | null = null
 
   if (null != msg.bref) {
-    bookEnt = await seneca.entity(bookCanon).load$({ bref: msg.bref })
+    bookEnt = await seneca
+      .entity<BookEntity>(bookCanon)
+      .load$({ bref: msg.bref })
   }
 
   if (null == bookEnt && null != msg.id) {
-    bookEnt = await seneca.entity(bookCanon).load$(msg.id)
+    bookEnt = await seneca.entity<BookEntity>(bookCanon).load$(msg.id)
   }
 
   if (null == bookEnt && null != msg.book_id) {
-    bookEnt = await seneca.entity(bookCanon).load$(msg.book_id)
+    bookEnt = await seneca.entity<BookEntity>(bookCanon).load$(msg.book_id)
   }
 
   return bookEnt
 }
 
 async function getAccount(
-  seneca: Seneca,
+  seneca: LedgerSeneca,
   accountCanon: string,
   msg: AccountIdentifier,
 ): Promise<SenecaEntity<AccountEntity> | null> {
   let accountEnt: SenecaEntity<AccountEntity> | null = null
   if (null != msg.aref) {
-    accountEnt = await seneca.entity(accountCanon).load$({ aref: msg.aref })
+    accountEnt = await seneca
+      .entity<AccountEntity>(accountCanon)
+      .load$({ aref: msg.aref })
   }
   if (null == accountEnt && null != msg.id) {
-    accountEnt = await seneca.entity(accountCanon).load$(msg.id)
+    accountEnt = await seneca.entity<AccountEntity>(accountCanon).load$(msg.id)
   }
   if (null == accountEnt && null != msg.account_id) {
-    accountEnt = await seneca.entity(accountCanon).load$(msg.account_id)
+    accountEnt = await seneca
+      .entity<AccountEntity>(accountCanon)
+      .load$(msg.account_id)
   }
 
   return accountEnt
