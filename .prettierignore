@@ -2,3 +2,7 @@
 dist
 dist-test
 coverage
+
+# Generated in part by seneca-doc (`npm run doc`); formatting it would fight
+# the generator.
+README.md
