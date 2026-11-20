@@ -15,6 +15,12 @@ When a period ends:
 2. The other side of each of those entries goes to one permanent equity account. It is commonly called Retained Earnings (companies) or Owner's Capital (sole owners).
 3. Permanent accounts are not reset. Their ending balances are the opening balances of the next period.
 
+Amounts in the books are never negative. A balance is either a debit balance or a credit balance.
+
+- An account's **normal side** is the side its balance is expected on: debit for assets and expenses, credit for liabilities, equity and revenues.
+- Occasionally the balance is on the other side. Examples: a cash account when payments exceed the funds, a customer account after an overpayment, an expense account when refunds exceed the period's expenses.
+- The closing entry is always the opposite of the balance the account actually has, whichever side that is.
+
 The result on the equity account needs no special case:
 
 - With a profit (revenues greater than expenses), the equity account's credit balance grows.
@@ -106,7 +112,8 @@ close account A in book B (optional target book T):
     A's balance in B ends at zero; A has no balance in T
 ```
 
-- The entry direction follows the sign of the balance, not the account's normal side. A temporary account whose balance is opposite to its normal side must still end at zero.
+- The closing entry is the opposite of the balance the account actually holds: a debit balance is closed with a credit, and a credit balance with a debit. This is usually, but not always, the opposite of the account's normal side.
+- The plugin reports a balance that is on the side opposite to `normal` as a negative number. Such an account must still end at zero.
 - A temporary account with a zero balance posts nothing and succeeds, as today.
 - The result keeps every existing field. It additionally reports the effective type that was used and, for a temporary account, the equity account.
 
@@ -211,37 +218,37 @@ Invariants to assert in every closing scenario:
 
 Scenarios that must be covered:
 
-| Area           | Scenario                                                                                                                         |
-| -------------- | -------------------------------------------------------------------------------------------------------------------------------- |
-| Types          | Create with each valid type, without a type, and with an invalid type                                                            |
-| Types          | Update sets a type on an untyped account; changes a type; rejects an invalid type and leaves the account unchanged               |
-| Types          | An untyped account is not given a type by any message                                                                            |
-| Result         | Period with a profit                                                                                                             |
-| Result         | Period with a loss                                                                                                               |
-| Result         | Break-even period                                                                                                                |
-| Result         | Equity account goes below zero and the negative balance is carried into the next book                                            |
-| Result         | Temporary account whose balance is opposite to its normal side                                                                   |
-| Result         | Temporary account with a zero balance                                                                                            |
-| Equity account | Default account is created when missing and reused when present                                                                  |
-| Equity account | Caller override is used                                                                                                          |
-| Equity account | Each rejection in R4, with proof that no entry was posted                                                                        |
-| Equity account | Equity account had no entries in the book before closing and is still carried forward                                            |
-| Workflow       | `close:account` directly on a temporary account, with and without a target book                                                  |
-| Workflow       | `close:book` without a target book                                                                                               |
-| Workflow       | Open-ended book                                                                                                                  |
-| Workflow       | Retry after a partial failure posts nothing twice                                                                                |
-| Workflow       | Entries cannot be added to the closed book (unchanged rule)                                                                      |
-| Open later     | Close without a target, then open a new book from the closed one; entries and balances identical to closing with a target        |
-| Open later     | Opening twice from the same closed book posts nothing the second time                                                            |
-| Open later     | Rejections: source book not closed, target book closed, unknown books                                                            |
-| Closed period  | Pre-closing balance of temporary and permanent accounts is retrievable after closing; default `balance:account` output unchanged |
-| Periods        | Three consecutive monthly books: equity accumulates and temporary accounts restart at zero each month                            |
-| Periods        | Books of unequal length                                                                                                          |
-| Compatibility  | All accounts untyped: results identical to `main` (existing specs unedited)                                                      |
-| Compatibility  | Mix of typed and untyped accounts in one book                                                                                    |
-| Compatibility  | Account switched to `temporary` after holding a carried-forward balance (R7)                                                     |
-| Isolation      | Two organisations, and two books of one organisation, do not affect each other                                                   |
-| Export         | `export:account` and `export:book` still work after a closing with types                                                         |
+| Area           | Scenario                                                                                                                               |
+| -------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| Types          | Create with each valid type, without a type, and with an invalid type                                                                  |
+| Types          | Update sets a type on an untyped account; changes a type; rejects an invalid type and leaves the account unchanged                     |
+| Types          | An untyped account is not given a type by any message                                                                                  |
+| Result         | Period with a profit                                                                                                                   |
+| Result         | Period with a loss                                                                                                                     |
+| Result         | Break-even period                                                                                                                      |
+| Result         | Equity account goes below zero and the negative balance is carried into the next book                                                  |
+| Result         | Debit-normal temporary account holding a credit balance, and credit-normal temporary account holding a debit balance: both end at zero |
+| Result         | Temporary account with a zero balance                                                                                                  |
+| Equity account | Default account is created when missing and reused when present                                                                        |
+| Equity account | Caller override is used                                                                                                                |
+| Equity account | Each rejection in R4, with proof that no entry was posted                                                                              |
+| Equity account | Equity account had no entries in the book before closing and is still carried forward                                                  |
+| Workflow       | `close:account` directly on a temporary account, with and without a target book                                                        |
+| Workflow       | `close:book` without a target book                                                                                                     |
+| Workflow       | Open-ended book                                                                                                                        |
+| Workflow       | Retry after a partial failure posts nothing twice                                                                                      |
+| Workflow       | Entries cannot be added to the closed book (unchanged rule)                                                                            |
+| Open later     | Close without a target, then open a new book from the closed one; entries and balances identical to closing with a target              |
+| Open later     | Opening twice from the same closed book posts nothing the second time                                                                  |
+| Open later     | Rejections: source book not closed, target book closed, unknown books                                                                  |
+| Closed period  | Pre-closing balance of temporary and permanent accounts is retrievable after closing; default `balance:account` output unchanged       |
+| Periods        | Three consecutive monthly books: equity accumulates and temporary accounts restart at zero each month                                  |
+| Periods        | Books of unequal length                                                                                                                |
+| Compatibility  | All accounts untyped: results identical to `main` (existing specs unedited)                                                            |
+| Compatibility  | Mix of typed and untyped accounts in one book                                                                                          |
+| Compatibility  | Account switched to `temporary` after holding a carried-forward balance (R7)                                                           |
+| Isolation      | Two organisations, and two books of one organisation, do not affect each other                                                         |
+| Export         | `export:account` and `export:book` still work after a closing with types                                                               |
 
 ## 6. Out of scope
 
