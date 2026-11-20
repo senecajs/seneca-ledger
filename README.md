@@ -371,7 +371,7 @@ Export all entries for a single ledger account within a book as a CSV string. Ea
 ----------
 ### &laquo; `biz:ledger,export:book,format:csv` &raquo;
 
-Export every account with entries in a book (excluding the opening balance account) as CSV, processed in batches of `batch_size` (default 5), plus a summary CSV with columns for account name, normal balance, type, total (or closing) balance, and entry count.
+Export every account with entries in a book (excluding the opening balance account) as CSV, processed in batches of `batch_size` (default 5), plus a summary CSV with columns for account name, normal balance, type, total (or closing) balance, and entry count. Accounts (in both `exports` and the summary rows) are ordered credit-normal before debit-normal, then by name, then by aref.
 
 
 

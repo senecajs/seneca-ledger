@@ -1419,9 +1419,9 @@ exports.default = {
                         '# Period: 20220101 to 20220331\n' +
                         '\n' +
                         'Account,Normal Balance,Type,Closing Balance,Entry Count\n' +
+                        'Credit Card,credit,Liability,50,2\n' +
                         'Sales,credit,Income,100,2\n' +
                         'Cash,debit,Asset,80,3\n' +
-                        'Credit Card,credit,Liability,50,2\n' +
                         'Office,debit,Asset,70,3\n',
                 },
             },

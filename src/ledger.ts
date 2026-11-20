@@ -698,10 +698,17 @@ function ledger(this: Seneca, options: LedgerOptions) {
     )
     const accounts = await Promise.all(accountPromises)
 
-    const validAccounts = accounts.filter(
-      (acc): acc is SenecaEntity<AccountEntity> =>
-        acc !== null && acc.aref !== `${bookEnt.oref}/Equity/Opening Balance`,
-    )
+    const validAccounts = accounts
+      .filter(
+        (acc): acc is SenecaEntity<AccountEntity> =>
+          acc !== null && acc.aref !== `${bookEnt.oref}/Equity/Opening Balance`,
+      )
+      .sort(
+        (a, b) =>
+          a.normal.localeCompare(b.normal) ||
+          a.name.localeCompare(b.name) ||
+          a.aref.localeCompare(b.aref),
+      )
 
     if (validAccounts.length === 0) {
       return {
