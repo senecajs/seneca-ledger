@@ -61,6 +61,9 @@ import type {
   BookSummaryCSVResult,
   BalanceTotals,
   ProcessedEntry,
+
+  // Plugin Export Type
+  LedgerPlugin,
 } from './types'
 
 /* NOTES
@@ -1440,7 +1443,7 @@ const defaults: LedgerOptions = {
   },
 }
 
-Object.assign(ledger, {
+const plugin: LedgerPlugin = Object.assign(ledger, {
   defaults,
   intern: {
     getBook,
@@ -1450,8 +1453,12 @@ Object.assign(ledger, {
   },
 })
 
-export default ledger
+export default plugin
+
+// Re-export the public types so consumers can
+// `import type { ... } from '@seneca/ledger'`.
+export type * from './types'
 
 if ('undefined' !== typeof module) {
-  module.exports = ledger
+  module.exports = plugin
 }

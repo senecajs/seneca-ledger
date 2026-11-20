@@ -519,14 +519,14 @@ export interface ProcessedEntry {
 
 /** Get book helper function */
 export type GetBookFn = (
-  seneca: any,
+  seneca: Seneca,
   bookCanon: string,
   msg: BookIdentifier,
 ) => Promise<BookEntity | null>
 
 /** Get account helper function */
 export type GetAccountFn = (
-  seneca: any,
+  seneca: Seneca,
   accountCanon: string,
   msg: AccountIdentifier,
 ) => Promise<AccountEntity | null>
@@ -625,7 +625,7 @@ export type MsgBalanceBookFn = (msg: BalanceBookInput) => Promise<any>
 
 /** Ledger plugin function */
 export interface LedgerPlugin {
-  (this: any, options: LedgerOptions): void
+  (this: Seneca, options: LedgerOptions): void
   defaults: LedgerOptions
   intern: {
     getBook: GetBookFn
@@ -634,6 +634,3 @@ export interface LedgerPlugin {
     calcTotals: CalcTotalsFn
   }
 }
-
-declare const ledger: LedgerPlugin
-export default ledger

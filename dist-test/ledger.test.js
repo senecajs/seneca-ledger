@@ -47,6 +47,16 @@ const suites = {
             await (0, seneca_msg_test_1.default)(seneca, messages)();
         });
     }
+    (0, node_test_1.test)('exports', () => {
+        // dist/types.js used to throw "ledger is not defined" when required.
+        (0, code_1.expect)(() => require('../dist/types.js')).not.throw();
+        // The default export is typed as the full plugin, defaults and intern
+        // included, and the public types are importable from the package root.
+        const plugin = __2.default;
+        (0, code_1.expect)(plugin.defaults.entity.base).equal('ledger');
+        const totals = plugin.intern.calcTotals(null, [], []);
+        (0, code_1.expect)(totals).equal({ creditTotal: 0, debitTotal: 0, balance: 0 });
+    });
     // test('maintain', Maintain)
 });
 async function makeSeneca() {

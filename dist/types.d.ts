@@ -421,9 +421,9 @@ export interface ProcessedEntry {
     kind: EntryKind;
 }
 /** Get book helper function */
-export type GetBookFn = (seneca: any, bookCanon: string, msg: BookIdentifier) => Promise<BookEntity | null>;
+export type GetBookFn = (seneca: Seneca, bookCanon: string, msg: BookIdentifier) => Promise<BookEntity | null>;
 /** Get account helper function */
-export type GetAccountFn = (seneca: any, accountCanon: string, msg: AccountIdentifier) => Promise<AccountEntity | null>;
+export type GetAccountFn = (seneca: Seneca, accountCanon: string, msg: AccountIdentifier) => Promise<AccountEntity | null>;
 /** Calculate totals helper function */
 export type CalcTotalsFn = (accountEnt: AccountEntity | null, creditEnts: CreditEntity[], debitEnts: DebitEntity[]) => BalanceTotals;
 /** Format date to YYYYMMDD helper function */
@@ -456,7 +456,7 @@ export type MsgListBalanceFn = (msg: ListBalanceInput) => Promise<any>;
 export type MsgBalanceBookFn = (msg: BalanceBookInput) => Promise<any>;
 /** Ledger plugin function */
 export interface LedgerPlugin {
-    (this: any, options: LedgerOptions): void;
+    (this: Seneca, options: LedgerOptions): void;
     defaults: LedgerOptions;
     intern: {
         getBook: GetBookFn;
@@ -465,6 +465,4 @@ export interface LedgerPlugin {
         calcTotals: CalcTotalsFn;
     };
 }
-declare const ledger: LedgerPlugin;
-export default ledger;
 //# sourceMappingURL=types.d.ts.map

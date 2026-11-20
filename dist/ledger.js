@@ -1011,7 +1011,7 @@ const defaults = {
         base: 'ledger',
     },
 };
-Object.assign(ledger, {
+const plugin = Object.assign(ledger, {
     defaults,
     intern: {
         getBook,
@@ -1020,8 +1020,8 @@ Object.assign(ledger, {
         calcTotals,
     },
 });
-exports.default = ledger;
+exports.default = plugin;
 if ('undefined' !== typeof module) {
-    module.exports = ledger;
+    module.exports = plugin;
 }
 //# sourceMappingURL=ledger.js.map
