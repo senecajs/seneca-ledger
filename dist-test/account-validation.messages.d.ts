@@ -83,7 +83,6 @@ declare const _default: {
             };
         };
         out: {
-            why?: undefined;
             ok: boolean;
             account: {
                 id: string;
@@ -97,6 +96,7 @@ declare const _default: {
                 name: string;
                 normal: string;
             };
+            why?: undefined;
         };
     } | {
         name: string;
@@ -112,7 +112,6 @@ declare const _default: {
             };
         };
         out: {
-            why?: undefined;
             ok: boolean;
             account: {
                 id: string;
@@ -126,6 +125,7 @@ declare const _default: {
                 oref?: undefined;
                 normal?: undefined;
             };
+            why?: undefined;
         };
     } | {
         name: string;
@@ -141,7 +141,6 @@ declare const _default: {
             };
         };
         out: {
-            why?: undefined;
             ok: boolean;
             account: {
                 id: string;
@@ -155,6 +154,7 @@ declare const _default: {
                 name: string;
                 normal: string;
             };
+            why?: undefined;
         };
     } | {
         name: string;
@@ -170,20 +170,20 @@ declare const _default: {
             };
         };
         out: {
-            why?: undefined;
             ok: boolean;
             account: {
                 org_id?: undefined;
                 path0?: undefined;
                 path1?: undefined;
                 path2?: undefined;
-                path?: undefined;
-                oref?: undefined;
-                name?: undefined;
                 id: string;
                 aref: string;
                 normal: string;
+                path?: undefined;
+                name?: undefined;
+                oref?: undefined;
             };
+            why?: undefined;
         };
     })[];
 };

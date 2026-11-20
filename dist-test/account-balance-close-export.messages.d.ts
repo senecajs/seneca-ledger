@@ -54,15 +54,15 @@ declare const _default: {
         out: {
             ok: boolean;
             why: string;
-            account_id?: undefined;
-            balance?: undefined;
-            aref?: undefined;
-            original_balance?: undefined;
-            closing_balance?: undefined;
-            opening_balance?: undefined;
-            opening_balance_aref?: undefined;
             closing_entries?: undefined;
             opening_entries?: undefined;
+            original_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            balance?: undefined;
+            aref?: undefined;
+            account_id?: undefined;
+            closing_balance?: undefined;
         };
     } | {
         name: string;
@@ -78,13 +78,13 @@ declare const _default: {
             account_id: string;
             aref: string;
             balance: number;
-            original_balance?: undefined;
-            closing_balance?: undefined;
-            opening_balance?: undefined;
-            opening_balance_aref?: undefined;
             closing_entries?: undefined;
             opening_entries?: undefined;
+            original_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
             why?: undefined;
+            closing_balance?: undefined;
         };
     } | {
         name: string;
@@ -96,17 +96,17 @@ declare const _default: {
             target_bref?: undefined;
         };
         out: {
-            account_id?: undefined;
-            balance?: undefined;
             ok: boolean;
             why: string;
-            aref?: undefined;
-            original_balance?: undefined;
-            closing_balance?: undefined;
-            opening_balance?: undefined;
-            opening_balance_aref?: undefined;
             closing_entries?: undefined;
             opening_entries?: undefined;
+            original_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            balance?: undefined;
+            aref?: undefined;
+            account_id?: undefined;
+            closing_balance?: undefined;
         };
     } | {
         name: string;
@@ -118,8 +118,6 @@ declare const _default: {
             target_bref?: undefined;
         };
         out: {
-            account_id?: undefined;
-            balance?: undefined;
             ok: boolean;
             aref: string;
             original_balance: number;
@@ -129,6 +127,8 @@ declare const _default: {
             closing_entries: never[];
             opening_entries: never[];
             why?: undefined;
+            balance?: undefined;
+            account_id?: undefined;
         };
     } | {
         name: string;
@@ -140,17 +140,17 @@ declare const _default: {
             end: number;
         };
         out: {
-            account_id?: undefined;
-            balance?: undefined;
-            aref?: undefined;
-            original_balance?: undefined;
-            closing_balance?: undefined;
-            opening_balance?: undefined;
-            opening_balance_aref?: undefined;
             closing_entries?: undefined;
             opening_entries?: undefined;
             ok: boolean;
             why: string;
+            original_balance?: undefined;
+            opening_balance?: undefined;
+            opening_balance_aref?: undefined;
+            balance?: undefined;
+            aref?: undefined;
+            account_id?: undefined;
+            closing_balance?: undefined;
         };
     })[];
 };
