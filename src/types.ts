@@ -559,7 +559,6 @@ export interface LedgerActions {
 
 export type LedgerAction = keyof LedgerActions
 
-/** A seneca entity handle, as returned by `seneca.entity(canon)`. */
 /**
  * The declared field names of T, without its index signature, so a typo in
  * a field name is a compile error rather than an `unknown` field.
@@ -570,6 +569,7 @@ export type DeclaredKeys<T> = keyof {
   ]: T[P]
 }
 
+/** A seneca entity handle, as returned by `seneca.entity(canon)`. */
 export interface SenecaEntityHandle<T> {
   /**
    * With `fields$`, seneca loads only those fields (plus `id`), so the
