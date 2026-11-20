@@ -525,10 +525,26 @@ function ledger(this: Seneca, options: LedgerOptions) {
       )
     }
 
-    const verifyResults = await Promise.all(verifyPromises)
-    const verifyClosingBalance = verifyResults[0] as BalanceAccountResult
-    const verifyOpeningBalance = verifyResults[1] as
-      BalanceAccountResult | undefined
+    const [verifyClosingBalance, verifyOpeningBalance] =
+      await Promise.all(verifyPromises)
+
+    // The closing (and opening) entries are saved by now, but the balances
+    // reported back must come from a successful check, not be assumed.
+    if (!verifyClosingBalance || !verifyClosingBalance.ok) {
+      return {
+        ok: false,
+        why: 'closing-balance-check-failed',
+        error: verifyClosingBalance,
+      }
+    }
+
+    if (verifyOpeningBalance && !verifyOpeningBalance.ok) {
+      return {
+        ok: false,
+        why: 'opening-balance-check-failed',
+        error: verifyOpeningBalance,
+      }
+    }
 
     return {
       ok: true,
