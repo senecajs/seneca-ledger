@@ -7,15 +7,22 @@ import type { Instance } from 'seneca'
 // ============================================================================
 
 /**
- * The Seneca instance.
+ * The Seneca instance, as passed to the plugin by consumers.
  *
- * Seneca is not strictly typed: its exported `Instance` resolves to
- * `Record<string, any>`, so member access is effectively untyped. We alias it
- * here to mark every `this`/`seneca` boundary as a deliberate, contained
- * exception to the project's otherwise-strict typing, rather than scattering
- * bare `any` across the codebase.
+ * seneca's own typings declare `make_seneca(): any`, so its exported
+ * `Instance` is `any`. This alias stays as the plugin's public `this` type so
+ * any real seneca instance is accepted. Inside the plugin, the instance is
+ * used through `LedgerSeneca` instead, which types the members the ledger
+ * calls.
  */
 export type Seneca = Instance
+
+/**
+ * A seneca entity query: field filters plus seneca directives such as
+ * `sort$` or `limit$`. Values are `unknown` because callers can filter on any
+ * field.
+ */
+export type EntityQuery = Record<string, unknown>
 
 /** Debit or Credit indicator */
 export type DC = 'debit' | 'credit'
@@ -47,6 +54,16 @@ export interface BookIdentifier {
 // Entity Types
 // ============================================================================
 
+/**
+ * A loaded seneca entity: the record's fields plus the entity methods the
+ * ledger calls. `data$(false)` returns the plain record.
+ */
+export type SenecaEntity<T> = T & {
+  data$(flag: false): T
+  data$(data: Partial<T>): SenecaEntity<T>
+  save$(): Promise<SenecaEntity<T>>
+}
+
 /** Account entity */
 export type AccountEntity = {
   id: string
@@ -59,7 +76,7 @@ export type AccountEntity = {
   path0?: string
   path1?: string
   path2?: string
-  [key: string]: any
+  [key: string]: unknown
 }
 
 /** Book entity */
@@ -73,7 +90,7 @@ export type BookEntity = {
   end: number
   time: TimeSpec
   closed?: boolean
-  [key: string]: any
+  [key: string]: unknown
 }
 
 /** Credit entry entity */
@@ -89,12 +106,12 @@ export type CreditEntity = {
   book_id: string
   credit_id: string
   caref: string
-  custom: Record<string, any>
+  custom: Record<string, unknown>
   date: number
   baseval: number
   basecur: string
   baserate: number
-  [key: string]: any
+  [key: string]: unknown
 }
 
 /** Debit entry entity */
@@ -110,12 +127,12 @@ export type DebitEntity = {
   book_id: string
   debit_id: string
   daref: string
-  custom: Record<string, any>
+  custom: Record<string, unknown>
   date: number
   baseval: number
   basecur: string
   baserate: number
-  [key: string]: any
+  [key: string]: unknown
 }
 
 /** Balance entity */
@@ -127,13 +144,13 @@ export type BalanceEntity = {
   creditTotal: number
   debitTotal: number
   when: number
-  [key: string]: any
+  [key: string]: unknown
 }
 
 /** Time specification for books */
 export type TimeSpec = {
   kind: string
-  [key: string]: any
+  [key: string]: unknown
 }
 
 // ============================================================================
@@ -181,7 +198,7 @@ export interface UpdateAccountInput extends AccountIdentifier {
 /** Input for balance:account message */
 export interface BalanceAccountInput
   extends Omit<AccountIdentifier, 'id'>, Omit<BookIdentifier, 'id'> {
-  save: boolean // true => save to ledger/balance
+  save?: boolean // true => save to ledger/balance (not implemented yet)
 }
 
 /** Input for export:account,format:csv message */
@@ -265,16 +282,14 @@ export interface CreateEntryInput extends BookIdentifier {
   kind?: EntryKind
 
   // custom data
-  custom?: Record<string, any>
+  custom?: Record<string, unknown>
 
   // custom fields
-  entry?: Record<string, any>
+  entry?: Record<string, unknown>
 }
 
 /** Input for void:entry message */
-export interface VoidEntryInput {
-  [key: string]: any
-}
+export type VoidEntryInput = Record<string, unknown>
 
 /** Input for list:entry message */
 export interface ListEntryInput
@@ -282,18 +297,14 @@ export interface ListEntryInput
   oref: string
   credit?: boolean
   debit?: boolean
-  q?: Record<string, any>
+  q?: EntityQuery
 }
 
 /** Input for list:balance message */
-export interface ListBalanceInput {
-  [key: string]: any
-}
+export type ListBalanceInput = Record<string, unknown>
 
 /** Input for balance:book message */
-export interface BalanceBookInput {
-  [key: string]: any
-}
+export type BalanceBookInput = Record<string, unknown>
 
 // ============================================================================
 // Message Output Types
@@ -308,7 +319,7 @@ export interface BaseResult {
 export interface InvalidResult extends BaseResult {
   ok: false
   why: string
-  error?: Record<string, any>
+  error?: InvalidResult
 }
 
 /** Result for create:account message */
@@ -326,7 +337,7 @@ export interface GetAccountResult extends BaseResult {
 /** Result for list:account message */
 export interface ListAccountResult extends BaseResult {
   ok: true
-  q: Record<string, any>
+  q: EntityQuery
   list: AccountEntity[]
 }
 
@@ -387,8 +398,8 @@ export interface ClosedAccount extends BaseResult {
   closing_balance: number
   opening_balance: number | null
   opening_balance_aref: string | null
-  closing_entries: Record<string, any>[]
-  opening_entries: Record<string, any>[]
+  closing_entries: CreateEntryResult[]
+  opening_entries: CreateEntryResult[]
   closing_date: number
 }
 
@@ -407,7 +418,7 @@ export interface GetBookResult extends BaseResult {
 /** Result for list:book message */
 export interface ListBookResult extends BaseResult {
   ok: true
-  q: Record<string, any>
+  q: EntityQuery
   list: BookEntity[]
 }
 
@@ -495,8 +506,102 @@ export interface ListEntryResult extends BaseResult, BalanceTotals {
   ok: true
   credits: CreditEntity[]
   debits: DebitEntity[]
-  cq: Record<string, any>
-  dq: Record<string, any>
+  cq: EntityQuery
+  dq: EntityQuery
+}
+
+// ============================================================================
+// Typed Seneca Boundary
+// ============================================================================
+
+/**
+ * Every `biz:ledger` action: its message input and its result. Used to type
+ * both `seneca.message(...)` registration and `seneca.post(...)` calls.
+ */
+export interface LedgerActions {
+  'create:account': {
+    in: CreateAccountInput
+    out: CreateAccountResult | InvalidResult
+  }
+  'get:account': { in: GetAccountInput; out: GetAccountResult | InvalidResult }
+  'list:account': { in: ListAccountInput; out: ListAccountResult }
+  'update:account': {
+    in: UpdateAccountInput
+    out: UpdateAccountResult | InvalidResult
+  }
+  'balance:account': {
+    in: BalanceAccountInput
+    out: BalanceAccountResult | InvalidResult
+  }
+  'export:account,format:csv': {
+    in: ExportAccountCSVInput
+    out: ExportAccountCSVResult | InvalidResult
+  }
+  'close:account': { in: CloseAccountInput; out: ClosedAccount | InvalidResult }
+  'create:book': { in: CreateBookInput; out: CreateBookResult | InvalidResult }
+  'get:book': { in: GetBookInput; out: GetBookResult | InvalidResult }
+  'update:book': { in: UpdateBookInput; out: UpdateBookResult | InvalidResult }
+  'list:book': { in: ListBookInput; out: ListBookResult }
+  'export:book,format:csv': {
+    in: ExportBookCSVInput
+    out: ExportBookCSVResult | InvalidResult
+  }
+  'close:book': { in: CloseBookInput; out: ClosedBook | InvalidResult }
+  'list:balance': { in: ListBalanceInput; out: void }
+  'balance:book': { in: BalanceBookInput; out: void }
+  'create:entry': {
+    in: CreateEntryInput
+    out: CreateEntryResult | InvalidResult
+  }
+  'void:entry': { in: VoidEntryInput; out: void }
+  'list:entry': { in: ListEntryInput; out: ListEntryResult | InvalidResult }
+}
+
+export type LedgerAction = keyof LedgerActions
+
+/**
+ * The declared field names of T, without its index signature, so a typo in
+ * a field name is a compile error rather than an `unknown` field.
+ */
+export type DeclaredKeys<T> = keyof {
+  [
+    P in keyof T as string extends P ? never : number extends P ? never : P
+  ]: T[P]
+}
+
+/** A seneca entity handle, as returned by `seneca.entity(canon)`. */
+export interface SenecaEntityHandle<T> {
+  /**
+   * With `fields$`, seneca loads only those fields (plus `id`), so the
+   * result is typed with only those fields.
+   */
+  list$<K extends DeclaredKeys<T>>(
+    q: EntityQuery & { fields$: readonly K[] },
+  ): Promise<SenecaEntity<Pick<T, K | Extract<'id', keyof T>>>[]>
+  list$(q?: EntityQuery & { fields$?: never }): Promise<SenecaEntity<T>[]>
+  load$(q: string | EntityQuery): Promise<SenecaEntity<T> | null>
+  data$(data: Partial<T>): SenecaEntity<T>
+}
+
+/**
+ * The members of the seneca instance the ledger plugin uses, typed. The
+ * plugin's `this` is the untyped `Seneca`; it is used through this interface.
+ */
+export interface LedgerSeneca {
+  fix(pattern: 'biz:ledger'): LedgerSeneca
+  message<A extends LedgerAction>(
+    pattern: A,
+    action: (
+      this: LedgerSeneca,
+      msg: LedgerActions[A]['in'],
+    ) => Promise<LedgerActions[A]['out']>,
+  ): LedgerSeneca
+  post<A extends LedgerAction>(
+    pattern: `biz:ledger,${A}`,
+    msg: LedgerActions[A]['in'],
+  ): Promise<LedgerActions[A]['out']>
+  entity<T>(canon: string): SenecaEntityHandle<T>
+  util: { Nid(opts: { length: number }): () => string }
 }
 
 // ============================================================================
@@ -519,17 +624,17 @@ export interface ProcessedEntry {
 
 /** Get book helper function */
 export type GetBookFn = (
-  seneca: any,
+  seneca: Seneca,
   bookCanon: string,
   msg: BookIdentifier,
-) => Promise<BookEntity | null>
+) => Promise<SenecaEntity<BookEntity> | null>
 
 /** Get account helper function */
 export type GetAccountFn = (
-  seneca: any,
+  seneca: Seneca,
   accountCanon: string,
   msg: AccountIdentifier,
-) => Promise<AccountEntity | null>
+) => Promise<SenecaEntity<AccountEntity> | null>
 
 /** Calculate totals helper function */
 export type CalcTotalsFn = (
@@ -611,13 +716,13 @@ export type MsgCloseBookFn = (
 export type MsgCreateEntryFn = (
   msg: CreateEntryInput,
 ) => Promise<CreateEntryResult | InvalidResult>
-export type MsgVoidEntryFn = (msg: VoidEntryInput) => Promise<any>
+export type MsgVoidEntryFn = (msg: VoidEntryInput) => Promise<void>
 export type MsgListEntryFn = (
   msg: ListEntryInput,
 ) => Promise<ListEntryResult | InvalidResult>
 
-export type MsgListBalanceFn = (msg: ListBalanceInput) => Promise<any>
-export type MsgBalanceBookFn = (msg: BalanceBookInput) => Promise<any>
+export type MsgListBalanceFn = (msg: ListBalanceInput) => Promise<void>
+export type MsgBalanceBookFn = (msg: BalanceBookInput) => Promise<void>
 
 // ============================================================================
 // Plugin Export Type
@@ -625,7 +730,7 @@ export type MsgBalanceBookFn = (msg: BalanceBookInput) => Promise<any>
 
 /** Ledger plugin function */
 export interface LedgerPlugin {
-  (this: any, options: LedgerOptions): void
+  (this: Seneca, options: LedgerOptions): void
   defaults: LedgerOptions
   intern: {
     getBook: GetBookFn
@@ -634,6 +739,3 @@ export interface LedgerPlugin {
     calcTotals: CalcTotalsFn
   }
 }
-
-declare const ledger: LedgerPlugin
-export default ledger

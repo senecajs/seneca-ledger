@@ -11,6 +11,7 @@ const seneca_msg_test_1 = __importDefault(require("seneca-msg-test"));
 // import { Maintain } from '@seneca/maintain'
 const __1 = __importDefault(require(".."));
 const __2 = __importDefault(require(".."));
+const helper_1 = require("./helper");
 const ledger_lifecycle_messages_1 = __importDefault(require("./ledger-lifecycle.messages"));
 const account_validation_messages_1 = __importDefault(require("./account-validation.messages"));
 const account_retrieval_messages_1 = __importDefault(require("./account-retrieval.messages"));
@@ -43,22 +44,10 @@ const suites = {
     });
     for (const [name, messages] of Object.entries(suites)) {
         (0, node_test_1.test)(name, async () => {
-            const seneca = await makeSeneca();
+            const seneca = await (0, helper_1.makeSeneca)();
             await (0, seneca_msg_test_1.default)(seneca, messages)();
         });
     }
     // test('maintain', Maintain)
 });
-async function makeSeneca() {
-    const seneca = (0, seneca_1.default)({ legacy: false })
-        .test()
-        .use('promisify')
-        .use('entity')
-        .use('entity-util', { when: { active: true } })
-        .use(__2.default);
-    await seneca.ready();
-    // print all message patterns
-    // console.log(seneca.list())
-    return seneca;
-}
 //# sourceMappingURL=ledger.test.js.map
