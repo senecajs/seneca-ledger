@@ -1,1 +1,2 @@
-export declare function makeSeneca(): Promise<any>;
+import Seneca from 'seneca';
+export declare function makeSeneca(): Promise<Seneca.Instance>;

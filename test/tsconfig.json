@@ -14,6 +14,7 @@
     "noImplicitReturns": true,
     "types": ["node"],
     "target": "ES2022",
-    "composite": true
+    "composite": true,
+    "checkers": 1
   }
 }

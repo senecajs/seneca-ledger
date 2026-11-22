@@ -28,10 +28,10 @@ declare const _default: {
         pattern: string;
         params: {
             aref: string;
-            account_id?: undefined;
             org_id?: undefined;
             account?: undefined;
             id?: undefined;
+            account_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -44,10 +44,10 @@ declare const _default: {
         pattern: string;
         params: {
             id: string;
-            account_id?: undefined;
             org_id?: undefined;
-            aref?: undefined;
             account?: undefined;
+            aref?: undefined;
+            account_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -64,9 +64,9 @@ declare const _default: {
         params: {
             account_id: string;
             org_id?: undefined;
-            aref?: undefined;
             account?: undefined;
             id?: undefined;
+            aref?: undefined;
         };
         out: {
             ok: boolean;
@@ -81,11 +81,11 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
-            account_id?: undefined;
             org_id: string;
-            aref?: undefined;
             account?: undefined;
             id?: undefined;
+            aref?: undefined;
+            account_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -99,11 +99,11 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
-            account_id?: undefined;
             org_id?: undefined;
-            aref?: undefined;
             account?: undefined;
             id?: undefined;
+            aref?: undefined;
+            account_id?: undefined;
         };
         out: {
             ok: boolean;
@@ -117,35 +117,35 @@ declare const _default: {
         name: string;
         pattern: string;
         params: {
-            account_id?: undefined;
-            org_id?: undefined;
             aref: string;
             account: {
                 custom_field: string;
             };
+            org_id?: undefined;
             id?: undefined;
+            account_id?: undefined;
         };
         out: {
             q?: {};
-            account?: undefined;
             ok: boolean;
             why: string;
+            account?: undefined;
         };
     } | {
         name: string;
         pattern: string;
         params: {
-            account_id?: undefined;
-            org_id?: undefined;
-            aref?: undefined;
-            account?: undefined;
             id: string;
+            org_id?: undefined;
+            account?: undefined;
+            aref?: undefined;
+            account_id?: undefined;
         };
         out: {
             q?: {};
-            account?: undefined;
             ok: boolean;
             why: string;
+            account?: undefined;
         };
     })[];
 };

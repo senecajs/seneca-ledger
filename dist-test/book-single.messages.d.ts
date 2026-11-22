@@ -62,9 +62,9 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
+            q?: {};
             ok: boolean;
             why: string;
-            q?: undefined;
             list?: undefined;
             note?: undefined;
             exports?: undefined;
@@ -101,18 +101,18 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
+            q?: {};
             ok: boolean;
             book: {
+                org_id?: undefined;
                 id: string;
                 bref: string;
-                org_id?: undefined;
                 time?: undefined;
                 name?: undefined;
                 oref?: undefined;
                 start?: undefined;
                 end?: undefined;
             };
-            q?: undefined;
             list?: undefined;
             note?: undefined;
             exports?: undefined;
@@ -208,7 +208,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             ok: boolean;
             why: string;
@@ -247,7 +247,7 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             ok: boolean;
             why: string;
@@ -286,7 +286,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             ok: boolean;
             why: string;
@@ -329,7 +329,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             ok: boolean;
             credit: {
@@ -381,7 +381,7 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             ok: boolean;
             book: {
@@ -432,7 +432,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             ok: boolean;
             book_id: string;
@@ -477,7 +477,7 @@ declare const _default: {
             target_bref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             ok: boolean;
             why: string;
@@ -516,7 +516,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             ok: boolean;
             why: string;
@@ -555,7 +555,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             ok: boolean;
             book_id: string;
@@ -600,7 +600,7 @@ declare const _default: {
             aref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             ok: boolean;
             book_id: string;
@@ -639,7 +639,7 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             note?: undefined;
             exports?: undefined;
@@ -685,7 +685,7 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             note?: undefined;
             exports?: undefined;
@@ -731,7 +731,7 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             note?: undefined;
             exports?: undefined;
@@ -777,7 +777,7 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             note?: undefined;
             exports?: undefined;
@@ -826,7 +826,7 @@ declare const _default: {
             bref?: undefined;
         };
         out: {
-            q?: undefined;
+            q?: {};
             list?: undefined;
             note?: undefined;
             exports?: undefined;
