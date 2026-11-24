@@ -10,9 +10,8 @@ const __1 = __importDefault(require(".."));
 async function makeSeneca() {
     const seneca = (0, seneca_1.default)({ legacy: false })
         .test()
-        .use('promisify')
-        .use('entity')
-        .use('entity-util', { when: { active: true } })
+        .use('@seneca/entity')
+        .use('@seneca/entity-util', { when: { active: true } })
         .use(__1.default);
     await seneca.ready();
     // print all message patterns

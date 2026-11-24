@@ -37,8 +37,7 @@ const suites = {
         (0, code_1.expect)(__1.default).exist();
         const seneca = (0, seneca_1.default)({ legacy: false })
             .test()
-            .use('promisify')
-            .use('entity')
+            .use('@seneca/entity')
             .use(__2.default);
         await seneca.ready();
     });

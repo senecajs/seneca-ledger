@@ -2,11 +2,9 @@ import type { Instance } from 'seneca';
 /**
  * The Seneca instance, as passed to the plugin by consumers.
  *
- * seneca's own typings declare `make_seneca(): any`, so its exported
- * `Instance` is `any`. This alias stays as the plugin's public `this` type so
- * any real seneca instance is accepted. Inside the plugin, the instance is
- * used through `LedgerSeneca` instead, which types the members the ledger
- * calls.
+ * This alias is the plugin's public `this` type, so any real seneca instance
+ * is accepted. Inside the plugin, the instance is used through `LedgerSeneca`
+ * instead, which types the members the ledger calls.
  */
 export type Seneca = Instance;
 /**

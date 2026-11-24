@@ -19,14 +19,17 @@ Ledger business logic plugin for the Seneca platform.
 ## Install
 
 ```sh
-$ npm install @seneca/ledger
+$ npm install seneca@^4 @seneca/entity @seneca/ledger
 ```
+
+Requires Seneca 4 and Node.js 24 or later. Seneca 3 users stay on
+`@seneca/ledger@0.6`.
 
 ## Quick Example
 
 ```js
 // Setup
-const seneca = Seneca().use('promisify').use('entity').use('ledger')
+const seneca = Seneca().use('@seneca/entity').use('@seneca/ledger')
 await seneca.ready()
 
 // Create an account

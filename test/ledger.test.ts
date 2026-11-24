@@ -40,8 +40,7 @@ describe('ledger', () => {
 
     const seneca = Seneca({ legacy: false })
       .test()
-      .use('promisify')
-      .use('entity')
+      .use('@seneca/entity')
       .use(Ledger)
     await seneca.ready()
   })
