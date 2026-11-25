@@ -1,14 +1,11 @@
 # Changes
 
-## 0.7.0 2026-11-22
-
-First entry of this change log. Earlier versions are on npm and in the git
-history.
+## 0.8.0 2026-11-25
 
 Seneca 4:
 
 - The peer dependency is `seneca` `^4.0.0` (was `>=3||>=4.0.0-rc2`). Seneca 3
-  users stay on `@seneca/ledger@0.6`.
+  users stay on `@seneca/ledger@0.7`.
 - The entity plugin peer is `@seneca/entity` `^29.0.0` (was `seneca-entity`
   `>=19`).
 - The peer dependency `seneca-promisify` is removed. Seneca 4 has promises
@@ -19,7 +16,19 @@ Seneca 4:
 - The tests and the README load plugins by their full names, such as
   `@seneca/entity` (B14), and no longer use `promisify`.
 
-Also in this release, from `main` since 0.6.4:
+Build:
+
+- `test/tsconfig.json` sets `checkers: 1`, so that TypeScript 7 writes the
+  same `dist-test` declarations on every build.
+- `prepublishOnly` runs the build. `repository.url` uses `git+https`, and
+  `publishConfig.access` is `public`.
+
+## 0.7.0 2026-11-20
+
+The last release for Seneca 3, published from `main`. This entry was
+written later. Earlier versions are on npm and in the git history.
+
+Changes since 0.6.4:
 
 - Types: precise types replace `any` in the public types, the default export
   is typed as `LedgerPlugin`, and the types can be imported from the package
@@ -35,10 +44,3 @@ Also in this release, from `main` since 0.6.4:
 - Fixed: `export:book` orders accounts by normal balance, name and `aref`,
   with a fixed sort locale, so the order no longer depends on the store or
   the host.
-
-Build:
-
-- `test/tsconfig.json` sets `checkers: 1`, so that TypeScript 7 writes the
-  same `dist-test` declarations on every build.
-- `prepublishOnly` runs the build. `repository.url` uses `git+https`, and
-  `publishConfig.access` is `public`.

@@ -23,7 +23,7 @@ $ npm install seneca@^4 @seneca/entity @seneca/ledger
 ```
 
 Requires Seneca 4 and Node.js 24 or later. Seneca 3 users stay on
-`@seneca/ledger@0.6`.
+`@seneca/ledger@0.7`.
 
 ## Quick Example
 
